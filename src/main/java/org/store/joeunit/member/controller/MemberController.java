@@ -1,4 +1,4 @@
 package org.store.joeunit.member.controller;
 
-public class MemberController1 {
+public class MemberController {
 }
