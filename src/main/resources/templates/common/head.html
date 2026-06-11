@@ -1,35 +1,54 @@
 <header class="site-header" th:fragment="head">
-    <!-- 상단 로고 / 검색 / 회원 메뉴 -->
+
     <div class="header-top">
+
         <div class="header-inner">
 
-            <!-- 로고 -->
             <a href="/" class="logo">
-                <span class="logo-main">조은IT</span><span class="logo-sub">쇼핑몰</span>
+                <span class="logo-main">조은IT</span>
+                <span class="logo-sub">쇼핑몰</span>
             </a>
 
-            <!-- 검색창 -->
-            <form class="search-box" action="/products" method="get">
+            <form class="search-box"
+                  action="/products"
+                  method="get">
+
                 <input type="text"
                        name="keyword"
                        placeholder="검색어를 입력하세요"
                        class="search-input">
-                <button type="submit" class="search-button">🔍</button>
+
+                <button type="submit"
+                        class="search-button">
+                    🔍
+                </button>
+
             </form>
 
-            <!-- 우측 상단 메뉴 -->
             <div class="top-menu">
+
+                <a href="/product/list">상품목록</a>
+
+                <span>|</span>
+
                 <a href="/login">로그인</a>
+
                 <span>|</span>
+
                 <a href="/members/join">회원가입</a>
+
                 <span>|</span>
+
                 <a href="/mypage">마이페이지</a>
+
                 <span>|</span>
+
                 <a href="/board">고객센터</a>
+
             </div>
 
-            <!-- 아이콘 메뉴 -->
             <div class="icon-menu">
+
                 <a href="/wishlist" class="icon-item">
                     <span class="icon">♡</span>
                     <span>찜한상품</span>
@@ -38,42 +57,48 @@
                 <a href="/cart" class="icon-item cart-icon">
                     <span class="icon">🛒</span>
                     <span>장바구니</span>
+
                     <em class="cart-count"
-                        th:text="${cartCount != null ? cartCount : 0}">0</em>
+                        th:text="${cartCount != null ? cartCount : 0}">
+                        0
+                    </em>
                 </a>
 
                 <a href="/orders" class="icon-item">
                     <span class="icon">📋</span>
                     <span>주문조회</span>
                 </a>
+
             </div>
+
         </div>
+
     </div>
 
-    <!-- 하단 카테고리 메뉴 -->
     <nav class="header-nav">
+
         <div class="nav-inner">
 
-            <button type="button" class="all-category-btn" id="allCategoryBtn">
+            <button type="button"
+                    class="all-category-btn">
+
                 ☰ 전체 카테고리
+
             </button>
 
             <ul class="nav-menu">
+
                 <li><a href="/products?categoryId=1">스마트폰</a></li>
                 <li><a href="/products?categoryId=2">노트북</a></li>
                 <li><a href="/products?categoryId=3">태블릿</a></li>
                 <li><a href="/products?categoryId=4">기타주변기기</a></li>
                 <li><a href="/board">게시판</a></li>
                 <li><a href="/events">이벤트</a></li>
+
             </ul>
 
-            <!-- 전체 카테고리 드롭다운 -->
-            <div class="category-dropdown" id="categoryDropdown">
-                <a href="/products?categoryId=1">스마트폰</a>
-                <a href="/products?categoryId=2">노트북</a>
-                <a href="/products?categoryId=3">태블릿</a>
-                <a href="/products?categoryId=4">기타주변기기</a>
-            </div>
         </div>
+
     </nav>
+
 </header>
