@@ -1,12 +1,16 @@
 package org.store.joeunit.order.dto;
 
 import lombok.Data;
+import java.util.Date;
 
 @Data
 public class OrderItemDto {
-    private Long orderItemId;      // 주문 상세 번호 (PK)
-    private Long orderId;          // 연결된 주문 번호 (FK)
-    private Long productId;        // 상품 번호 (FK)
-    private int quantity;          // 주문 수량
-    private Long orderPrice;       // 상품 개당 가격
+    private Long orderItemId;       // PK (seq_order_item)
+    private Long orderId;           // FK (orders)
+    private Long productId;         // FK (product)
+    private String productName;     // 상품명 (역정규화)
+    private Long orderPrice;        // 상품 1개 단가
+    private int quantity;           // 수량
+    private Long itemTotalPrice;    // 항목 총 가격 (단가 * 수량)
+    private Date createdAt;
 }

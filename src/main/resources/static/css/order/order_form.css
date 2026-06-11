@@ -1,0 +1,18 @@
+/* [페이지 기본 레이아웃] */
+body { font-family: 'Noto Sans KR', sans-serif; background-color: #f4f7f6; margin: 0; }
+.main-content { display: flex; justify-content: center; padding: 50px 20px; }
+
+/* [주문서 카드 디자인] */
+.order-card { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 400px; }
+h2 { text-align: center; color: #333; margin-bottom: 30px; }
+
+/* [입력 폼 요소 디자인] */
+.input-group { margin-bottom: 20px; }
+.input-group label { display: block; font-size: 14px; color: #666; margin-bottom: 5px; font-weight: bold; }
+.input-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; box-sizing: border-box; }
+.input-group input:focus { border-color: #1f73d1; outline: none; }
+
+/* [하단 결제 금액 및 버튼 디자인] */
+.total-price { font-size: 20px; font-weight: bold; color: #E74C3C; text-align: right; margin-bottom: 20px; }
+.btn-submit { width: 100%; padding: 15px; background-color: #1f73d1; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+.btn-submit:hover { background-color: #155ca8; }

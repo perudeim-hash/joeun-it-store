@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문하기 | JOEUN IT STORE</title>
+
+    <link rel="stylesheet" th:href="@{/css/common/head.css}">
+    <link rel="stylesheet" th:href="@{/css/order/order_form.css}">
+</head>
+<body>
+<div th:replace="~{common/head :: head}"></div>
+
+<div class="main-content">
+    <div class="order-card">
+        <h2>🛍️ 상품 주문서</h2>
+
+        <div class="input-group">
+            <label>상품 번호</label>
+            <input type="number" id="productId" value="1">
+        </div>
+        <div class="input-group">
+            <label>상품명</label>
+            <input type="text" id="productName" value="갤럭시 S24">
+        </div>
+        <div class="input-group">
+            <label>주문 수량</label>
+            <input type="number" id="quantity" value="2" oninput="calculateTotal()">
+        </div>
+        <div class="input-group">
+            <label>상품 단가 (원)</label>
+            <input type="number" id="orderPrice" value="1150000" oninput="calculateTotal()">
+        </div>
+
+        <div class="total-price">
+            총 결제금액: <span id="totalAmountText">2,300,000</span>원
+            <input type="hidden" id="totalAmount" value="2300000">
+        </div>
+
+        <button class="btn-submit" onclick="submitOrder()">결제하기</button>
+    </div>
+</div>
+
+<script th:src="@{/js/common/head.js}"></script>
+<script th:src="@{/js/order/order_form.js}"></script>
+</body>
+</html>
