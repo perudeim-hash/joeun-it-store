@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.store.joeunit.order.mapper.OrderMapper">
+
+    <insert id="insertOrder" parameterType="org.store.joeunit.order.dto.OrderDto" useGeneratedKeys="true" keyProperty="orderId">
+        INSERT INTO orders (member_id, order_status, total_amount, order_date)
+        VALUES (#{memberId}, 'ORDERED', #{totalAmount}, SYSDATE)
+    </insert>
+
+    <insert id="insertOrderItem" parameterType="org.store.joeunit.order.dto.OrderItemDto">
+        INSERT INTO order_item (order_id, product_id, quantity, order_price)
+        VALUES (#{orderId}, #{productId}, #{quantity}, #{orderPrice})
+    </insert>
+
+    <select id="selectMyOrders" parameterType="long" resultType="org.store.joeunit.order.dto.OrderDto">
+        SELECT order_id as orderId,
+        member_id as memberId,
+        order_status as orderStatus,
+        total_amount as totalAmount,
+        order_date as orderDate
+        FROM orders
+        WHERE member_id = #{memberId}
+        ORDER BY order_date DESC
+    </select>
+
+</mapper>
