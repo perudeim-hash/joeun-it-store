@@ -21,4 +21,10 @@ public class CartItemDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    private String imagePath;
+    private String productName;
+    private String brand;
+    private int price;
+    private int stock;
+
 }
