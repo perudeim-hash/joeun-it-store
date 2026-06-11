@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko"
+      data-theme="light"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>JOEUN IT STORE</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5"
+          rel="stylesheet"/>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-base-200 min-h-screen">
+
+<!-- 네비게이션 -->
+
+<div class="navbar bg-base-100 shadow-lg px-6">
+
+    <div class="navbar-start">
+
+        <a href="/"
+           class="btn btn-ghost text-xl">
+
+            JOEUN IT STORE
+
+        </a>
+
+    </div>
+
+    <div class="navbar-center gap-2">
+
+        <a href="/product/list"
+           class="btn btn-ghost">
+
+            상품목록
+
+        </a>
+
+        <a href="/board/list"
+           class="btn btn-ghost">
+
+            게시판
+
+        </a>
+
+    </div>
+
+    <div class="navbar-end gap-2">
+
+        <!-- 로그인 안된 상태 -->
+
+        <div th:if="${session.loggedMember == null}"
+             class="flex gap-2">
+
+            <a href="/member/signup"
+               class="btn btn-outline">
+
+                회원가입
+
+            </a>
+
+            <a href="/member/login"
+               class="btn btn-primary">
+
+                로그인
+
+            </a>
+
+        </div>
+
+        <!-- 로그인 된 상태 -->
+
+        <div th:if="${session.loggedMember != null}"
+             class="flex items-center gap-2">
+
+            <span class="font-bold">
+
+                <span th:text="${session.loggedMember.nickname}">
+                    nickname
+                </span>
+
+                님 환영합니다
+
+            </span>
+
+            <!-- 관리자만 표시 -->
+
+            <a th:if="${session.loggedMember.role == 'ADMIN'}"
+               href="/admin/member/list"
+               class="btn btn-warning">
+
+                회원관리
+
+            </a>
+
+            <a href="/member/mypage"
+               class="btn btn-secondary">
+
+                마이페이지
+
+            </a>
+
+            <a href="/member/logout"
+               class="btn btn-error">
+
+                로그아웃
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 메인 -->
+
+<div class="hero min-h-[70vh]">
+
+    <div class="hero-content text-center">
+
+        <div>
+
+            <h1 class="text-5xl font-bold">
+
+                JOEUN IT STORE
+
+            </h1>
+
+            <p class="py-6">
+
+                쇼핑몰 프로젝트 메인 페이지
+
+            </p>
+
+            <div class="flex justify-center gap-3">
+
+                <a href="/product/list"
+                   class="btn btn-primary">
+
+                    상품 보러가기
+
+                </a>
+
+                <a href="/board/list"
+                   class="btn btn-outline">
+
+                    게시판 가기
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:inline="javascript">
+
+    const welcomeMessage =
+        [[${welcomeMessage}]];
+
+    const message =
+        [[${message}]];
+
+    if (welcomeMessage != null) {
+        alert(welcomeMessage);
+    }
+
+    if (message != null) {
+        alert(message);
+    }
+
+</script>
+
+</body>
+</html>

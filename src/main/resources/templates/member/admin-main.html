@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 페이지</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-base-200 min-h-screen">
+
+<div class="navbar bg-base-100 shadow px-6">
+    <div class="flex-1">
+        <a href="/" class="btn btn-ghost text-xl">
+            JOEUN IT STORE
+        </a>
+    </div>
+
+    <div class="flex gap-2">
+        <a href="/" class="btn btn-outline">
+            메인페이지
+        </a>
+
+        <a href="/member/logout" class="btn btn-error">
+            로그아웃
+        </a>
+    </div>
+</div>
+
+<div class="max-w-4xl mx-auto py-10 px-4">
+
+    <div class="card bg-base-100 shadow-2xl">
+        <div class="card-body text-center">
+
+            <h1 class="text-4xl font-bold">
+                관리자 페이지
+            </h1>
+
+            <p class="py-4 text-gray-500">
+                회원 정보를 관리할 수 있습니다.
+            </p>
+
+            <div class="flex justify-center gap-3">
+                <a href="/admin/member/list" class="btn btn-primary">
+                    회원관리
+                </a>
+
+                <a href="/" class="btn btn-outline">
+                    메인페이지
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
