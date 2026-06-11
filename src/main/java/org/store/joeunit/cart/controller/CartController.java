@@ -18,7 +18,7 @@ import java.util.List;
 public class CartController {
 
     private final CartService cartService;
-
+    //아이템 리스트 출력
     @GetMapping("/carts")
     public String cartList(Model model) {
         int memberId = 2;
@@ -32,14 +32,14 @@ public class CartController {
         return "cart/carts";
     }
 
+    // 아이텝 삭제
     @PostMapping("/delete")
-    public String CartItemDeleteAll(int cartItemId) {
+    public String CartItemDelete(int cartItemId) {
         int memberId = 2;
-
         cartService.deleteCartItem(memberId,cartItemId);
         return "redirect:/cart/carts";
     }
-
+    //장바구니 전체 삭제
     @PostMapping("/delete-all")
     public String CartItemDeleteAll() {
         int memberId = 2;
