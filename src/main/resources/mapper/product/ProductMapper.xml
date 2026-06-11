@@ -6,7 +6,9 @@
 
 <mapper namespace="org.store.joeunit.product.mapper.ProductMapper">
 
-    <!-- 상품 전체 목록 조회 -->
+    <!-- ==========================================
+         상품 전체 목록 조회
+    ========================================== -->
     <select id="getList"
             resultType="org.store.joeunit.product.dto.ProductDto">
 
@@ -16,7 +18,9 @@
 
     </select>
 
-    <!-- 상품 상세 조회 -->
+    <!-- ==========================================
+         상품 상세 조회
+    ========================================== -->
     <select id="getById"
             parameterType="Integer"
             resultType="org.store.joeunit.product.dto.ProductDto">
@@ -27,7 +31,9 @@
 
     </select>
 
-    <!-- 상품 등록 -->
+    <!-- ==========================================
+         상품 등록
+    ========================================== -->
     <insert id="insert">
 
         INSERT INTO PRODUCT (
@@ -38,8 +44,17 @@
         MODEL_NAME,
         PRICE,
         STOCK,
+        CPU,
+        RAM,
+        STORAGE_CAPACITY,
+        SCREEN_SIZE,
+        OS,
+        COLOR,
         DESCRIPTION,
-        STATUS
+        IMAGE_NAME,
+        IMAGE_PATH,
+        STATUS,
+        CREATED_AT
         )
         VALUES (
         SEQ_PRODUCT.NEXTVAL,
@@ -49,26 +64,51 @@
         #{modelName},
         #{price},
         #{stock},
+        #{cpu},
+        #{ram},
+        #{storageCapacity},
+        #{screenSize},
+        #{os},
+        #{color},
         #{description},
-        'SALE'
+        #{imageName},
+        #{imagePath},
+        'SALE',
+        SYSDATE
         )
 
     </insert>
 
-    <!-- 상품 수정 -->
+    <!-- ==========================================
+         상품 수정
+    ========================================== -->
     <update id="update">
 
         UPDATE PRODUCT
-        SET PRODUCT_NAME = #{productName},
+        SET
+        CATEGORY_ID = #{categoryId},
+        PRODUCT_NAME = #{productName},
+        BRAND = #{brand},
+        MODEL_NAME = #{modelName},
         PRICE = #{price},
         STOCK = #{stock},
+        CPU = #{cpu},
+        RAM = #{ram},
+        STORAGE_CAPACITY = #{storageCapacity},
+        SCREEN_SIZE = #{screenSize},
+        OS = #{os},
+        COLOR = #{color},
         DESCRIPTION = #{description},
+        IMAGE_NAME = #{imageName},
+        IMAGE_PATH = #{imagePath},
         UPDATED_AT = SYSDATE
         WHERE PRODUCT_ID = #{productId}
 
     </update>
 
-    <!-- 상품 삭제 -->
+    <!-- ==========================================
+         상품 삭제
+    ========================================== -->
     <delete id="delete">
 
         DELETE
@@ -77,19 +117,23 @@
 
     </delete>
 
-    <!-- 상품명 검색 -->
+    <!-- ==========================================
+         상품명 검색
+    ========================================== -->
     <select id="search"
             parameterType="String"
             resultType="org.store.joeunit.product.dto.ProductDto">
 
         SELECT *
         FROM PRODUCT
-        WHERE PRODUCT_NAME
-        LIKE '%' || #{keyword} || '%'
+        WHERE PRODUCT_NAME LIKE '%' || #{keyword} || '%'
+        ORDER BY PRODUCT_ID DESC
 
     </select>
 
-    <!-- 카테고리별 상품 조회 -->
+    <!-- ==========================================
+         카테고리별 조회
+    ========================================== -->
     <select id="getCategoryList"
             parameterType="Integer"
             resultType="org.store.joeunit.product.dto.ProductDto">

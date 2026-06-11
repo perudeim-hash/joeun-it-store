@@ -1,6 +1,7 @@
 package org.store.joeunit.product.dto;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -17,63 +18,111 @@ import java.util.Date;
 @ToString
 public class ProductDto {
 
-    // 상품번호
+    /*
+     * 상품번호
+     */
     private Integer productId;
 
-    // 카테고리번호
+    /*
+     * 카테고리번호
+     */
     private Integer categoryId;
 
-    // 카테고리명
+    /*
+     * 카테고리명
+     */
     private String categoryName;
 
-    // 상품명
+    /*
+     * 상품명
+     */
     private String productName;
 
-    // 제조사
+    /*
+     * 제조사
+     */
     private String brand;
 
-    // 모델명
+    /*
+     * 모델명
+     */
     private String modelName;
 
-    // 가격
+    /*
+     * 가격
+     */
     private Integer price;
 
-    // 재고
+    /*
+     * 재고
+     */
     private Integer stock;
 
-    // CPU
+    /*
+     * CPU
+     */
     private String cpu;
 
-    // RAM
+    /*
+     * RAM
+     */
     private String ram;
 
-    // 저장공간
+    /*
+     * 저장공간
+     */
     private String storageCapacity;
 
-    // 화면크기
+    /*
+     * 화면크기
+     */
     private String screenSize;
 
-    // 운영체제
+    /*
+     * 운영체제
+     */
     private String os;
 
-    // 색상
+    /*
+     * 색상
+     */
     private String color;
 
-    // 상품설명
+    /*
+     * 상품설명
+     */
     private String description;
 
-    // 이미지 파일명
+    /*
+     * 이미지 파일명
+     */
     private String imageName;
 
-    // 이미지 경로
+    /*
+     * 이미지 경로
+     */
     private String imagePath;
 
-    // SALE, SOLD_OUT, STOP
+    /*
+     * 업로드 파일
+     */
+    private MultipartFile upload;
+
+    /*
+     * 상품상태
+     * SALE
+     * SOLD_OUT
+     * STOP
+     */
     private String status;
 
-    // 등록일
+    /*
+     * 등록일
+     */
     private Date createdAt;
 
-    // 수정일
+    /*
+     * 수정일
+     */
     private Date updatedAt;
 }

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>상품상세</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/common/head.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-base-200">
+
+<div th:replace="~{common/head :: head}"></div>
+
+<div class="container mx-auto p-10">
+
+    <div class="card bg-base-100 shadow-xl">
+
+        <div class="card-body">
+
+            <h1 class="text-3xl font-bold">
+                상품상세
+            </h1>
+
+            <div class="divider"></div>
+
+            <p>
+                <b>상품명 :</b>
+                <span th:text="${product.productName}"></span>
+            </p>
+
+            <p>
+                <b>브랜드 :</b>
+                <span th:text="${product.brand}"></span>
+            </p>
+
+            <p>
+                <b>가격 :</b>
+                <span th:text="${product.price}"></span>
+            </p>
+
+            <p>
+                <b>재고 :</b>
+                <span th:text="${product.stock}"></span>
+            </p>
+
+            <p>
+                <b>설명 :</b>
+                <span th:text="${product.description}"></span>
+            </p>
+
+            <div class="card-actions justify-end">
+
+                <a href="/product/list"
+                   class="btn btn-primary">
+
+                    목록
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
