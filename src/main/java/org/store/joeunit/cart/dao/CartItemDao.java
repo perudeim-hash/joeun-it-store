@@ -1,23 +1,27 @@
 package org.store.joeunit.cart.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.store.joeunit.cart.dto.CartItemDto;
 
+import java.util.List;
+
+@Mapper
 public interface CartItemDao {
-    CartItemDto findCartItemsByMemberId(CartItemDto cartItemDto);
+    List<CartItemDto> findCartItemsByMemberId(CartItemDto cartItemDto);
 
     CartItemDto findCartItemByMemberIdAndProductId(CartItemDto cartItemDto);
 
-    CartItemDto createCartItem(CartItemDto cartItemDto);
+    int cartItemTotalPrice(CartItemDto cartItemDto);
 
-    CartItemDto increaseCartItemQuantity(CartItemDto cartItemDto);
+    int createCartItem(CartItemDto cartItemDto);
 
-    CartItemDto updateCartItemQuantity(CartItemDto cartItemDto);
+    int increaseCartItemQuantity(CartItemDto cartItemDto);
 
-    CartItemDto deleteCartItem(CartItemDto cartItemDto);
+    int updateCartItemQuantity(CartItemDto cartItemDto);
 
-    CartItemDto deleteCartItemsByMemberId(CartItemDto cartItemDto);
+    int deleteCartItem(CartItemDto cartItemDto);
 
-
+    int deleteCartItemsByMemberId(CartItemDto cartItemDto);
 
 
 }

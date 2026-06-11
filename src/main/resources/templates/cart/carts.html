@@ -4,14 +4,96 @@
     <meta charset="UTF-8">
     <title>장바구니</title>
     <link rel="stylesheet" href="/css/common/head.css">
-    <script src="/js/common/head.js" defer></script>
 </head>
 <body>
 
 <div th:replace="~{common/head :: head}"></div>
 
-<main>
+<main class="cart-container">
     <h1>장바구니</h1>
+
+    <!-- 장바구니 비었을 때 -->
+    <div th:if="${cartItems == null or #lists.isEmpty(cartItems)}">
+        <p>장바구니가 비어 있습니다.</p>
+        <a href="/products">상품 보러가기</a>
+    </div>
+
+    <!-- 장바구니 목록 -->
+    <div th:if="${cartItems != null and !#lists.isEmpty(cartItems)}">
+        <table border="1" width="100%">
+            <thead>
+            <tr>
+                <th>이미지</th>
+                <th>상품명</th>
+                <th>브랜드</th>
+                <th>가격</th>
+                <th>수량</th>
+                <th>상품 합계</th>
+                <th>삭제</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="item : ${cartItems}">
+                <td>
+                    <img th:src="${item.imagePath}" alt="상품 이미지" width="80">
+                </td>
+
+                <td th:text="${item.productName}">상품명</td>
+
+                <td th:text="${item.brand}">브랜드</td>
+
+                <td>
+                    <span th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')}">0</span>원
+                </td>
+
+                <td>
+                    <form action="/cart/update" method="post">
+                        <input type="hidden" name="memberId" th:value="${item.memberId}">
+                        <input type="hidden" name="cartItemId" th:value="${item.cartItemId}">
+
+                        <input type="number"
+                               name="quantity"
+                               th:value="${item.quantity}"
+                               min="1"
+                               style="width: 60px;">
+
+                        <button type="submit">변경</button>
+                    </form>
+                </td>
+
+
+                <td>
+                    <span th:text="${#numbers.formatInteger(item.itemTotalPrice, 3, 'COMMA')}">0</span>원
+                </td>
+
+                <td>
+                    <form action="/cart/delete" method="post">
+                        <input type="hidden" name="memberId" th:value="${item.memberId}">
+                        <input type="hidden" name="cartItemId" th:value="${item.cartItemId}">
+                        <button type="submit">삭제</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 30px; text-align: right;">
+            <h2>
+                총 금액:
+                <span th:text="${#numbers.formatInteger(cartTotalPrice, 3, 'COMMA')}">0</span>원
+            </h2>
+
+            <form action="/orders" method="post">
+                <button type="submit">주문하기</button>
+            </form>
+
+            <form action="/cart/delete-all" method="post" style="margin-top: 10px;">
+                <input type="hidden" name="memberId" value="2">
+                <button type="submit">장바구니 전체 비우기</button>
+            </form>
+        </div>
+    </div>
 </main>
 
 </body>
