@@ -13,9 +13,9 @@ spring:
 
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@//localhost:1521/XE
-    username: ??_DB_ID
-    password: ??_DB_PW
+    url: jdbc:oracle:thin:@//localhost:1521/XEPDB1
+    username: shop
+    password: 1234
 
   servlet:
     multipart:

@@ -6,17 +6,16 @@ import org.store.joeunit.product.dto.ProductDto;
 import java.util.List;
 
 /*
- * 상품(Product) Mapper
+ * 상품 Mapper
  *
  * 담당 기능
- * - 상품 목록 조회
- * - 상품 상세 조회
- * - 상품 등록
- * - 상품 수정
- * - 상품 삭제
- * - 상품 검색
- * - 카테고리 조회
- * - 페이징
+ * - 상품목록 조회
+ * - 상품상세 조회
+ * - 상품등록
+ * - 상품수정
+ * - 상품삭제
+ * - 상품검색
+ * - 카테고리별 조회
  */
 
 @Mapper
@@ -29,7 +28,6 @@ public interface ProductMapper {
 
     /*
      * 상품 상세 조회
-     * 상품번호(PK) 기준 조회
      */
     ProductDto getById(Integer productId);
 
@@ -52,4 +50,9 @@ public interface ProductMapper {
      * 상품명 검색
      */
     List<ProductDto> search(String keyword);
+
+    /*
+     * 카테고리별 상품 조회
+     */
+    List<ProductDto> getCategoryList(Integer categoryId);
 }
