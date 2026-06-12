@@ -31,15 +31,52 @@
 
                 <span>|</span>
 
-                <a href="/member/login">로그인</a>
+                <!-- 로그인 안 된 상태 -->
+                <th:block th:if="${session.loggedMember == null}">
 
-                <span>|</span>
+                    <a href="/member/login">
+                        로그인
+                    </a>
 
-                <a href="/member/signup">회원가입</a>
+                    <span>|</span>
 
-                <span>|</span>
+                    <a href="/member/signup">
+                        회원가입
+                    </a>
 
-                <a href="member/mypage">마이페이지</a>
+                </th:block>
+
+                <!-- 로그인 된 상태 -->
+                <th:block th:if="${session.loggedMember != null}">
+
+                    <span class="welcome-text">
+                        <span th:text="${session.loggedMember.nickname}">
+                            회원
+                        </span>님 환영합니다
+                    </span>
+
+                    <span>|</span>
+
+                    <!-- 관리자만 보임 -->
+                    <a th:if="${session.loggedMember.role == 'ADMIN'}"
+                       href="/admin/member/list"
+                       class="admin-link">
+                        회원관리
+                    </a>
+
+                    <span th:if="${session.loggedMember.role == 'ADMIN'}">|</span>
+
+                    <a href="/member/mypage">
+                        마이페이지
+                    </a>
+
+                    <span>|</span>
+
+                    <a href="/member/logout">
+                        로그아웃
+                    </a>
+
+                </th:block>
 
                 <span>|</span>
 

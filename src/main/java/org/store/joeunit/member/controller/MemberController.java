@@ -9,6 +9,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.store.joeunit.member.dto.MemberDto;
 import org.store.joeunit.member.service.MemberService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -80,6 +83,48 @@ public class MemberController {
         );
 
         return "redirect:/";
+    }
+    // 아이디 중복확인
+    @PostMapping("/id-check")
+    @ResponseBody
+    public Map<String, Object> idCheck(@RequestParam String loginId) {
+
+        int count = memberService.idCheck(loginId);
+
+        Map<String, Object> result = new HashMap<>();
+
+        // count가 0이면 사용 가능
+        result.put("available", count == 0);
+
+        return result;
+    }
+
+    // 이메일 중복확인
+    @PostMapping("/email-check")
+    @ResponseBody
+    public Map<String, Object> emailCheck(@RequestParam String email) {
+
+        int count = memberService.emailCheck(email);
+
+        Map<String, Object> result = new HashMap<>();
+
+        result.put("available", count == 0);
+
+        return result;
+    }
+
+    // 닉네임 중복확인
+    @PostMapping("/nickname-check")
+    @ResponseBody
+    public Map<String, Object> nicknameCheck(@RequestParam String nickname) {
+
+        int count = memberService.nicknameCheck(nickname);
+
+        Map<String, Object> result = new HashMap<>();
+
+        result.put("available", count == 0);
+
+        return result;
     }
 
     // 로그아웃
@@ -166,24 +211,54 @@ public class MemberController {
 
     // 비밀번호 변경 처리
     @PostMapping("/change-password")
-    public String changePasswordProcess(
-            @RequestParam String password,
-            HttpSession session) {
+    public String changePasswordProcess(@RequestParam String currentPassword,
+                                        @RequestParam String newPassword,
+                                        @RequestParam String newPasswordConfirm,
+                                        HttpSession session,
+                                        RedirectAttributes redirectAttributes) {
 
         MemberDto loggedMember =
                 (MemberDto) session.getAttribute("loggedMember");
 
+        if (loggedMember == null) {
+            return "redirect:/member/login";
+        }
+
+        if (!loggedMember.getPassword().equals(currentPassword)) {
+            redirectAttributes.addFlashAttribute(
+                    "message",
+                    "현재 비밀번호가 일치하지 않습니다."
+            );
+
+            return "redirect:/member/change-password";
+        }
+
+        if (!newPassword.equals(newPasswordConfirm)) {
+            redirectAttributes.addFlashAttribute(
+                    "message",
+                    "새 비밀번호가 일치하지 않습니다."
+            );
+
+            return "redirect:/member/change-password";
+        }
+
         MemberDto memberDto = new MemberDto();
-
-        memberDto.setMemberId(
-                loggedMember.getMemberId()
-        );
-
-        memberDto.setPassword(password);
+        memberDto.setMemberId(loggedMember.getMemberId());
+        memberDto.setPassword(newPassword);
 
         memberService.changePassword(memberDto);
 
-        return "redirect:/member/mypage";
+        MemberDto updatedMember =
+                memberService.findByNo(loggedMember.getMemberId());
+
+        session.setAttribute("loggedMember", updatedMember);
+
+        redirectAttributes.addFlashAttribute(
+                "message",
+                "비밀번호가 변경되었습니다."
+        );
+
+        return "redirect:/";
     }
 
     // 회원탈퇴 페이지
