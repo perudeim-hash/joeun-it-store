@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="light">
+<html lang="ko"
+      data-theme="light"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>로그인</title>
@@ -13,20 +16,33 @@
 <div class="card bg-base-100 w-full max-w-md shadow-2xl">
     <div class="card-body">
 
-        <h2 class="text-3xl font-bold text-center mb-6">로그인</h2>
+        <h2 class="text-3xl font-bold text-center mb-6">
+            로그인
+        </h2>
+
+        <div th:if="${loginError}"
+             class="alert alert-error mb-4">
+            <span th:text="${loginError}">
+                아이디 또는 비밀번호가 틀렸습니다.
+            </span>
+        </div>
 
         <form action="/member/login" method="post">
 
             <div class="form-control mb-4">
                 <label class="label">아이디</label>
-                <input type="text" name="loginId"
-                       class="input input-bordered w-full" required>
+                <input type="text"
+                       name="loginId"
+                       class="input input-bordered w-full"
+                       required>
             </div>
 
             <div class="form-control mb-6">
                 <label class="label">비밀번호</label>
-                <input type="password" name="password"
-                       class="input input-bordered w-full" required>
+                <input type="password"
+                       name="password"
+                       class="input input-bordered w-full"
+                       required>
             </div>
 
             <button class="btn btn-primary w-full">
@@ -38,8 +54,15 @@
         <div class="divider">MENU</div>
 
         <div class="flex gap-2">
-            <a href="/" class="btn btn-ghost flex-1">메인페이지</a>
-            <a href="/member/signup" class="btn btn-outline flex-1">회원가입</a>
+            <a href="/"
+               class="btn btn-ghost flex-1">
+                메인페이지
+            </a>
+
+            <a href="/member/signup"
+               class="btn btn-outline flex-1">
+                회원가입
+            </a>
         </div>
 
     </div>

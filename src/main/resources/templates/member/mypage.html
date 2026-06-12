@@ -95,8 +95,8 @@
 
             <div class="flex justify-between border-b pb-2">
                 <span class="font-bold">가입일</span>
-                <span th:text="${#temporals.format(memberDto.createdAt,'yyyy-MM-dd')}">
-                    2026-06-11
+                <span th:text="${#temporals.format(memberDto.createdAt,'yyyy-MM-dd HH:mm')}">
+                    2026-06-11 14:00
                 </span>
             </div>
 
@@ -104,8 +104,8 @@
                 <span class="font-bold">최근 수정일</span>
 
                 <span th:if="${memberDto.updatedAt != null}"
-                      th:text="${#temporals.format(memberDto.updatedAt,'yyyy-MM-dd')}">
-                    2026-06-11
+                      th:text="${#temporals.format(memberDto.updatedAt,'yyyy-MM-dd HH:mm')}">
+                    2026-06-11 14:30
                 </span>
 
                 <span th:if="${memberDto.updatedAt == null}">
@@ -145,11 +145,23 @@
 
         <div class="divider"></div>
 
-        <div class="text-center">
+        <div class="text-center"
+             th:if="${memberDto.role != 'ADMIN'}">
+
             <a href="/member/delete"
                class="btn btn-error btn-outline btn-sm">
                 회원탈퇴
             </a>
+
+        </div>
+
+        <div th:if="${memberDto.role == 'ADMIN'}"
+             class="alert alert-info mt-2">
+
+            <span>
+                관리자 계정은 회원탈퇴가 제한됩니다.
+            </span>
+
         </div>
 
     </div>

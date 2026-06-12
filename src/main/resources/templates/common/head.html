@@ -1,0 +1,104 @@
+<header class="site-header" th:fragment="head">
+
+    <div class="header-top">
+
+        <div class="header-inner">
+
+            <a href="/" class="logo">
+                <span class="logo-main">조은IT</span>
+                <span class="logo-sub">쇼핑몰</span>
+            </a>
+
+            <form class="search-box"
+                  action="/products"
+                  method="get">
+
+                <input type="text"
+                       name="keyword"
+                       placeholder="검색어를 입력하세요"
+                       class="search-input">
+
+                <button type="submit"
+                        class="search-button">
+                    🔍
+                </button>
+
+            </form>
+
+            <div class="top-menu">
+
+                <a href="/product/list">상품목록</a>
+
+                <span>|</span>
+
+                <a href="/member/login">로그인</a>
+
+                <span>|</span>
+
+                <a href="/member/signup">회원가입</a>
+
+                <span>|</span>
+
+                <a href="member/mypage">마이페이지</a>
+
+                <span>|</span>
+
+                <a href="/board">고객센터</a>
+
+            </div>
+
+            <div class="icon-menu">
+
+                <a href="/wishlist" class="icon-item">
+                    <span class="icon">♡</span>
+                    <span>찜한상품</span>
+                </a>
+
+                <a href="/cart" class="icon-item cart-icon">
+                    <span class="icon">🛒</span>
+                    <span>장바구니</span>
+
+                    <em class="cart-count"
+                        th:text="${cartCount != null ? cartCount : 0}">
+                        0
+                    </em>
+                </a>
+
+                <a href="/orders" class="icon-item">
+                    <span class="icon">📋</span>
+                    <span>주문조회</span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <nav class="header-nav">
+
+        <div class="nav-inner">
+
+            <button type="button"
+                    class="all-category-btn">
+
+                ☰ 전체 카테고리
+
+            </button>
+
+            <ul class="nav-menu">
+
+                <li><a href="/products?categoryId=1">스마트폰</a></li>
+                <li><a href="/products?categoryId=2">노트북</a></li>
+                <li><a href="/products?categoryId=3">태블릿</a></li>
+                <li><a href="/products?categoryId=4">기타주변기기</a></li>
+                <li><a href="/board">게시판</a></li>
+                <li><a href="/events">이벤트</a></li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+
+</header>
