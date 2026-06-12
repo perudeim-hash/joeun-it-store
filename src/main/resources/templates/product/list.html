@@ -10,7 +10,7 @@
     <!-- DaisyUI -->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet"/>
 
-    <!-- 공통 헤더 CSS -->
+    <!-- 공통 헤더 -->
     <link rel="stylesheet" href="/css/common/head.css">
 
     <!-- Tailwind -->
@@ -24,11 +24,11 @@
 
 <div class="max-w-[1400px] mx-auto mt-10 flex gap-8">
 
-    <!-- ==========================================
+    <!-- ==========================
          왼쪽 메뉴
-    ========================================== -->
+    ========================== -->
 
-    <div class="w-64">
+    <div class="w-64 shrink-0">
 
         <div class="card bg-base-100 shadow-xl">
 
@@ -56,166 +56,129 @@
 
     </div>
 
-    <!-- ==========================================
-         오른쪽 본문
-    ========================================== -->
+    <!-- ==========================
+         오른쪽 영역
+    ========================== -->
 
-    <div class="flex-1">
+    <div class="flex-1 min-w-0">
 
         <!-- 제목 -->
 
-        <div class="flex justify-between items-center mb-6">
+        <div class="mb-6">
 
             <h1 class="text-4xl font-bold">
                 상품목록
             </h1>
 
-            <a href="/product/write"
-               class="btn btn-primary">
-                상품등록
-            </a>
+        </div>
+
+        <!-- ==========================
+             카테고리 버튼
+        ========================== -->
+
+        <div class="flex gap-2 mb-8">
+
+            <button type="button"
+                    class="btn btn-outline btn-primary"
+                    onclick="loadCategory(0)">
+                전체
+            </button>
+
+            <button type="button"
+                    class="btn btn-outline btn-primary"
+                    onclick="loadCategory(1)">
+                스마트폰
+            </button>
+
+            <button type="button"
+                    class="btn btn-outline btn-primary"
+                    onclick="loadCategory(2)">
+                노트북
+            </button>
+
+            <button type="button"
+                    class="btn btn-outline btn-primary"
+                    onclick="loadCategory(3)">
+                태블릿
+            </button>
+
+            <button type="button"
+                    class="btn btn-outline btn-primary"
+                    onclick="loadCategory(4)">
+                기타기기
+            </button>
 
         </div>
 
-        <!-- ==========================================
-             카테고리 검색
-        ========================================== -->
+        <!-- ==========================
+             상품 카드 목록
+        ========================== -->
 
-        <form action="/product/list"
-              method="get"
-              class="flex gap-3 mb-6">
+        <div id="productList"
+             class="grid grid-cols-4 gap-6">
 
-            <select name="categoryId"
-                    class="select select-bordered w-60">
+            <div class="card bg-base-100 shadow-md hover:shadow-xl transition duration-300"
+                 th:each="product : ${productList}">
 
-                <option value="">
-                    전체카테고리
-                </option>
+                <!-- 상품 이미지 -->
 
-                <option value="1">
-                    스마트폰
-                </option>
+                <a th:href="@{/product/view(productId=${product.productId})}">
 
-                <option value="2">
-                    노트북
-                </option>
+                    <figure class="h-[250px] overflow-hidden">
 
-                <option value="3">
-                    태블릿
-                </option>
+                        <img th:src="@{/upload/{img}(img=${product.imageName})}"
+                             th:alt="${product.productName}"
+                             class="w-full h-full object-cover">
 
-                <option value="4">
-                    기타기기
-                </option>
+                    </figure>
 
-            </select>
+                </a>
 
-            <button class="btn btn-primary">
-                검색
-            </button>
+                <!-- 상품 정보 -->
 
-        </form>
+                <div class="card-body p-4">
 
-        <!-- ==========================================
-             상품목록
-        ========================================== -->
+                    <a th:href="@{/product/view(productId=${product.productId})}"
+                       class="font-bold text-lg hover:text-primary line-clamp-2">
 
-        <div class="card bg-base-100 shadow-xl">
+                        <span th:text="${product.productName}">
+                        </span>
 
-            <div class="card-body">
+                    </a>
 
-                <div class="overflow-x-auto">
+                    <div class="text-sm text-gray-500">
 
-                    <table class="table table-zebra">
+                        브랜드 :
+                        <span th:text="${product.brand}">
+                        </span>
 
-                        <thead>
+                    </div>
 
-                        <tr>
+                    <div class="text-2xl font-bold text-error">
 
-                            <th>번호</th>
-                            <th>상품명</th>
-                            <th>브랜드</th>
-                            <th>가격</th>
-                            <th>재고</th>
-                            <th>상태</th>
-                            <th>관리</th>
+                        <span th:text="${#numbers.formatInteger(product.price,3,'COMMA')}">
+                        </span>
+                        원
 
-                        </tr>
+                    </div>
 
-                        </thead>
+                    <div class="text-sm text-gray-500">
 
-                        <tbody>
+                        판매량 :
+                        <span th:text="${product.salesCount}">
+                        </span>
+                        개 판매
 
-                        <tr th:each="product : ${productList}">
+                    </div>
 
-                            <td th:text="${product.productId}">
-                            </td>
+                    <div>
 
-                            <td class="font-bold"
-                                th:text="${product.productName}">
-                            </td>
+                        <span class="badge badge-success"
+                              th:text="${product.status}">
+                        </span>
 
-                            <td th:text="${product.brand}">
-                            </td>
+                    </div>
 
-                            <td>
-                                <span th:text="${#numbers.formatInteger(product.price,3,'COMMA')}">
-                                </span>
-                                원
-                            </td>
-
-                            <td th:text="${product.stock}">
-                            </td>
-
-                            <td>
-
-                                <div class="badge badge-success"
-                                     th:text="${product.status}">
-                                </div>
-
-                            </td>
-
-                            <td>
-
-                                <div class="flex gap-2">
-
-                                    <!-- 상세 -->
-
-                                    <a th:href="@{/product/view(productId=${product.productId})}"
-                                       class="btn btn-sm btn-info">
-
-                                        상세
-
-                                    </a>
-
-                                    <!-- 수정 -->
-
-                                    <a th:href="@{/product/modify(productId=${product.productId})}"
-                                       class="btn btn-sm btn-success">
-
-                                        수정
-
-                                    </a>
-
-                                    <!-- 삭제 -->
-
-                                    <a th:href="@{/product/delete(productId=${product.productId})}"
-                                       class="btn btn-sm btn-error"
-                                       onclick="return confirm('삭제하시겠습니까?');">
-
-                                        삭제
-
-                                    </a>
-
-                                </div>
-
-                            </td>
-
-                        </tr>
-
-                        </tbody>
-
-                    </table>
 
                 </div>
 
@@ -223,9 +186,14 @@
 
         </div>
 
+        <div id="paging"
+             class="flex flex-wrap justify-center gap-2 mt-10">
+        </div>
     </div>
 
 </div>
+
+<script src="/js/product/list.js"></script>
 
 </body>
 </html>

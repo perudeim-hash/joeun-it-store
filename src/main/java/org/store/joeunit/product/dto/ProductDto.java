@@ -125,4 +125,9 @@ public class ProductDto {
      * 수정일
      */
     private Date updatedAt;
+
+
+    private Integer salesCount;
 }
+
+
