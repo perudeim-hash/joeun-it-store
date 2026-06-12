@@ -136,5 +136,26 @@
         FROM shop_member
         WHERE role = 'ADMIN'
     </select>
-
+    <!-- 회원 목록 페이징 조회 -->
+    <select id="findAllPaging"
+            resultType="org.store.joeunit.member.dto.MemberDto">
+        SELECT *
+        FROM shop_member
+        ORDER BY member_id DESC
+        OFFSET #{start} ROWS FETCH NEXT #{size} ROWS ONLY
+    </select>
+    <!-- 닉네임으로 회원 조회 -->
+    <select id="findByNickname"
+            resultType="org.store.joeunit.member.dto.MemberDto">
+        SELECT *
+        FROM shop_member
+        WHERE nickname = #{nickname}
+    </select>
+    <!-- 아이디로 회원 조회 -->
+    <select id="findByLoginId"
+            resultType="org.store.joeunit.member.dto.MemberDto">
+        SELECT *
+        FROM shop_member
+        WHERE login_id = #{loginId}
+    </select>
 </mapper>

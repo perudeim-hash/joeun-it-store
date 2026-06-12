@@ -73,4 +73,21 @@ public class MemberService {
     public int getAdminCount() {
         return memberDao.getAdminCount();
     }
+    // 회원 목록 페이징 조회
+    public List<MemberDto> findAllPaging(int page, int size) {
+
+        int start = (page - 1) * size;
+
+        return memberDao.findAllPaging(start, size);
+    }
+    // 닉네임으로 회원 조회
+    public MemberDto findByNickname(String nickname) {
+        return memberDao.findByNickname(nickname);
+
+    }
+    //아이디로 회원 조회
+    public MemberDto findByLoginId(String loginId) {
+        return memberDao.findByLoginId(loginId);
+    }
+
 }
