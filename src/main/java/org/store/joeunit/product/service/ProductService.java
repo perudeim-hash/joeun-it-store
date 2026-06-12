@@ -5,11 +5,9 @@ import org.springframework.stereotype.Service;
 import org.store.joeunit.product.dto.ProductDto;
 import org.store.joeunit.product.mapper.ProductMapper;
 
+import java.util.HashMap;
 import java.util.List;
-
-/*
- * 상품 Service
- */
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -17,78 +15,65 @@ public class ProductService {
 
     private final ProductMapper productMapper;
 
-    /*
-     * 상품 전체 조회
-     */
     public List<ProductDto> getList() {
-
         return productMapper.getList();
-
     }
 
-    /*
-     * 상품 상세 조회
-     */
-    public ProductDto getById(
-            Integer productId
-    ) {
-
-        return productMapper.getById(
-                productId
-        );
-
+    public ProductDto getById(Integer productId) {
+        return productMapper.getById(productId);
     }
 
-    /*
-     * 카테고리별 조회
-     */
-    public List<ProductDto> getCategoryList(
-            Integer categoryId
-    ) {
-
-        return productMapper.getCategoryList(
-                categoryId
-        );
-
+    public List<ProductDto> getCategoryList(Integer categoryId) {
+        return productMapper.getCategoryList(categoryId);
     }
 
-    /*
-     * 상품 등록
-     */
-    public int insert(
-            ProductDto productDto
-    ) {
-
-        return productMapper.insert(
-                productDto
-        );
-
+    public int insert(ProductDto productDto) {
+        return productMapper.insert(productDto);
     }
 
-    /*
-     * 상품 수정
-     */
-    public int update(
-            ProductDto productDto
-    ) {
-
-        return productMapper.update(
-                productDto
-        );
-
+    public int update(ProductDto productDto) {
+        return productMapper.update(productDto);
     }
 
-    /*
-     * 상품 삭제
-     */
-    public int delete(
-            Integer productId
-    ) {
+    public int delete(Integer productId) {
+        return productMapper.delete(productId);
+    }
 
-        return productMapper.delete(
-                productId
-        );
+    public List<ProductDto> getPageList(int page) {
 
+        int pageSize = 8;
+        int startRow = (page - 1) * pageSize + 1;
+        int endRow = page * pageSize;
+
+        Map<String,Object> paramMap = new HashMap<>();
+
+        paramMap.put("startRow", startRow);
+        paramMap.put("endRow", endRow);
+
+        return productMapper.getPageList(paramMap);
+    }
+
+    public List<ProductDto> getCategoryPageList(Integer categoryId, int page) {
+
+        int pageSize = 8;
+        int startRow = (page - 1) * pageSize + 1;
+        int endRow = page * pageSize;
+
+        Map<String,Object> paramMap = new HashMap<>();
+
+        paramMap.put("categoryId", categoryId);
+        paramMap.put("startRow", startRow);
+        paramMap.put("endRow", endRow);
+
+        return productMapper.getCategoryPageList(paramMap);
+    }
+
+    public int getTotalCount() {
+        return productMapper.getTotalCount();
+    }
+
+    public int getCategoryTotalCount(Integer categoryId) {
+        return productMapper.getCategoryTotalCount(categoryId);
     }
 
 }
