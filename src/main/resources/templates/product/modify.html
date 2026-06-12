@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>상품수정</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/common/head.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-base-200">
+
+<div th:replace="~{common/head :: head}"></div>
+
+<div class="container mx-auto p-10">
+
+    <form action="/product/modify"
+          method="post"
+          enctype="multipart/form-data">
+
+        <input type="hidden"
+               name="productId"
+               th:value="${product.productId}">
+
+        <div class="card bg-base-100 shadow-xl">
+
+            <div class="card-body">
+
+                <h1 class="text-3xl font-bold">
+                    상품수정
+                </h1>
+
+                <input type="text"
+                       name="productName"
+                       th:value="${product.productName}"
+                       class="input input-bordered">
+
+                <input type="text"
+                       name="brand"
+                       th:value="${product.brand}"
+                       class="input input-bordered">
+
+                <input type="number"
+                       name="price"
+                       th:value="${product.price}"
+                       class="input input-bordered">
+
+                <input type="number"
+                       name="stock"
+                       th:value="${product.stock}"
+                       class="input input-bordered">
+
+                <textarea name="description"
+                          class="textarea textarea-bordered"
+                          th:text="${product.description}">
+                </textarea>
+
+                <input type="file"
+                       name="upload"
+                       class="file-input file-input-bordered">
+
+                <div class="card-actions justify-end">
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        수정완료
+
+                    </button>
+
+                    <a href="/product/list"
+                       class="btn btn-neutral">
+
+                        취소
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>
