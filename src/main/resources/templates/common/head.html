@@ -31,15 +31,15 @@
 
                 <span>|</span>
 
-                <a href="/login">로그인</a>
+                <a href="/member/login">로그인</a>
 
                 <span>|</span>
 
-                <a href="/members/join">회원가입</a>
+                <a href="/member/signup">회원가입</a>
 
                 <span>|</span>
 
-                <a href="/mypage">마이페이지</a>
+                <a href="member/mypage">마이페이지</a>
 
                 <span>|</span>
 
@@ -59,9 +59,6 @@
                     <span>장바구니</span>
 
                     <em class="cart-count"
-                        th:text="${cartCount != null ? cartCount : 0}">
-                        0
-                    </em>
                 </a>
 
                 <a href="/orders" class="icon-item">
@@ -78,9 +75,6 @@
     <nav class="header-nav">
 
         <div class="nav-inner">
-
-            <button type="button"
-                    class="all-category-btn">
 
                 ☰ 전체 카테고리
 
