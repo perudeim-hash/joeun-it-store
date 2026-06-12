@@ -1,6 +1,7 @@
 package org.store.joeunit.member.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.store.joeunit.member.dto.MemberDto;
 
 import java.util.List;
@@ -46,4 +47,14 @@ public interface MemberDao {
 
     // 관리자 수
     int getAdminCount();
+
+    // 회원 목록 페이징 조회
+    List<MemberDto> findAllPaging(@Param("start") int start,
+                                  @Param("size") int size);
+    // 닉네임으로 회원 조회
+    MemberDto findByNickname(String nickname);
+
+    MemberDto findByLoginId(String loginId);
+
+
 }

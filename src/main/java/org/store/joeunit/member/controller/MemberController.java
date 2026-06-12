@@ -31,6 +31,16 @@ public class MemberController {
                                 HttpSession session,
                                 RedirectAttributes redirectAttributes) {
 
+        // 아이디 형식 검사
+        if (!memberDto.getLoginId().matches("^[a-z0-9_]{4,20}$")) {
+            redirectAttributes.addFlashAttribute(
+                    "signupError",
+                    "아이디는 영문 소문자, 숫자, _ 만 4~20자로 입력하세요."
+            );
+
+            return "redirect:/member/signup";
+        }
+
         memberService.signup(memberDto);
 
         // 가입 후 자동 로그인
@@ -47,43 +57,6 @@ public class MemberController {
         return "redirect:/";
     }
 
-    // 로그인 페이지
-    @GetMapping("/login")
-    public String login() {
-        return "member/login";
-    }
-
-    // 로그인 처리
-    @PostMapping("/login")
-    public String loginProcess(MemberDto memberDto,
-                               HttpSession session,
-                               RedirectAttributes redirectAttributes) {
-
-        MemberDto loggedMember =
-                memberService.login(memberDto);
-
-        if (loggedMember == null) {
-
-            redirectAttributes.addFlashAttribute(
-                    "loginError",
-                    "아이디 또는 비밀번호가 틀렸습니다."
-            );
-
-            return "redirect:/member/login";
-        }
-
-        session.setAttribute(
-                "loggedMember",
-                loggedMember
-        );
-
-        redirectAttributes.addFlashAttribute(
-                "welcomeMessage",
-                loggedMember.getNickname() + "님 환영합니다."
-        );
-
-        return "redirect:/";
-    }
     // 아이디 중복확인
     @PostMapping("/id-check")
     @ResponseBody
@@ -127,10 +100,43 @@ public class MemberController {
         return result;
     }
 
+    // 로그인 페이지
+    @GetMapping("/login")
+    public String login() {
+        return "member/login";
+    }
+
+    // 로그인 처리
+    @PostMapping("/login")
+    public String loginProcess(MemberDto memberDto,
+                               HttpSession session,
+                               RedirectAttributes redirectAttributes) {
+
+        MemberDto loggedMember =
+                memberService.login(memberDto);
+
+        if (loggedMember == null) {
+            redirectAttributes.addFlashAttribute(
+                    "loginError",
+                    "아이디 또는 비밀번호가 틀렸습니다."
+            );
+
+            return "redirect:/member/login";
+        }
+
+        session.setAttribute("loggedMember", loggedMember);
+
+        redirectAttributes.addFlashAttribute(
+                "welcomeMessage",
+                loggedMember.getNickname() + "님 환영합니다."
+        );
+
+        return "redirect:/";
+    }
+
     // 로그아웃
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-
         session.invalidate();
 
         return "redirect:/";
@@ -153,10 +159,7 @@ public class MemberController {
                         loggedMember.getMemberId()
                 );
 
-        model.addAttribute(
-                "memberDto",
-                memberDto
-        );
+        model.addAttribute("memberDto", memberDto);
 
         return "member/mypage";
     }
@@ -178,10 +181,7 @@ public class MemberController {
                         loggedMember.getMemberId()
                 );
 
-        model.addAttribute(
-                "memberDto",
-                memberDto
-        );
+        model.addAttribute("memberDto", memberDto);
 
         return "member/update";
     }
@@ -194,11 +194,20 @@ public class MemberController {
         MemberDto loggedMember =
                 (MemberDto) session.getAttribute("loggedMember");
 
+        if (loggedMember == null) {
+            return "redirect:/member/login";
+        }
+
         memberDto.setMemberId(
                 loggedMember.getMemberId()
         );
 
         memberService.updateMember(memberDto);
+
+        MemberDto updatedMember =
+                memberService.findByNo(loggedMember.getMemberId());
+
+        session.setAttribute("loggedMember", updatedMember);
 
         return "redirect:/member/mypage";
     }
@@ -243,7 +252,11 @@ public class MemberController {
         }
 
         MemberDto memberDto = new MemberDto();
-        memberDto.setMemberId(loggedMember.getMemberId());
+
+        memberDto.setMemberId(
+                loggedMember.getMemberId()
+        );
+
         memberDto.setPassword(newPassword);
 
         memberService.changePassword(memberDto);
@@ -263,16 +276,47 @@ public class MemberController {
 
     // 회원탈퇴 페이지
     @GetMapping("/delete")
-    public String deletePage() {
+    public String deletePage(HttpSession session) {
+
+        MemberDto loggedMember =
+                (MemberDto) session.getAttribute("loggedMember");
+
+        if (loggedMember == null) {
+            return "redirect:/member/login";
+        }
+
+        if ("ADMIN".equals(loggedMember.getRole())) {
+            return "redirect:/member/mypage";
+        }
+
         return "member/delete";
     }
 
     // 회원탈퇴 처리
     @PostMapping("/delete")
-    public String deleteProcess(HttpSession session) {
+    public String deleteProcess(@RequestParam String password,
+                                HttpSession session,
+                                RedirectAttributes redirectAttributes) {
 
         MemberDto loggedMember =
                 (MemberDto) session.getAttribute("loggedMember");
+
+        if (loggedMember == null) {
+            return "redirect:/member/login";
+        }
+
+        if ("ADMIN".equals(loggedMember.getRole())) {
+            return "redirect:/member/mypage";
+        }
+
+        if (!loggedMember.getPassword().equals(password)) {
+            redirectAttributes.addFlashAttribute(
+                    "message",
+                    "비밀번호가 일치하지 않습니다."
+            );
+
+            return "redirect:/member/delete";
+        }
 
         memberService.deleteMember(
                 loggedMember.getMemberId()

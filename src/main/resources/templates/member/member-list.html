@@ -15,13 +15,58 @@
 
 <div class="max-w-7xl mx-auto py-12 px-4">
 
-    <div class="mb-8">
-        <h2 class="text-4xl font-extrabold text-[#0b1f3a]">
-            회원관리
-        </h2>
-        <p class="mt-3 text-gray-500">
-            회원 정보를 확인하고 권한 및 등급을 관리할 수 있습니다.
-        </p>
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
+
+        <div>
+            <h2 class="text-4xl font-extrabold text-[#0b1f3a]">
+                회원관리
+            </h2>
+
+            <p class="mt-3 text-gray-500">
+                회원 정보를 확인하고 권한 및 등급을 관리할 수 있습니다.
+            </p>
+        </div>
+
+        <form action="/admin/member/search"
+              method="get"
+              class="flex gap-2">
+
+            <select name="type"
+                    class="select select-bordered">
+
+                <option value="nickname">
+                    닉네임
+                </option>
+
+                <option value="loginId">
+                    아이디
+                </option>
+
+                <option value="memberId">
+                    회원번호
+                </option>
+
+            </select>
+
+            <input type="text"
+                   name="keyword"
+                   placeholder="검색어 입력"
+                   class="input input-bordered w-52"
+                   required>
+
+            <button class="btn bg-[#0066cc] hover:bg-[#0052a3] text-white border-none">
+                검색
+            </button>
+
+        </form>
+
+    </div>
+
+    <div th:if="${searchError}"
+         class="alert alert-error mb-6">
+        <span th:text="${searchError}">
+            검색 결과가 없습니다.
+        </span>
     </div>
 
     <div class="stats shadow bg-white w-full mb-8 border border-gray-100">
@@ -56,6 +101,7 @@
         <div class="card-body">
 
             <div class="overflow-x-auto">
+
                 <table class="table table-zebra">
 
                     <thead>
@@ -80,7 +126,9 @@
                                    name="memberId"
                                    th:value="${member.memberId}">
 
-                            <td th:text="${member.memberId}">1</td>
+                            <td th:text="${member.memberId}">
+                                1
+                            </td>
 
                             <td>
                                 <span class="font-semibold"
@@ -89,9 +137,13 @@
                                 </span>
                             </td>
 
-                            <td th:text="${member.nickname}">닉네임</td>
+                            <td th:text="${member.nickname}">
+                                닉네임
+                            </td>
 
-                            <td th:text="${member.email}">email@test.com</td>
+                            <td th:text="${member.email}">
+                                email@test.com
+                            </td>
 
                             <td>
                                 <select name="role"
@@ -100,6 +152,7 @@
                                             th:selected="${member.role == 'USER'}">
                                         USER
                                     </option>
+
                                     <option value="ADMIN"
                                             th:selected="${member.role == 'ADMIN'}">
                                         ADMIN
@@ -115,18 +168,22 @@
                                             th:selected="${member.membership == 'BRONZE'}">
                                         BRONZE
                                     </option>
+
                                     <option value="SILVER"
                                             th:selected="${member.membership == 'SILVER'}">
                                         SILVER
                                     </option>
+
                                     <option value="GOLD"
                                             th:selected="${member.membership == 'GOLD'}">
                                         GOLD
                                     </option>
+
                                     <option value="VIP"
                                             th:selected="${member.membership == 'VIP'}">
                                         VIP
                                     </option>
+
                                     <option value="ADMIN"
                                             th:selected="${member.membership == 'ADMIN'}">
                                         ADMIN
@@ -154,6 +211,45 @@
                     </tbody>
 
                 </table>
+
+                <div class="flex justify-center mt-6">
+
+                    <div class="join">
+
+                        <a th:href="@{/admin/member/list(page=1)}"
+                           class="join-item btn">
+                            처음
+                        </a>
+
+                        <a th:if="${startPage > 1}"
+                           th:href="@{/admin/member/list(page=${prevBlockPage})}"
+                           class="join-item btn">
+                            이전
+                        </a>
+
+                        <a th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                           th:href="@{/admin/member/list(page=${i})}"
+                           th:text="${i}"
+                           th:classappend="${i == page} ? ' btn-active' : ''"
+                           class="join-item btn">
+                            1
+                        </a>
+
+                        <a th:if="${endPage < totalPage}"
+                           th:href="@{/admin/member/list(page=${nextBlockPage})}"
+                           class="join-item btn">
+                            다음
+                        </a>
+
+                        <a th:href="@{/admin/member/list(page=${totalPage})}"
+                           class="join-item btn">
+                            마지막
+                        </a>
+
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
