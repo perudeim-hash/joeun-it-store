@@ -56,5 +56,28 @@ public interface MemberDao {
 
     MemberDto findByLoginId(String loginId);
 
+    MemberDto findByEmailAndPhone(
+            @Param("email") String email,
+            @Param("phone") String phone
+    );
 
+    MemberDto findForPasswordReset(
+            @Param("loginId") String loginId,
+            @Param("email") String email,
+            @Param("phone") String phone
+    );
+    MemberDto findByNickNameAndEmail(
+            @Param("nickname") String nickname,
+            @Param("email") String email
+    );
+
+    MemberDto findByLoginIdAndEmail(
+            @Param("loginId") String loginId,
+            @Param("email") String email
+    );
+    // 멤버등급 별 인원 수
+    int getBronzeCount();
+    int getSilverCount();
+    int getGoldCount();
+    int getVipCount();
 }

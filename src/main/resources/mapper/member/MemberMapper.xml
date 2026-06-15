@@ -158,4 +158,61 @@
         FROM shop_member
         WHERE login_id = #{loginId}
     </select>
+    <!-- 아이디 찾기 -->
+    <select id="findByEmailAndPhone"
+            resultType="org.store.joeunit.member.dto.MemberDto">
+
+        SELECT *
+        FROM shop_member
+        WHERE email = #{email}
+        AND phone = #{phone}
+
+    </select>
+    <!-- 비밀번호 찾기 -->
+    <select id="findForPasswordReset"
+            resultType="org.store.joeunit.member.dto.MemberDto">
+
+        SELECT *
+        FROM shop_member
+        WHERE login_id = #{loginId}
+        AND email = #{email}
+        AND phone = #{phone}
+
+    </select>
+
+    <select id="findByNickNameAndEmail"
+            resultType="org.store.joeunit.member.dto.MemberDto">
+
+        SELECT *
+        FROM shop_member
+        WHERE nickname = #{nickname}
+        And email = #{email}
+
+    </select>
+
+    <select id="findByLoginIdAndEmail"
+            resultType="org.store.joeunit.member.dto.MemberDto">
+
+        SELECT *
+        FROM shop_member
+        WHERE login_id = #{loginId}
+        AND email =#{email}
+
+    </select>
+
+    <select id="getBronzeCount" resultType="int">
+        SELECT COUNT(*) FROM shop_member WHERE membership = 'BRONZE'
+    </select>
+
+    <select id="getSilverCount" resultType="int">
+        SELECT COUNT(*) FROM shop_member WHERE membership = 'SILVER'
+    </select>
+
+    <select id="getGoldCount" resultType="int">
+        SELECT COUNT(*) FROM shop_member WHERE membership = 'GOLD'
+    </select>
+
+    <select id="getVipCount" resultType="int">
+        SELECT COUNT(*) FROM shop_member WHERE membership = 'VIP'
+    </select>
 </mapper>
