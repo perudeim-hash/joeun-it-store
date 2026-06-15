@@ -23,7 +23,7 @@ public class CartService {
     }
 
     // 장바구니에서 Item 추가(이미 있는 경우 개수 추가)
-    public int addCartItem(CartItemDto cartItemDto) {
+    public Long addCartItem(CartItemDto cartItemDto) {
         if (cartItemDto.getQuantity() <= 0) {
             throw new IllegalArgumentException("수량은 1개 이상 있어야 합니다.");
         }
@@ -35,7 +35,7 @@ public class CartService {
     }
 
     // 장바구니 업데이트
-    public int updateCartItem(CartItemDto cartItemDto) {
+    public Long updateCartItem(CartItemDto cartItemDto) {
         if (cartItemDto.getQuantity() <= 0) {
             throw new IllegalArgumentException("수량은 1개 이상 있어야 합니다.");
         }
@@ -49,7 +49,7 @@ public class CartService {
     }
 
     // 장바구니 총 가격
-    public int getCartTotalPrice(int memberId) {
+    public Long getCartTotalPrice(Long memberId) {
         CartItemDto itemDto = CartItemDto.builder()
                 .memberId(memberId)
                 .build();
@@ -58,7 +58,7 @@ public class CartService {
     }
 
     //장바구니 아이템 한개 삭제
-    public int deleteCartItem(int memberId, int cartItemId) {
+    public Long deleteCartItem(Long memberId, int cartItemId) {
         CartItemDto itemDto = CartItemDto.builder()
                 .memberId(memberId)
                 .cartItemId(cartItemId)
@@ -67,7 +67,7 @@ public class CartService {
     }
 
     //장바구니 전체 삭제
-    public int deleteAllCartItem(int memberId) {
+    public Long deleteAllCartItem(Long memberId) {
         CartItemDto itemDto = CartItemDto.builder()
                 .memberId(memberId)
                 .build();
