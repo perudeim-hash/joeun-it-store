@@ -1,5 +1,5 @@
 package org.store.joeunit.product.controller;
-
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,15 +7,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.store.joeunit.product.dto.ProductDto;
 import org.store.joeunit.product.service.ProductService;
-
-
+import jakarta.servlet.http.HttpSession;
+import org.store.joeunit.member.dto.MemberDto;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
 public class ProductController {
+
     private final ProductService productService;
 
     @GetMapping("/product/list")
@@ -35,7 +40,7 @@ public class ProductController {
             totalCount = productService.getCategoryTotalCount(categoryId);
         }
 
-        int totalPage = (int)Math.ceil((double)totalCount / 8);
+        int totalPage = (int) Math.ceil((double) totalCount / 8);
 
         model.addAttribute("productList", productDtoList);
         model.addAttribute("currentPage", page);
@@ -51,9 +56,18 @@ public class ProductController {
     }
 
     @GetMapping("/product/view")
-    public String view(@RequestParam Integer productId, Model model) {
+    public String view(@RequestParam Integer productId,
+                       Model model,
+                       HttpSession session) {
 
-        model.addAttribute("product", productService.getById(productId));
+        model.addAttribute("product",
+                productService.getById(productId));
+
+        MemberDto loginMember =
+                (MemberDto) session.getAttribute("loggedMember");
+
+        model.addAttribute("loginMember",
+                loginMember);
 
         return "product/view";
     }
@@ -73,10 +87,25 @@ public class ProductController {
 
         if (upload != null && !upload.isEmpty()) {
 
-            String fileName = upload.getOriginalFilename();
+            String originalFileName =
+                    upload.getOriginalFilename();
 
-            productDto.setImageName(fileName);
-            productDto.setImagePath("/images/" + fileName);
+            String savedFileName =
+                    UUID.randomUUID() + "_" + originalFileName;
+
+            Path uploadPath =
+                    Paths.get("uploads");
+
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            upload.transferTo(
+                    uploadPath.resolve(savedFileName)
+            );
+
+            productDto.setImageName(savedFileName);
+            productDto.setImagePath("/uploads/" + savedFileName);
         }
 
         productService.insert(productDto);
@@ -91,10 +120,25 @@ public class ProductController {
 
         if (upload != null && !upload.isEmpty()) {
 
-            String fileName = upload.getOriginalFilename();
+            String originalFileName =
+                    upload.getOriginalFilename();
 
-            productDto.setImageName(fileName);
-            productDto.setImagePath("/images/" + fileName);
+            String savedFileName =
+                    UUID.randomUUID() + "_" + originalFileName;
+
+            Path uploadPath =
+                    Paths.get("uploads");
+
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            upload.transferTo(
+                    uploadPath.resolve(savedFileName)
+            );
+
+            productDto.setImageName(savedFileName);
+            productDto.setImagePath("/uploads/" + savedFileName);
         }
 
         productService.update(productDto);
@@ -112,34 +156,34 @@ public class ProductController {
 
     @GetMapping("/product/category/{categoryId}")
     @ResponseBody
-    public Map<String,Object> categoryId(
+    public Map<String, Object> categoryId(
             @PathVariable Integer categoryId,
             @RequestParam(defaultValue = "1") int page) {
 
         List<ProductDto> productList;
         int totalCount;
 
-        if(categoryId == 0){
+        if (categoryId == 0) {
 
             productList = productService.getPageList(page);
             totalCount = productService.getTotalCount();
 
         } else {
 
-            productList = productService.getCategoryPageList(categoryId,page);
+            productList = productService.getCategoryPageList(categoryId, page);
             totalCount = productService.getCategoryTotalCount(categoryId);
 
         }
 
         int totalPage =
-                (int)Math.ceil((double)totalCount / 8);
+                (int) Math.ceil((double) totalCount / 8);
 
-        Map<String,Object> result =
+        Map<String, Object> result =
                 new HashMap<>();
 
-        result.put("productList",productList);
-        result.put("currentPage",page);
-        result.put("totalPage",totalPage);
+        result.put("productList", productList);
+        result.put("currentPage", page);
+        result.put("totalPage", totalPage);
 
         return result;
     }
