@@ -15,7 +15,6 @@
 
 <body class="bg-base-200">
 
-<!-- 공통 헤더 -->
 <div th:replace="~{common/head :: head}"></div>
 
 <div class="max-w-[1200px] mx-auto mt-10">
@@ -32,7 +31,7 @@
 
             <div class="flex gap-10">
 
-                <!-- 왼쪽 상품 정보 -->
+                <!-- 상품 정보 -->
 
                 <div class="flex-1">
 
@@ -68,12 +67,18 @@
 
                 </div>
 
-                <!-- 오른쪽 상품 이미지 -->
+                <!-- 상품 이미지 -->
 
                 <div class="w-[450px] flex justify-center">
 
-                    <img th:src="@{/upload/{img}(img=${product.imageName})}"
+                    <img th:if="${product.imageName != null}"
+                         th:src="@{/uploads/{img}(img=${product.imageName})}"
                          th:alt="${product.productName}"
+                         class="w-full h-[450px] object-cover rounded-xl shadow-lg border">
+
+                    <img th:if="${product.imageName == null}"
+                         src="/images/no-image.png"
+                         alt="no-image"
                          class="w-full h-[450px] object-cover rounded-xl shadow-lg border">
 
                 </div>
@@ -84,21 +89,58 @@
 
             <div class="flex justify-end gap-3">
 
-                <a th:href="@{/product/modify(productId=${product.productId})}"
-                   class="btn btn-success">
-                    수정
-                </a>
+                <!-- 관리자 -->
 
-                <a th:href="@{/product/delete(productId=${product.productId})}"
-                   class="btn btn-error"
-                   onclick="return confirm('삭제하시겠습니까?');">
-                    삭제
-                </a>
+                <th:block th:if="${loginMember != null and loginMember.role == 'ADMIN'}">
 
-                <a href="/product/list"
-                   class="btn btn-primary">
-                    목록
-                </a>
+                    <a th:href="@{/product/modify(productId=${product.productId})}"
+                       class="btn btn-success">
+                        수정
+                    </a>
+
+                    <a th:href="@{/product/delete(productId=${product.productId})}"
+                       class="btn btn-error"
+                       onclick="return confirm('삭제하시겠습니까?');">
+                        삭제
+                    </a>
+
+                    <a href="/product/list"
+                       class="btn btn-primary">
+                        목록
+                    </a>
+
+                </th:block>
+
+                <!-- 일반회원 -->
+
+                <th:block th:if="${loginMember != null and loginMember.role == 'USER'}">
+
+                    <form action="/cart/add"
+                          method="post">
+
+                        <input type="hidden"
+                               name="productId"
+                               th:value="${product.productId}">
+
+                        <input type="hidden"
+                               name="quantity"
+                               value="1">
+
+                        <button type="submit"
+                                class="btn btn-warning">
+
+                            장바구니 담기
+
+                        </button>
+
+                    </form>
+
+                    <a href="/product/list"
+                       class="btn btn-primary">
+                        목록
+                    </a>
+
+                </th:block>
 
             </div>
 

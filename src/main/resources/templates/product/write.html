@@ -5,10 +5,7 @@
     <meta charset="UTF-8">
     <title>상품등록</title>
 
-    <!-- DaisyUI -->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet"/>
-
-    <!-- TailwindCSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
@@ -16,17 +13,9 @@
 
 <div class="container mx-auto p-10">
 
-    <!-- ==========================================
-         상품 등록
-    ========================================== -->
-
     <h1 class="text-4xl font-bold mb-10">
         상품등록
     </h1>
-
-    <!-- ==========================================
-         상품 등록 폼
-    ========================================== -->
 
     <form action="/product/write"
           method="post"
@@ -36,30 +25,15 @@
 
             <div class="card-body space-y-4">
 
-                <!-- 카테고리 -->
-
                 <select name="categoryId"
                         class="select select-bordered">
 
-                    <option value="1">
-                        스마트폰
-                    </option>
-
-                    <option value="2">
-                        노트북
-                    </option>
-
-                    <option value="3">
-                        태블릿
-                    </option>
-
-                    <option value="4">
-                        기타기기
-                    </option>
+                    <option value="1">스마트폰</option>
+                    <option value="2">노트북</option>
+                    <option value="3">태블릿</option>
+                    <option value="4">기타기기</option>
 
                 </select>
-
-                <!-- 상품명 -->
 
                 <input type="text"
                        name="productName"
@@ -67,21 +41,15 @@
                        class="input input-bordered"
                        required/>
 
-                <!-- 브랜드 -->
-
                 <input type="text"
                        name="brand"
                        placeholder="브랜드"
                        class="input input-bordered"/>
 
-                <!-- 모델명 -->
-
                 <input type="text"
                        name="modelName"
                        placeholder="모델명"
                        class="input input-bordered"/>
-
-                <!-- 가격 -->
 
                 <input type="number"
                        name="price"
@@ -89,69 +57,69 @@
                        class="input input-bordered"
                        required/>
 
-                <!-- 재고 -->
-
                 <input type="number"
                        name="stock"
                        placeholder="재고"
                        class="input input-bordered"
                        required/>
 
-                <!-- CPU -->
-
                 <input type="text"
                        name="cpu"
                        placeholder="CPU"
                        class="input input-bordered"/>
-
-                <!-- RAM -->
 
                 <input type="text"
                        name="ram"
                        placeholder="RAM"
                        class="input input-bordered"/>
 
-                <!-- 저장공간 -->
-
                 <input type="text"
                        name="storageCapacity"
                        placeholder="저장공간"
                        class="input input-bordered"/>
-
-                <!-- 화면크기 -->
 
                 <input type="text"
                        name="screenSize"
                        placeholder="화면크기"
                        class="input input-bordered"/>
 
-                <!-- 운영체제 -->
-
                 <input type="text"
                        name="os"
                        placeholder="운영체제"
                        class="input input-bordered"/>
-
-                <!-- 색상 -->
 
                 <input type="text"
                        name="color"
                        placeholder="색상"
                        class="input input-bordered"/>
 
-                <!-- 상품 설명 -->
-
                 <textarea name="description"
                           class="textarea textarea-bordered"
                           placeholder="상품설명"></textarea>
 
-                <!-- 상품 이미지 -->
+                <div>
 
-                <input type="file"
-                       name="upload"
-                       class="file-input file-input-bordered"/>
+                    <label class="label">
+                        <span class="label-text font-semibold">
+                            상품 이미지
+                        </span>
+                    </label>
 
-                <!-- 등록 버튼 -->
+                    <input type="file"
+                           name="upload"
+                           accept="image/*"
+                           class="file-input file-input-bordered w-full"
+                           onchange="previewImage(this)"/>
+
+                </div>
+
+                <div class="flex justify-center">
+
+                    <img id="preview"
+                         src=""
+                         class="hidden w-72 h-72 object-cover rounded-lg border shadow">
+
+                </div>
 
                 <button type="submit"
                         class="btn btn-primary">
@@ -167,6 +135,34 @@
     </form>
 
 </div>
+
+<script>
+
+    function previewImage(input){
+
+        const file = input.files[0];
+
+        if(!file){
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function(e){
+
+            const preview =
+                document.querySelector("#preview");
+
+            preview.src =
+                e.target.result;
+
+            preview.classList.remove("hidden");
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+</script>
 
 </body>
 </html>
