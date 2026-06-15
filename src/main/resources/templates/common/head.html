@@ -86,7 +86,7 @@
                 <a href="/cart/carts" class="icon-item cart-icon">
                     <span class="icon">🛒</span>
                     <span>장바구니</span>
-                    <em class="cart-count">0</em>
+                    <em class="cart-count" th:text="${cartCount != null ? cartCount : 0}">0</em>
                 </a>
 
                 <a href="/orders" class="icon-item">

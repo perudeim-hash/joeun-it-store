@@ -10,7 +10,7 @@ body {
 }
 
 .cart-layout {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
 }
 
@@ -34,37 +34,46 @@ body {
     color: #6b7280;
 }
 
+/* 장바구니 목록 + 주문요약 */
 .cart-content {
     display: grid;
-    grid-template-columns: 1fr 320px;
+    grid-template-columns: minmax(0, 1fr) 300px;
     gap: 24px;
     align-items: start;
 }
 
 .cart-list {
+    min-width: 0;
     background-color: #ffffff;
     border: 1px solid #eef0f3;
     border-radius: 16px;
     overflow: hidden;
 }
 
+/* 표 헤더 */
 .cart-header {
     display: grid;
-    grid-template-columns: minmax(320px, 1.5fr) 140px 170px 160px 90px;
-    gap: 16px;
-    padding: 18px 24px;
+    grid-template-columns: minmax(240px, 1.6fr) 110px 120px 130px 70px;
+    gap: 12px;
+    padding: 18px 20px;
     border-bottom: 1px solid #e5e7eb;
     font-weight: 700;
     color: #374151;
     background-color: #f8fafc;
+    align-items: center;
 }
 
+.cart-header span {
+    white-space: nowrap;
+}
+
+/* 장바구니 상품 한 줄 */
 .cart-row {
     display: grid;
-    grid-template-columns: minmax(320px, 1.5fr) 140px 170px 160px 90px;
-    gap: 16px;
+    grid-template-columns: minmax(240px, 1.6fr) 110px 120px 130px 70px;
+    gap: 12px;
     align-items: center;
-    padding: 22px 24px;
+    padding: 22px 20px;
     border-bottom: 1px solid #eef0f3;
     background-color: #ffffff;
 }
@@ -73,16 +82,17 @@ body {
     border-bottom: none;
 }
 
+/* 상품 정보 */
 .product-info {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     min-width: 0;
 }
 
 .product-image-wrap {
-    width: 92px;
-    height: 92px;
+    width: 86px;
+    height: 86px;
     border-radius: 14px;
     overflow: hidden;
     background-color: #f3f4f6;
@@ -114,6 +124,8 @@ body {
     font-size: 17px;
     font-weight: 800;
     color: #111827;
+    line-height: 1.35;
+    word-break: keep-all;
 }
 
 .product-stock {
@@ -122,10 +134,12 @@ body {
     color: #6b7280;
 }
 
+/* 가격 / 합계 */
 .price-box,
 .item-total-box {
     font-weight: 700;
     color: #111827;
+    white-space: nowrap;
 }
 
 /* 수량 박스 */
@@ -141,8 +155,8 @@ body {
 }
 
 .quantity-btn {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     border: none;
     background-color: #ffffff;
     color: #374151;
@@ -157,8 +171,8 @@ body {
 }
 
 .quantity-text {
-    width: 44px;
-    height: 34px;
+    width: 38px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -169,11 +183,26 @@ body {
     background-color: #ffffff;
 }
 
+/* 삭제 */
 .delete-box {
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
+.delete-box form {
+    margin: 0;
+}
+
+.delete-box .btn {
+    min-height: 32px;
+    height: 32px;
+    padding: 0 10px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+/* 주문 요약 */
 .cart-summary {
     position: sticky;
     top: 24px;
@@ -193,6 +222,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
 }
 
 .summary-line {
@@ -207,6 +237,7 @@ body {
 
 .summary-total strong {
     color: #2563eb;
+    white-space: nowrap;
 }
 
 .empty-cart {
@@ -223,7 +254,7 @@ body {
 }
 
 /* 반응형 */
-@media (max-width: 960px) {
+@media (max-width: 1100px) {
     .cart-content {
         grid-template-columns: 1fr;
     }
@@ -231,7 +262,9 @@ body {
     .cart-summary {
         position: static;
     }
+}
 
+@media (max-width: 960px) {
     .cart-header {
         display: none;
     }
@@ -239,13 +272,14 @@ body {
     .cart-row {
         grid-template-columns: 1fr;
         gap: 14px;
+        padding: 22px 20px;
     }
 
     .price-box,
-    .item-total-box,
-    .delete-box {
+    .item-total-box {
         display: flex;
         justify-content: space-between;
+        align-items: center;
     }
 
     .price-box::before {
@@ -260,15 +294,27 @@ body {
         font-weight: 500;
     }
 
+    .quantity-box {
+        margin-left: auto;
+    }
+
     .delete-box {
         justify-content: flex-end;
     }
 }
 
 @media (max-width: 640px) {
+    .cart-page {
+        padding: 28px 14px 60px;
+    }
+
     .cart-title-box {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .cart-title {
+        font-size: 28px;
     }
 
     .product-info {
@@ -278,5 +324,9 @@ body {
     .product-image-wrap {
         width: 78px;
         height: 78px;
+    }
+
+    .product-name {
+        font-size: 16px;
     }
 }
