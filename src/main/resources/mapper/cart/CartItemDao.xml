@@ -39,6 +39,11 @@
     WHERE ci.MEMBER_ID = #{memberId}
     </select>
 
+    <select id="countCartItemsByMemberId" resultType="Long" parameterType="Long">
+        select count(*)
+        from cart_item
+        where member_id = #{memberId}
+    </select>
 
     <insert id="createCartItem" parameterType="CartItemDto">
         INSERT INTO cart_item(

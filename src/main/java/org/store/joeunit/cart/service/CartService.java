@@ -74,4 +74,8 @@ public class CartService {
         return cartItemDao.deleteCartItemsByMemberId(itemDto);
     }
 
+    public Long getCartCount(Long memberId) {
+        return cartItemDao.countCartItemsByMemberId(memberId);
+    }
+
 }

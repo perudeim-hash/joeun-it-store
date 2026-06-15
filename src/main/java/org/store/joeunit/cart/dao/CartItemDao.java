@@ -23,6 +23,6 @@ public interface CartItemDao {
 
     Long deleteCartItemsByMemberId(CartItemDto cartItemDto);
 
-
+    Long countCartItemsByMemberId(Long memberId);
 }
 
