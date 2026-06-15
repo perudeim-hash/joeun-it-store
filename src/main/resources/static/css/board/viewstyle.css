@@ -1,0 +1,112 @@
+body{
+    font-family:'Malgun Gothic', sans-serif;
+    background:#f8f9fa;
+    margin:0;
+}
+
+.container{
+    width:900px;
+    margin:60px auto;
+    background:white;
+    padding:40px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+.title{
+    font-size:26px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.info{
+    border-top:2px solid #4b57ff;
+    border-bottom:1px solid #ddd;
+    padding:15px 0;
+    font-size:14px;
+    color:#666;
+    margin-bottom:30px;
+}
+
+.content{
+    min-height:200px;
+    font-size:16px;
+    line-height:1.6;
+    margin-bottom:40px;
+}
+
+/* 댓글 */
+.comment-section{
+    margin-top:30px;
+}
+
+.comment-section h3{
+    margin-bottom:15px;
+}
+
+.comment-input{
+    width:100%;
+    height:100px;
+    padding:10px;
+    box-sizing:border-box;
+    resize:none;
+    border:1px solid #ddd;
+    border-radius:5px;
+}
+
+.comment-btn{
+    margin-top:10px;
+    padding:10px 20px;
+    background:#4b57ff;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.comment-btn:hover{
+    background:#3742d0;
+}
+
+.comment-list{
+    margin-top:20px;
+}
+
+.comment-item{
+    border-bottom:1px solid #eee;
+    padding:15px 0;
+}
+
+.comment-user{
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+.comment-date{
+    font-size:12px;
+    color:#888;
+    margin-top:5px;
+}
+
+.btn-area{
+    margin-top:40px;
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+}
+
+.btn-area button, .btn-area a{
+    border:none;
+    padding:12px 20px;
+    border-radius:5px;
+    cursor:pointer;
+    color:white;
+}
+
+.btn-list{ background:#6c757d; }
+.btn-edit{ background:#007bff; }
+.btn-delete{ background:#dc3545; }
+
+.btn-list:hover{background:#5a6268;}
+.btn-edit:hover{background:#0069d9;}
+.btn-delete:hover{background:#c82333;}
