@@ -34,8 +34,12 @@
     </delete>
 
     <select id="selectMyOrderList" parameterType="long" resultType="org.store.joeunit.order.dto.OrderDto">
-        SELECT order_id as orderId, total_price as totalPrice, final_price as finalPrice,
-        order_status as orderStatus, created_at as createdAt
+        SELECT order_id as orderId,
+        total_price as totalPrice,
+        final_price as finalPrice,
+        order_status as orderStatus,
+        created_at as createdAt,
+        member_membership as memberMembership
         FROM orders
         WHERE member_id = #{memberId}
         ORDER BY created_at DESC
@@ -57,7 +61,6 @@
         SET order_status = 'ORDER_CANCEL', updated_at = SYSDATE
         WHERE order_id = #{orderId}
     </update>
-
 
     <delete id="deleteOrderItems" parameterType="long">
         DELETE FROM order_item WHERE order_id = #{orderId}
