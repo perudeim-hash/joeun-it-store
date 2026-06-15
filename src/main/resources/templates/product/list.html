@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <title>상품목록</title>
+
+    <!-- DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet"/>
+
+    <!-- 공통 헤더 -->
+    <link rel="stylesheet" href="/css/common/head.css">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-base-200">
+
+<!-- 공통 헤더 -->
+<div th:replace="~{common/head :: head}"></div>
+
+<div class="max-w-[1400px] mx-auto mt-10 flex gap-8">
+
+    <!-- ==========================
+         왼쪽 메뉴
+    ========================== -->
+
+    <div class="w-64 shrink-0">
+
+        <div class="card bg-base-100 shadow-xl">
+
+            <div class="card-body">
+
+                <h2 class="card-title text-2xl">
+                    조은IT 쇼핑몰
+                </h2>
+
+                <div class="divider"></div>
+
+                <a href="/product/list"
+                   class="btn btn-outline btn-primary w-full">
+                    상품목록
+                </a>
+
+                <a href="/product/write"
+                   class="btn btn-outline btn-success w-full">
+                    상품등록
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ==========================
+         오른쪽 영역
+    ========================== -->
+
+    <div class="flex-1 min-w-0">
+
+        <!-- 제목 -->
+
+        <div class="mb-6">
+
+            <h1 class="text-4xl font-bold">
+                상품목록
+            </h1>
+
+        </div>
+
+        <!-- ==========================
+             카테고리 버튼
+        ========================== -->
+
+        <div class="flex gap-2 mb-8">
+
+            <button type="button"
+                    class="btn btn-outline btn-primary"
+                    onclick="loadCategory(0)">
+                전체
+            </button>
+
+            <button type="button"
+                    class="btn btn-outline btn-primary"
+                    onclick="loadCategory(1)">
+                스마트폰
+            </button>
+
+            <button type="button"
+                    class="btn btn-outline btn-primary"
+                    onclick="loadCategory(2)">
+                노트북
+            </button>
+
+            <button type="button"
+                    class="btn btn-outline btn-primary"
+                    onclick="loadCategory(3)">
+                태블릿
+            </button>
+
+            <button type="button"
+                    class="btn btn-outline btn-primary"
+                    onclick="loadCategory(4)">
+                기타기기
+            </button>
+
+        </div>
+
+        <!-- ==========================
+             상품 카드 목록
+        ========================== -->
+
+        <div id="productList"
+             class="grid grid-cols-4 gap-6">
+
+            <div class="card bg-base-100 shadow-md hover:shadow-xl transition duration-300"
+                 th:each="product : ${productList}">
+
+                <!-- 상품 이미지 -->
+
+                <a th:href="@{/product/view(productId=${product.productId})}">
+
+                    <figure class="h-[250px] overflow-hidden">
+
+                        <img th:src="@{/upload/{img}(img=${product.imageName})}"
+                             th:alt="${product.productName}"
+                             class="w-full h-full object-cover">
+
+                    </figure>
+
+                </a>
+
+                <!-- 상품 정보 -->
+
+                <div class="card-body p-4">
+
+                    <a th:href="@{/product/view(productId=${product.productId})}"
+                       class="font-bold text-lg hover:text-primary line-clamp-2">
+
+                        <span th:text="${product.productName}">
+                        </span>
+
+                    </a>
+
+                    <div class="text-sm text-gray-500">
+
+                        브랜드 :
+                        <span th:text="${product.brand}">
+                        </span>
+
+                    </div>
+
+                    <div class="text-2xl font-bold text-error">
+
+                        <span th:text="${#numbers.formatInteger(product.price,3,'COMMA')}">
+                        </span>
+                        원
+
+                    </div>
+
+                    <div class="text-sm text-gray-500">
+
+                        판매량 :
+                        <span th:text="${product.salesCount}">
+                        </span>
+                        개 판매
+
+                    </div>
+
+                    <div>
+
+                        <span class="badge badge-success"
+                              th:text="${product.status}">
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="paging"
+             class="flex flex-wrap justify-center gap-2 mt-10">
+        </div>
+    </div>
+
+</div>
+
+<script src="/js/product/list.js"></script>
+
+</body>
+</html>

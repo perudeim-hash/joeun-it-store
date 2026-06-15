@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.store.joeunit.product.mapper.ProductMapper">
+
+    <select id="getList"
+            resultType="org.store.joeunit.product.dto.ProductDto">
+
+        SELECT *
+        FROM PRODUCT
+        ORDER BY PRODUCT_ID DESC
+
+    </select>
+
+    <select id="getById"
+            parameterType="Integer"
+            resultType="org.store.joeunit.product.dto.ProductDto">
+
+        SELECT *
+        FROM PRODUCT
+        WHERE PRODUCT_ID = #{productId}
+
+    </select>
+
+    <insert id="insert">
+
+        INSERT INTO PRODUCT (
+        PRODUCT_ID,
+        CATEGORY_ID,
+        PRODUCT_NAME,
+        BRAND,
+        MODEL_NAME,
+        PRICE,
+        STOCK,
+        CPU,
+        RAM,
+        STORAGE_CAPACITY,
+        SCREEN_SIZE,
+        OS,
+        COLOR,
+        DESCRIPTION,
+        IMAGE_NAME,
+        IMAGE_PATH,
+        STATUS,
+        CREATED_AT
+        )
+        VALUES (
+        SEQ_PRODUCT.NEXTVAL,
+        #{categoryId},
+        #{productName},
+        #{brand},
+        #{modelName},
+        #{price},
+        #{stock},
+        #{cpu},
+        #{ram},
+        #{storageCapacity},
+        #{screenSize},
+        #{os},
+        #{color},
+        #{description},
+        #{imageName},
+        #{imagePath},
+        'SALE',
+        SYSDATE
+        )
+
+    </insert>
+
+    <update id="update">
+
+        UPDATE PRODUCT
+        SET
+        CATEGORY_ID = #{categoryId},
+        PRODUCT_NAME = #{productName},
+        BRAND = #{brand},
+        MODEL_NAME = #{modelName},
+        PRICE = #{price},
+        STOCK = #{stock},
+        CPU = #{cpu},
+        RAM = #{ram},
+        STORAGE_CAPACITY = #{storageCapacity},
+        SCREEN_SIZE = #{screenSize},
+        OS = #{os},
+        COLOR = #{color},
+        DESCRIPTION = #{description},
+        IMAGE_NAME = #{imageName},
+        IMAGE_PATH = #{imagePath},
+        UPDATED_AT = SYSDATE
+        WHERE PRODUCT_ID = #{productId}
+
+    </update>
+
+    <delete id="delete">
+
+        DELETE
+        FROM PRODUCT
+        WHERE PRODUCT_ID = #{productId}
+
+    </delete>
+
+    <select id="search"
+            parameterType="String"
+            resultType="org.store.joeunit.product.dto.ProductDto">
+
+        SELECT *
+        FROM PRODUCT
+        WHERE PRODUCT_NAME LIKE '%' || #{keyword} || '%'
+        ORDER BY PRODUCT_ID DESC
+
+    </select>
+
+    <select id="getCategoryList"
+            parameterType="Integer"
+            resultType="org.store.joeunit.product.dto.ProductDto">
+
+        SELECT *
+        FROM PRODUCT
+        WHERE CATEGORY_ID = #{categoryId}
+        ORDER BY PRODUCT_ID DESC
+
+    </select>
+
+    <select id="getPageList"
+            parameterType="map"
+            resultType="org.store.joeunit.product.dto.ProductDto">
+
+        SELECT *
+        FROM (
+        SELECT ROW_NUMBER() OVER(ORDER BY PRODUCT_ID DESC) RN,
+        P.*
+        FROM PRODUCT P
+        )
+        WHERE RN BETWEEN #{startRow}
+        AND #{endRow}
+
+    </select>
+
+    <select id="getCategoryPageList"
+            parameterType="map"
+            resultType="org.store.joeunit.product.dto.ProductDto">
+
+        SELECT *
+        FROM (
+        SELECT ROW_NUMBER() OVER(ORDER BY PRODUCT_ID DESC) RN,
+        P.*
+        FROM PRODUCT P
+        WHERE CATEGORY_ID = #{categoryId}
+        )
+        WHERE RN BETWEEN #{startRow}
+        AND #{endRow}
+
+    </select>
+
+    <select id="getTotalCount"
+            resultType="int">
+
+        SELECT COUNT(*)
+        FROM PRODUCT
+
+    </select>
+
+    <select id="getCategoryTotalCount"
+            parameterType="Integer"
+            resultType="int">
+
+        SELECT COUNT(*)
+        FROM PRODUCT
+        WHERE CATEGORY_ID = #{categoryId}
+
+    </select>
+
+</mapper>

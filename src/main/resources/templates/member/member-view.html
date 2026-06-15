@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko"
+      data-theme="light"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>회원 상세정보</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-base-200 min-h-screen">
+
+<div class="max-w-4xl mx-auto py-10 px-4">
+
+    <div class="card bg-base-100 shadow-2xl">
+        <div class="card-body">
+
+            <div class="text-center">
+
+                <div class="avatar placeholder mb-3">
+                    <div class="bg-primary text-primary-content rounded-full w-24">
+                        <span class="text-4xl"
+                              th:text="${#strings.substring(memberDto.nickname,0,1)}">
+                            J
+                        </span>
+                    </div>
+                </div>
+
+                <h2 class="text-3xl font-bold"
+                    th:text="${memberDto.nickname}">
+                    닉네임
+                </h2>
+
+                <div class="flex justify-center gap-2 mt-2">
+                    <div class="badge badge-warning"
+                         th:text="${memberDto.role}">
+                        USER
+                    </div>
+
+                    <div class="badge badge-primary"
+                         th:text="${memberDto.membership}">
+                        BRONZE
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="divider">
+                회원 상세정보
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="table table-zebra">
+
+                    <tbody>
+
+                    <tr>
+                        <th>회원번호</th>
+                        <td th:text="${memberDto.memberId}">
+                            1
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>아이디</th>
+                        <td th:text="${memberDto.loginId}">
+                            user01
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>닉네임</th>
+                        <td th:text="${memberDto.nickname}">
+                            닉네임
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>이메일</th>
+                        <td th:text="${memberDto.email}">
+                            email@test.com
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>전화번호</th>
+                        <td th:text="${memberDto.phone}">
+                            010-0000-0000
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>우편번호</th>
+                        <td th:text="${memberDto.zipcode}">
+                            12345
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>주소</th>
+                        <td>
+                            <span th:text="${memberDto.address}">
+                                주소
+                            </span>
+                            <span th:text="${memberDto.detailAddress}">
+                                상세주소
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>권한</th>
+                        <td>
+                            <div class="badge badge-warning"
+                                 th:text="${memberDto.role}">
+                                USER
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>회원등급</th>
+                        <td>
+                            <div class="badge badge-primary"
+                                 th:text="${memberDto.membership}">
+                                BRONZE
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>가입일</th>
+                        <td>
+                            <span th:if="${memberDto.createdAt != null}"
+                                  th:text="${#temporals.format(memberDto.createdAt, 'yyyy-MM-dd HH:mm')}">
+                                2026-06-11 14:00
+                            </span>
+
+                            <span th:if="${memberDto.createdAt == null}">
+                                -
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>최근 수정일</th>
+                        <td>
+                            <span th:if="${memberDto.updatedAt != null}"
+                                  th:text="${#temporals.format(memberDto.updatedAt, 'yyyy-MM-dd HH:mm')}">
+                                2026-06-11 14:30
+                            </span>
+
+                            <span th:if="${memberDto.updatedAt == null}">
+                                수정 이력 없음
+                            </span>
+                        </td>
+                    </tr>
+
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="divider">
+                MENU
+            </div>
+
+            <div class="flex gap-2">
+
+                <a href="/admin/member/list"
+                   class="btn btn-outline flex-1">
+                    회원목록
+                </a>
+
+                <a href="/"
+                   class="btn btn-primary flex-1">
+                    메인페이지
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
