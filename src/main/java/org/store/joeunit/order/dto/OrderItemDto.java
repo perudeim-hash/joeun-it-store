@@ -1,9 +1,12 @@
 package org.store.joeunit.order.dto;
 
-import lombok.Data;
+import lombok.*;
 import java.util.Date;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderItemDto {
     private Long orderItemId;       // PK (seq_order_item)
     private Long orderId;           // FK (orders)
