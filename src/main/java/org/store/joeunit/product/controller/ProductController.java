@@ -1,14 +1,15 @@
 package org.store.joeunit.product.controller;
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.store.joeunit.member.dto.MemberDto;
 import org.store.joeunit.product.dto.ProductDto;
 import org.store.joeunit.product.service.ProductService;
-import jakarta.servlet.http.HttpSession;
-import org.store.joeunit.member.dto.MemberDto;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,6 +24,16 @@ public class ProductController {
 
     private final ProductService productService;
 
+    // 메인 카테고리 -> 상품목록 연결
+    @GetMapping("/products")
+    public String products(
+            @RequestParam(defaultValue = "0")
+            Integer categoryId) {
+
+        return "redirect:/product/list?categoryId=" + categoryId;
+
+    }
+
     @GetMapping("/product/list")
     public String list(
             @RequestParam(defaultValue = "1") int page,
@@ -33,11 +44,15 @@ public class ProductController {
         int totalCount;
 
         if (categoryId == null || categoryId == 0) {
+
             productDtoList = productService.getPageList(page);
             totalCount = productService.getTotalCount();
+
         } else {
+
             productDtoList = productService.getCategoryPageList(categoryId, page);
             totalCount = productService.getCategoryTotalCount(categoryId);
+
         }
 
         int totalPage = (int) Math.ceil((double) totalCount / 8);
@@ -52,38 +67,51 @@ public class ProductController {
 
     @GetMapping("/product/write")
     public String write() {
+
         return "product/write";
     }
 
     @GetMapping("/product/view")
-    public String view(@RequestParam Integer productId,
-                       Model model,
-                       HttpSession session) {
+    public String view(
+            @RequestParam Integer productId,
+            Model model,
+            HttpSession session) {
 
-        model.addAttribute("product",
-                productService.getById(productId));
+        model.addAttribute(
+                "product",
+                productService.getById(productId)
+        );
 
         MemberDto loginMember =
                 (MemberDto) session.getAttribute("loggedMember");
 
-        model.addAttribute("loginMember",
-                loginMember);
+        model.addAttribute(
+                "loginMember",
+                loginMember
+        );
 
         return "product/view";
     }
 
     @GetMapping("/product/modify")
-    public String modify(@RequestParam Integer productId, Model model) {
+    public String modify(
+            @RequestParam Integer productId,
+            Model model) {
 
-        model.addAttribute("product", productService.getById(productId));
+        model.addAttribute(
+                "product",
+                productService.getById(productId)
+        );
 
         return "product/modify";
     }
 
     @PostMapping("/product/write")
-    public String writeProcess(ProductDto productDto) throws Exception {
+    public String writeProcess(
+            ProductDto productDto) throws Exception {
 
-        MultipartFile upload = productDto.getUpload();
+        MultipartFile upload =
+                productDto.getUpload();
 
         if (upload != null && !upload.isEmpty()) {
 
@@ -97,7 +125,9 @@ public class ProductController {
                     Paths.get("uploads");
 
             if (!Files.exists(uploadPath)) {
+
                 Files.createDirectories(uploadPath);
+
             }
 
             upload.transferTo(
@@ -106,6 +136,7 @@ public class ProductController {
 
             productDto.setImageName(savedFileName);
             productDto.setImagePath("/uploads/" + savedFileName);
+
         }
 
         productService.insert(productDto);
@@ -114,9 +145,11 @@ public class ProductController {
     }
 
     @PostMapping("/product/modify")
-    public String modifyProcess(ProductDto productDto) throws Exception {
+    public String modifyProcess(
+            ProductDto productDto) throws Exception {
 
-        MultipartFile upload = productDto.getUpload();
+        MultipartFile upload =
+                productDto.getUpload();
 
         if (upload != null && !upload.isEmpty()) {
 
@@ -130,7 +163,9 @@ public class ProductController {
                     Paths.get("uploads");
 
             if (!Files.exists(uploadPath)) {
+
                 Files.createDirectories(uploadPath);
+
             }
 
             upload.transferTo(
@@ -139,6 +174,7 @@ public class ProductController {
 
             productDto.setImageName(savedFileName);
             productDto.setImagePath("/uploads/" + savedFileName);
+
         }
 
         productService.update(productDto);
@@ -147,7 +183,8 @@ public class ProductController {
     }
 
     @GetMapping("/product/delete")
-    public String delete(@RequestParam Integer productId) {
+    public String delete(
+            @RequestParam Integer productId) {
 
         productService.delete(productId);
 
@@ -170,8 +207,16 @@ public class ProductController {
 
         } else {
 
-            productList = productService.getCategoryPageList(categoryId, page);
-            totalCount = productService.getCategoryTotalCount(categoryId);
+            productList =
+                    productService.getCategoryPageList(
+                            categoryId,
+                            page
+                    );
+
+            totalCount =
+                    productService.getCategoryTotalCount(
+                            categoryId
+                    );
 
         }
 

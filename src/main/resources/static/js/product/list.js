@@ -1,5 +1,12 @@
 let currentCategory = 0;
 
+const categoryMap = {
+    "스마트폰": 1,
+    "노트북": 2,
+    "태블릿": 3,
+    "기타주변기기": 4
+};
+
 async function loadCategory(categoryId, page = 1) {
 
     currentCategory = categoryId;
@@ -148,6 +155,41 @@ window.addEventListener("DOMContentLoaded", () => {
                 button.dataset.category,
                 1
             );
+
+        });
+
+    });
+
+    // 메인 메뉴 매핑
+    document.querySelectorAll(".main-category").forEach(menu => {
+
+        menu.addEventListener("click", (e) => {
+            window.addEventListener("DOMContentLoaded", () => {
+
+                document.querySelectorAll(".category-btn").forEach(button => {
+
+                    button.addEventListener("click", () => {
+
+                        loadCategory(
+                            button.dataset.category,
+                            1
+                        );
+
+                    });
+
+                });
+
+                const urlParams =
+                    new URLSearchParams(location.search);
+
+                const categoryId =
+                    Number(urlParams.get("categoryId")) || 0;
+
+                loadCategory(categoryId, 1);
+
+            });
+
+            }
 
         });
 
