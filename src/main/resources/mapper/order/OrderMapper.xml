@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.store.joeunit.order.mapper.OrderMapper">
+
+    <insert id="insertOrder" parameterType="org.store.joeunit.order.dto.OrderDto">
+        <selectKey keyProperty="orderId" resultType="long" order="BEFORE">
+            SELECT seq_orders.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO orders (
+        order_id, member_id, total_price, discount_price, final_price,
+        member_membership, order_status, receiver_name, receiver_phone,
+        zipcode, address, detail_address, created_at
+        ) VALUES (
+        #{orderId}, #{memberId}, #{totalPrice}, #{discountPrice}, #{finalPrice},
+        #{memberMembership}, 'ORDER_COMPLETE', #{receiverName}, #{receiverPhone},
+        #{zipcode}, #{address}, #{detailAddress}, SYSDATE
+        )
+    </insert>
+
+    <insert id="insertOrderItem" parameterType="org.store.joeunit.order.dto.OrderItemDto">
+        INSERT INTO order_item (
+        order_item_id, order_id, product_id, product_name,
+        order_price, quantity, item_total_price, created_at
+        ) VALUES (
+        seq_order_item.NEXTVAL, #{orderId}, #{productId}, #{productName},
+        #{orderPrice}, #{quantity}, #{itemTotalPrice}, SYSDATE
+        )
+    </insert>
+
+    <delete id="deleteCartItemAfterOrder">
+        DELETE FROM cart_item WHERE member_id = #{memberId} AND product_id = #{productId}
+    </delete>
+
+    <select id="selectMyOrderList" parameterType="long" resultType="org.store.joeunit.order.dto.OrderDto">
+        SELECT order_id as orderId,
+        total_price as totalPrice,
+        final_price as finalPrice,
+        order_status as orderStatus,
+        created_at as createdAt,
+        member_membership as memberMembership
+        FROM orders
+        WHERE member_id = #{memberId}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="selectOrderDetail" parameterType="long" resultType="org.store.joeunit.order.dto.OrderDto">
+        SELECT * FROM orders WHERE order_id = #{orderId}
+    </select>
+
+    <select id="selectOrderItemsByOrderId" parameterType="long" resultType="org.store.joeunit.order.dto.OrderItemDto">
+        SELECT product_id as productId, product_name as productName,
+        order_price as orderPrice, quantity, item_total_price as itemTotalPrice
+        FROM order_item
+        WHERE order_id = #{orderId}
+    </select>
+
+    <update id="updateOrderStatusToCancel" parameterType="long">
+        UPDATE orders
+        SET order_status = 'ORDER_CANCEL', updated_at = SYSDATE
+        WHERE order_id = #{orderId}
+    </update>
+
+    <delete id="deleteOrderItems" parameterType="long">
+        DELETE FROM order_item WHERE order_id = #{orderId}
+    </delete>
+
+    <delete id="deleteOrder" parameterType="long">
+        DELETE FROM orders WHERE order_id = #{orderId}
+    </delete>
+
+</mapper>
