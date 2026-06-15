@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class CartItemDto {
 
     private int cartItemId;
-    private int memberId;
+    private Long memberId;
     private int productId;
     private int quantity;
     private int itemTotalPrice;

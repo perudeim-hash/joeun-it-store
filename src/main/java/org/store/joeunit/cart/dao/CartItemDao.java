@@ -11,17 +11,17 @@ public interface CartItemDao {
 
     CartItemDto findCartItemByMemberIdAndProductId(CartItemDto cartItemDto);
 
-    int cartItemTotalPrice(CartItemDto cartItemDto);
+    Long cartItemTotalPrice(CartItemDto cartItemDto);
 
-    int createCartItem(CartItemDto cartItemDto);
+    Long createCartItem(CartItemDto cartItemDto);
 
-    int increaseCartItemQuantity(CartItemDto cartItemDto);
+    Long increaseCartItemQuantity(CartItemDto cartItemDto);
 
-    int updateCartItemQuantity(CartItemDto cartItemDto);
+    Long updateCartItemQuantity(CartItemDto cartItemDto);
 
-    int deleteCartItem(CartItemDto cartItemDto);
+    Long deleteCartItem(CartItemDto cartItemDto);
 
-    int deleteCartItemsByMemberId(CartItemDto cartItemDto);
+    Long deleteCartItemsByMemberId(CartItemDto cartItemDto);
 
 
 }

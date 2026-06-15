@@ -31,7 +31,7 @@
         AND PRODUCT_ID = #{productId}
     </select>
 
-    <select id="cartItemTotalPrice" resultType="int"  parameterType="CartItemDto">
+    <select id="cartItemTotalPrice" resultType="Long"  parameterType="CartItemDto">
     SELECT nvl(sum(p.price * ci.quantity),0)
     FROM CART_ITEM ci
     JOIN PRODUCT p
