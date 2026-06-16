@@ -27,6 +27,11 @@ public interface ProductMapper {
 
     List<ProductDto> getCategoryPageList(Map<String,Object> paramMap);
 
+    List<ProductDto> getBestProducts();
+
+    List<ProductDto> getNewProducts();
+
+
     int getTotalCount();
 
     int getCategoryTotalCount(Integer categoryId);

@@ -458,4 +458,68 @@ body {
     .hero-arrow {
         display: none;
     }
+
+
 }
+document.addEventListener("DOMContentLoaded", () => {
+
+    const slides = [
+        {
+            title:"최신 IT 기기, 모두 여기",
+            desc:"스마트한 선택, 합리적인 가격"
+        },
+        {
+            title:"노트북 특가전",
+            desc:"학생·직장인 추천"
+        },
+        {
+            title:"스마트폰 기획전",
+            desc:"최신 갤럭시 · 아이폰"
+        }
+    ];
+
+    let current = 0;
+
+    const title =
+        document.querySelector(".hero-small");
+
+    const desc =
+        document.querySelector(".hero-desc");
+
+    function render(){
+
+        title.textContent =
+            slides[current].title;
+
+        desc.textContent =
+            slides[current].desc;
+    }
+
+    document
+        .querySelector(".hero-next")
+        .addEventListener("click", () => {
+
+            current++;
+
+            if(current >= slides.length){
+                current = 0;
+            }
+
+            render();
+        });
+
+    document
+        .querySelector(".hero-prev")
+        .addEventListener("click", () => {
+
+            current--;
+
+            if(current < 0){
+                current = slides.length - 1;
+            }
+
+            render();
+        });
+
+    render();
+});

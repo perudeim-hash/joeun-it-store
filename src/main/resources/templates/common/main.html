@@ -88,129 +88,143 @@
 
   <!-- 추천 상품 -->
   <section class="product-section">
+
     <div class="section-title-box">
       <h2>추천 상품</h2>
-      <a href="/products">더보기 ›</a>
+      <a href="/product/list">더보기 ›</a>
     </div>
 
     <div class="product-grid">
 
-      <div class="product-card">
-        <a href="/products/1" class="product-image galaxy"></a>
-        <div class="product-info">
-          <h3>갤럭시 S25</h3>
-          <p>스마트폰</p>
-          <div class="product-bottom">
-            <strong>1,200,000원</strong>
-            <div class="product-icons">
-              <button type="button">♡</button>
-              <form action="/cart/add" method="post">
-                <input type="hidden" name="productId" value="1">
-                <input type="hidden" name="quantity" value="1">
-                <button type="submit">🛒</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="product-card"
+           th:each="product : ${recommendProducts}">
 
-      <div class="product-card">
-        <a href="/products/2" class="product-image fold"></a>
-        <div class="product-info">
-          <h3>갤럭시 Z Fold</h3>
-          <p>스마트폰</p>
-          <div class="product-bottom">
-            <strong>2,100,000원</strong>
-            <div class="product-icons">
-              <button type="button">♡</button>
-              <form action="/cart/add" method="post">
-                <input type="hidden" name="productId" value="2">
-                <input type="hidden" name="quantity" value="1">
-                <button type="submit">🛒</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+        <a th:href="@{/product/detail(productId=${product.productId})}"
+           class="product-image galaxy">
+        </a>
 
-      <div class="product-card">
-        <a href="/products/3" class="product-image iphone"></a>
         <div class="product-info">
-          <h3>아이폰 18 Pro</h3>
-          <p>스마트폰</p>
-          <div class="product-bottom">
-            <strong>1,700,000원</strong>
-            <div class="product-icons">
-              <button type="button">♡</button>
-              <form action="/cart/add" method="post">
-                <input type="hidden" name="productId" value="3">
-                <input type="hidden" name="quantity" value="1">
-                <button type="submit">🛒</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="product-card">
-        <a href="/products/4" class="product-image laptop-product"></a>
-        <div class="product-info">
-          <h3>LG 그램</h3>
-          <p>노트북</p>
-          <div class="product-bottom">
-            <strong>1,800,000원</strong>
-            <div class="product-icons">
-              <button type="button">♡</button>
-              <form action="/cart/add" method="post">
-                <input type="hidden" name="productId" value="4">
-                <input type="hidden" name="quantity" value="1">
-                <button type="submit">🛒</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+          <h3 th:text="${product.productName}">
+            상품명
+          </h3>
 
-      <div class="product-card">
-        <a href="/products/5" class="product-image macbook"></a>
-        <div class="product-info">
-          <h3>맥북 에어</h3>
-          <p>노트북</p>
-          <div class="product-bottom">
-            <strong>1,590,000원</strong>
-            <div class="product-icons">
-              <button type="button">♡</button>
-              <form action="/cart/add" method="post">
-                <input type="hidden" name="productId" value="5">
-                <input type="hidden" name="quantity" value="1">
-                <button type="submit">🛒</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+          <p th:text="${product.brand}">
+            브랜드
+          </p>
 
-      <div class="product-card">
-        <a href="/products/6" class="product-image ipad"></a>
-        <div class="product-info">
-          <h3>아이패드 에어</h3>
-          <p>태블릿</p>
           <div class="product-bottom">
-            <strong>990,000원</strong>
+
+            <strong
+                    th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'">
+              0원
+            </strong>
+
             <div class="product-icons">
-              <button type="button">♡</button>
-              <form action="/cart/add" method="post">
-                <input type="hidden" name="productId" value="6">
-                <input type="hidden" name="quantity" value="1">
-                <button type="submit">🛒</button>
+
+              <button type="button">
+                ♡
+              </button>
+
+              <form action="/cart/add"
+                    method="post">
+
+                <input type="hidden"
+                       name="productId"
+                       th:value="${product.productId}">
+
+                <input type="hidden"
+                       name="quantity"
+                       value="1">
+
+                <button type="submit">
+                  🛒
+                </button>
+
               </form>
+
             </div>
+
           </div>
+
         </div>
+
       </div>
 
     </div>
+
   </section>
+  </section>
+
+  <!-- 신규 상품 -->
+  <section class="product-section">
+
+    <div class="section-title-box">
+      <h2>신규 상품</h2>
+      <a href="/product/list">더보기 ›</a>
+    </div>
+
+    <div class="product-grid">
+
+      <div class="product-card"
+           th:each="product : ${newProducts}">
+
+        <a th:href="@{/product/detail(productId=${product.productId})}"
+           class="product-image galaxy">
+        </a>
+
+        <div class="product-info">
+
+          <h3 th:text="${product.productName}">
+            상품명
+          </h3>
+
+          <p th:text="${product.brand}">
+            브랜드
+          </p>
+
+          <div class="product-bottom">
+
+            <strong
+                    th:text="${#numbers.formatInteger(product.price,3,'COMMA')} + '원'">
+              0원
+            </strong>
+
+            <div class="product-icons">
+
+              <button type="button">
+                ♡
+              </button>
+
+              <form action="/cart/add"
+                    method="post">
+
+                <input type="hidden"
+                       name="productId"
+                       th:value="${product.productId}">
+
+                <input type="hidden"
+                       name="quantity"
+                       value="1">
+
+                <button type="submit">
+                  🛒
+                </button>
+
+              </form>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
 
   <!-- 하단 서비스 카드 -->
   <section class="service-section">

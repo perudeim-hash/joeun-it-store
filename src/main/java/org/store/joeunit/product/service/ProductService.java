@@ -45,7 +45,7 @@ public class ProductService {
         int startRow = (page - 1) * pageSize + 1;
         int endRow = page * pageSize;
 
-        Map<String,Object> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap<>();
 
         paramMap.put("startRow", startRow);
         paramMap.put("endRow", endRow);
@@ -59,7 +59,7 @@ public class ProductService {
         int startRow = (page - 1) * pageSize + 1;
         int endRow = page * pageSize;
 
-        Map<String,Object> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap<>();
 
         paramMap.put("categoryId", categoryId);
         paramMap.put("startRow", startRow);
@@ -75,5 +75,13 @@ public class ProductService {
     public int getCategoryTotalCount(Integer categoryId) {
         return productMapper.getCategoryTotalCount(categoryId);
     }
+    public List<ProductDto> getBestProducts() {
+        return productMapper.getBestProducts();
+    }
+
+    public List<ProductDto> getNewProducts() {
+        return productMapper.getNewProducts();
+    }
+
 
 }
