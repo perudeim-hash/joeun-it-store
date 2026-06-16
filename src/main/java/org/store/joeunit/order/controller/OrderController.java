@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.store.joeunit.member.dto.MemberDto;
+import org.store.joeunit.member.service.MemberService;
 import org.store.joeunit.order.dto.OrderDto;
 import org.store.joeunit.order.service.OrderService;
 
@@ -13,6 +14,7 @@ import org.store.joeunit.order.service.OrderService;
 public class OrderController {
 
     private final OrderService orderService;
+    private final MemberService memberService;
 
     @PostMapping("/create")
     public String createOrder(@RequestBody OrderDto orderDto, HttpSession session) {
@@ -34,6 +36,12 @@ public class OrderController {
             orderDto.setMemberMembership(membership);
 
             orderService.placeOrderFromCart(loginMember.getMemberId(), orderDto);
+
+            MemberDto updatedMember = memberService.findByNo(loginMember.getMemberId());
+            if (updatedMember != null) {
+                session.setAttribute("loggedMember", updatedMember);
+            }
+
             return "success";
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,9 +50,18 @@ public class OrderController {
     }
 
     @PostMapping("/cancel/{orderId}")
-    public String cancelOrder(@PathVariable Long orderId) {
+    public String cancelOrder(@PathVariable Long orderId, HttpSession session) {
+        MemberDto loginMember = (MemberDto) session.getAttribute("loggedMember");
+        if (loginMember == null) return "fail:login";
+
         try {
             orderService.cancelOrder(orderId);
+
+            MemberDto updatedMember = memberService.findByNo(loginMember.getMemberId());
+            if (updatedMember != null) {
+                session.setAttribute("loggedMember", updatedMember);
+            }
+
             return "success";
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,10 +80,9 @@ public class OrderController {
         }
     }
 
-    // ✨ 할인율 1%, 3%, 5%, 10% ✨
     private int getDiscountRate(String membership) {
         if (membership == null) return 1;
-        switch (membership.toUpperCase()) {
+        switch (membership.trim().toUpperCase()) {
             case "VIP": return 10;
             case "GOLD": return 5;
             case "SILVER": return 3;
