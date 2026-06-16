@@ -215,4 +215,13 @@
     <select id="getVipCount" resultType="int">
         SELECT COUNT(*) FROM shop_member WHERE membership = 'VIP'
     </select>
+
+    <update id="updateTotalPurchase">
+        UPDATE shop_member
+        SET
+        total_purchase = #{totalPurchase},
+        membership = #{membership},
+        updated_at = SYSDATE
+        WHERE member_id = #{memberId}
+    </update>
 </mapper>
