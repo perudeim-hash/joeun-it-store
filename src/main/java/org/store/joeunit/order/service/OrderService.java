@@ -66,23 +66,21 @@ public class OrderService {
 
     @Transactional
     public void cancelOrder(Long orderId) {
-        OrderDto order = orderMapper.selectOrderDetail(orderId);
 
-        if (order != null && !"ORDER_CANCEL".equals(order.getOrderStatus())) {
-            orderMapper.updateOrderStatusToCancel(orderId);
+        OrderDto order =
+        orderMapper.selectOrderDetail(orderId);
 
-            MemberDto member = memberService.findByNo(order.getMemberId());
-            long currentTotal = (member != null && member.getTotalPurchase() != null) ? member.getTotalPurchase() : 0L;
-            long cancelAmount = (order.getFinalPrice() != null) ? order.getFinalPrice() : 0L;
+        orderMapper.updateOrderStatusToCancel(orderId);
 
-            // ✨ [핵심 방어벽] 현재 누적 금액보다 취소할 금액이 크면 (음수가 될 위기면)
-            // 딱 현재 누적 금액까지만 0원으로 깎아버리도록 방어!
-            if (currentTotal - cancelAmount < 0) {
-                cancelAmount = currentTotal;
-            }
+        Long totalspent =
+                orderMapper.selectTotalSpentByMember(
+                        order.getMemberId()
+                );
 
-            memberService.updateMembership(order.getMemberId(), -cancelAmount);
-        }
+        memberService.updateMembershipByTotal(
+                order.getMemberId(),
+                totalspent
+        );
     }
 
     @Transactional

@@ -206,4 +206,23 @@ public class MemberService {
 
         memberDao.updateTotalPurchase(member);
     }
+    //누적 구매금액을 직접 넣어서 회원등급 재계싼
+    public void updateMembershipByTotal(Long memberId,
+                                        Long totalPurchase) {
+        MemberDto member =
+                memberDao.findByNo(memberId);
+
+        Long safeTotalPurchase =
+                totalPurchase != null
+                ? totalPurchase
+                        : 0L;
+
+        String membership =
+                calculateMembership(safeTotalPurchase);
+
+        member.setTotalPurchase(safeTotalPurchase);
+        member.setMembership(membership);
+
+        memberDao.updateTotalPurchase(member);
+    }
 }
