@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko"
+      data-theme="light"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>아이디 찾기 결과</title>
+
+    <link rel="stylesheet" href="/css/common/head.css">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-[#f5f8fc] min-h-screen">
+
+<div th:replace="~{common/head :: head}"></div>
+
+<div class="flex justify-center py-16 px-4">
+
+    <div class="w-full max-w-md">
+
+        <div class="text-center mb-8">
+            <h2 class="text-4xl font-extrabold text-[#0b1f3a]">
+                아이디 찾기 결과
+            </h2>
+
+            <p class="mt-3 text-gray-500">
+                입력하신 정보와 일치하는 아이디입니다.
+            </p>
+        </div>
+
+        <div class="card bg-white shadow-xl border border-gray-100">
+            <div class="card-body p-8 text-center">
+
+                <div class="mb-5">
+                    <p class="text-gray-500 mb-3">
+                        회원님의 아이디는
+                    </p>
+
+                    <div class="bg-[#f5f8fc] border border-gray-100 rounded-xl py-5">
+                        <span class="text-3xl font-extrabold text-[#0066cc]"
+                              th:text="${loginId}">
+                            user01
+                        </span>
+                    </div>
+
+                    <p class="text-gray-500 mt-3">
+                        입니다.
+                    </p>
+                </div>
+
+                <div class="divider my-6">
+                    MENU
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="/member/login"
+                       class="btn bg-[#0066cc] hover:bg-[#0052a3] text-white border-none">
+                        로그인
+                    </a>
+
+                    <a href="/member/find-password"
+                       class="btn btn-outline border-[#0066cc] text-[#0066cc] hover:bg-[#0066cc] hover:text-white">
+                        비밀번호 찾기
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

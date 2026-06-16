@@ -1,5 +1,12 @@
 let currentCategory = 0;
 
+const categoryMap = {
+    "스마트폰": 1,
+    "노트북": 2,
+    "태블릿": 3,
+    "기타주변기기": 4
+};
+
 async function loadCategory(categoryId, page = 1) {
 
     currentCategory = categoryId;
@@ -25,9 +32,9 @@ async function loadCategory(categoryId, page = 1) {
                     <figure class="h-[250px] overflow-hidden">
 
                         <img
-                            src="/upload/${product.imageName}"
+                            src="/uploads/${product.imageName}"
                             alt="${product.productName}"
-                            class="w-full h-full object-cover">
+                            class="w-full h-full object-cover rounded-lg">
 
                     </figure>
 
@@ -36,7 +43,7 @@ async function loadCategory(categoryId, page = 1) {
                 <div class="card-body p-4">
 
                     <a href="/product/view?productId=${product.productId}"
-                       class="font-bold text-lg hover:text-primary">
+                       class="font-bold text-lg hover:text-primary line-clamp-2">
 
                         ${product.productName}
 
@@ -56,9 +63,7 @@ async function loadCategory(categoryId, page = 1) {
 
                     <div class="text-sm text-gray-500">
 
-                        판매량 :
-                        ${product.salesCount ?? 0}
-                        개 판매
+                        판매량 : ${product.salesCount ?? 0} 개 판매
 
                     </div>
 
@@ -78,7 +83,8 @@ async function loadCategory(categoryId, page = 1) {
         `;
     });
 
-    document.querySelector("#productList").innerHTML = html;
+    document.querySelector("#productList").innerHTML =
+        html;
 
     drawPaging(
         data.currentPage,
@@ -86,16 +92,16 @@ async function loadCategory(categoryId, page = 1) {
     );
 }
 
-function drawPaging(currentPage,totalPage){
+function drawPaging(currentPage, totalPage) {
 
     let pagingHtml = "";
 
-    if(currentPage > 1){
+    if (currentPage > 1) {
 
         pagingHtml += `
             <button
                 class="btn btn-sm btn-outline"
-                onclick="loadCategory(${currentCategory},${currentPage - 1})">
+                onclick="loadCategory(${currentCategory}, ${currentPage - 1})">
 
                 이전
 
@@ -103,15 +109,18 @@ function drawPaging(currentPage,totalPage){
         `;
     }
 
-    let startPage = Math.max(1,currentPage - 2);
-    let endPage = Math.min(totalPage,currentPage + 2);
+    let startPage =
+        Math.max(1, currentPage - 2);
 
-    for(let i=startPage;i<=endPage;i++){
+    let endPage =
+        Math.min(totalPage, currentPage + 2);
+
+    for (let i = startPage; i <= endPage; i++) {
 
         pagingHtml += `
             <button
-                class="btn btn-sm ${i===currentPage ? 'btn-primary' : 'btn-outline'}"
-                onclick="loadCategory(${currentCategory},${i})">
+                class="btn btn-sm ${i === currentPage ? 'btn-primary' : 'btn-outline'}"
+                onclick="loadCategory(${currentCategory}, ${i})">
 
                 ${i}
 
@@ -119,12 +128,12 @@ function drawPaging(currentPage,totalPage){
         `;
     }
 
-    if(currentPage < totalPage){
+    if (currentPage < totalPage) {
 
         pagingHtml += `
             <button
                 class="btn btn-sm btn-outline"
-                onclick="loadCategory(${currentCategory},${currentPage + 1})">
+                onclick="loadCategory(${currentCategory}, ${currentPage + 1})">
 
                 다음
 
@@ -136,8 +145,56 @@ function drawPaging(currentPage,totalPage){
         pagingHtml;
 }
 
-window.addEventListener("load",()=>{
+window.addEventListener("DOMContentLoaded", () => {
 
-    loadCategory(0,1);
+    document.querySelectorAll(".category-btn").forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            loadCategory(
+                button.dataset.category,
+                1
+            );
+
+        });
+
+    });
+
+    // 메인 메뉴 매핑
+    document.querySelectorAll(".main-category").forEach(menu => {
+
+        menu.addEventListener("click", (e) => {
+            window.addEventListener("DOMContentLoaded", () => {
+
+                document.querySelectorAll(".category-btn").forEach(button => {
+
+                    button.addEventListener("click", () => {
+
+                        loadCategory(
+                            button.dataset.category,
+                            1
+                        );
+
+                    });
+
+                });
+
+                const urlParams =
+                    new URLSearchParams(location.search);
+
+                const categoryId =
+                    Number(urlParams.get("categoryId")) || 0;
+
+                loadCategory(categoryId, 1);
+
+            });
+
+            }
+
+        });
+
+    });
+
+    loadCategory(0, 1);
 
 });

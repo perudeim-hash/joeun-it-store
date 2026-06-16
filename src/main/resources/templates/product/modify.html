@@ -18,13 +18,23 @@
 
 <div class="container mx-auto p-10">
 
-    <form action="/product/modify"
-          method="post"
-          enctype="multipart/form-data">
+    <form action="/product/modify" method="post" enctype="multipart/form-data">
 
-        <input type="hidden"
-               name="productId"
-               th:value="${product.productId}">
+        <input type="hidden" name="productId" th:value="${product.productId}">
+
+        <!-- 이미지 유지 -->
+        <input type="hidden" name="imageName" th:value="${product.imageName}">
+        <input type="hidden" name="imagePath" th:value="${product.imagePath}">
+
+        <!-- 수정폼에 없는 값 유지 -->
+        <input type="hidden" name="categoryId" th:value="${product.categoryId}">
+        <input type="hidden" name="modelName" th:value="${product.modelName}">
+        <input type="hidden" name="cpu" th:value="${product.cpu}">
+        <input type="hidden" name="ram" th:value="${product.ram}">
+        <input type="hidden" name="storageCapacity" th:value="${product.storageCapacity}">
+        <input type="hidden" name="screenSize" th:value="${product.screenSize}">
+        <input type="hidden" name="os" th:value="${product.os}">
+        <input type="hidden" name="color" th:value="${product.color}">
 
         <div class="card bg-base-100 shadow-xl">
 
@@ -33,6 +43,28 @@
                 <h1 class="text-3xl font-bold">
                     상품수정
                 </h1>
+
+                <div class="flex justify-center">
+
+                    <img th:if="${product.imageName != null}"
+                         th:src="@{/uploads/{img}(img=${product.imageName})}"
+                         th:alt="${product.productName}"
+                         class="w-72 h-72 object-cover rounded-lg border shadow">
+
+                    <img th:if="${product.imageName == null}"
+                         src="/images/no-image.png"
+                         alt="no-image"
+                         class="w-72 h-72 object-cover rounded-lg border shadow">
+
+                </div>
+
+                <div class="flex justify-center">
+
+                    <img id="preview"
+                         src=""
+                         class="hidden w-72 h-72 object-cover rounded-lg border shadow mt-3">
+
+                </div>
 
                 <input type="text"
                        name="productName"
@@ -61,22 +93,20 @@
 
                 <input type="file"
                        name="upload"
-                       class="file-input file-input-bordered">
+                       accept="image/*"
+                       class="file-input file-input-bordered"
+                       onchange="previewImage(this)">
 
                 <div class="card-actions justify-end">
 
                     <button type="submit"
                             class="btn btn-success">
-
                         수정완료
-
                     </button>
 
                     <a href="/product/list"
                        class="btn btn-neutral">
-
                         취소
-
                     </a>
 
                 </div>
@@ -88,6 +118,8 @@
     </form>
 
 </div>
+
+<script src="/js/product/modify.js"></script>
 
 </body>
 </html>

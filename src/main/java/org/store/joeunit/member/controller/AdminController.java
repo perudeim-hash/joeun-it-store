@@ -64,6 +64,12 @@ public class AdminController {
         model.addAttribute("memberList", memberList);
         model.addAttribute("memberCount", memberCount);
         model.addAttribute("adminCount", adminCount);
+
+        model.addAttribute("bronzeCount", memberService.getBronzeCount());
+        model.addAttribute("silverCount", memberService.getSilverCount());
+        model.addAttribute("goldCount", memberService.getGoldCount());
+        model.addAttribute("vipCount", memberService.getVipCount());
+
         model.addAttribute("page", page);
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("startPage", startPage);
@@ -86,6 +92,13 @@ public class AdminController {
 
         MemberDto memberDto = memberService.findByNo(memberId);
         model.addAttribute("memberDto", memberDto);
+
+        int discountRate =
+                memberService.calculateDiscountRate(
+                        memberDto.getMembership()
+                );
+
+        model.addAttribute("discountRate", discountRate);
 
         return "member/member-view";
     }

@@ -62,8 +62,6 @@
 
     <div class="flex-1 min-w-0">
 
-        <!-- 제목 -->
-
         <div class="mb-6">
 
             <h1 class="text-4xl font-bold">
@@ -72,47 +70,18 @@
 
         </div>
 
-        <!-- ==========================
-             카테고리 버튼
-        ========================== -->
-
+        <!-- 수정 : onclick 제거 후 JS 이벤트 연결 -->
         <div class="flex gap-2 mb-8">
 
-            <button type="button"
-                    class="btn btn-outline btn-primary"
-                    onclick="loadCategory(0)">
-                전체
-            </button>
-
-            <button type="button"
-                    class="btn btn-outline btn-primary"
-                    onclick="loadCategory(1)">
-                스마트폰
-            </button>
-
-            <button type="button"
-                    class="btn btn-outline btn-primary"
-                    onclick="loadCategory(2)">
-                노트북
-            </button>
-
-            <button type="button"
-                    class="btn btn-outline btn-primary"
-                    onclick="loadCategory(3)">
-                태블릿
-            </button>
-
-            <button type="button"
-                    class="btn btn-outline btn-primary"
-                    onclick="loadCategory(4)">
-                기타기기
-            </button>
+            <button type="button" class="btn btn-outline btn-primary category-btn" data-category="0">전체</button>
+            <button type="button" class="btn btn-outline btn-primary category-btn" data-category="1">스마트폰</button>
+            <button type="button" class="btn btn-outline btn-primary category-btn" data-category="2">노트북</button>
+            <button type="button" class="btn btn-outline btn-primary category-btn" data-category="3">태블릿</button>
+            <button type="button" class="btn btn-outline btn-primary category-btn" data-category="4">기타기기</button>
 
         </div>
 
-        <!-- ==========================
-             상품 카드 목록
-        ========================== -->
+        <!-- 상품 목록 -->
 
         <div id="productList"
              class="grid grid-cols-4 gap-6">
@@ -120,44 +89,37 @@
             <div class="card bg-base-100 shadow-md hover:shadow-xl transition duration-300"
                  th:each="product : ${productList}">
 
-                <!-- 상품 이미지 -->
-
                 <a th:href="@{/product/view(productId=${product.productId})}">
 
                     <figure class="h-[250px] overflow-hidden">
 
-                        <img th:src="@{/upload/{img}(img=${product.imageName})}"
+                        <img th:src="@{/uploads/{img}(img=${product.imageName})}"
                              th:alt="${product.productName}"
-                             class="w-full h-full object-cover">
+                             class="w-full h-full object-cover rounded-lg">
 
                     </figure>
 
                 </a>
-
-                <!-- 상품 정보 -->
 
                 <div class="card-body p-4">
 
                     <a th:href="@{/product/view(productId=${product.productId})}"
                        class="font-bold text-lg hover:text-primary line-clamp-2">
 
-                        <span th:text="${product.productName}">
-                        </span>
+                        <span th:text="${product.productName}"></span>
 
                     </a>
 
                     <div class="text-sm text-gray-500">
 
                         브랜드 :
-                        <span th:text="${product.brand}">
-                        </span>
+                        <span th:text="${product.brand}"></span>
 
                     </div>
 
                     <div class="text-2xl font-bold text-error">
 
-                        <span th:text="${#numbers.formatInteger(product.price,3,'COMMA')}">
-                        </span>
+                        <span th:text="${#numbers.formatInteger(product.price,3,'COMMA')}"></span>
                         원
 
                     </div>
@@ -165,8 +127,7 @@
                     <div class="text-sm text-gray-500">
 
                         판매량 :
-                        <span th:text="${product.salesCount}">
-                        </span>
+                        <span th:text="${product.salesCount}"></span>
                         개 판매
 
                     </div>
@@ -179,7 +140,6 @@
 
                     </div>
 
-
                 </div>
 
             </div>
@@ -189,10 +149,12 @@
         <div id="paging"
              class="flex flex-wrap justify-center gap-2 mt-10">
         </div>
+
     </div>
 
 </div>
 
+<!-- 수정 : 모든 AJAX 및 이벤트 처리는 list.js -->
 <script src="/js/product/list.js"></script>
 
 </body>

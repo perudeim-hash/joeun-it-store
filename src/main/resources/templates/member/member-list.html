@@ -69,29 +69,108 @@
         </span>
     </div>
 
-    <div class="stats shadow bg-white w-full mb-8 border border-gray-100">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
 
-        <div class="stat">
-            <div class="stat-title">전체 회원</div>
-            <div class="stat-value text-[#0066cc]"
-                 th:text="${memberCount}">
-                0
+        <div class="card bg-white shadow-xl border border-gray-100">
+            <div class="card-body p-5">
+
+                <h3 class="text-xl font-bold text-[#0b1f3a] mb-3">
+                    회원 현황
+                </h3>
+
+                <div class="grid grid-cols-2 gap-3">
+
+                    <div class="bg-[#f5f8fc] rounded-xl p-4 border border-gray-100">
+                        <div class="text-xs text-gray-500 mb-1">
+                            전체 회원
+                        </div>
+                        <div class="text-2xl font-extrabold text-[#0066cc]"
+                             th:text="${memberCount}">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="bg-[#f5f8fc] rounded-xl p-4 border border-gray-100">
+                        <div class="text-xs text-gray-500 mb-1">
+                            관리자
+                        </div>
+                        <div class="text-2xl font-extrabold text-error"
+                             th:text="${adminCount}">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="bg-[#f5f8fc] rounded-xl p-4 border border-gray-100">
+                        <div class="text-xs text-gray-500 mb-1">
+                            일반회원
+                        </div>
+                        <div class="text-2xl font-extrabold text-success"
+                             th:text="${memberCount - adminCount}">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="bg-[#f5f8fc] rounded-xl p-4 border border-gray-100">
+                        <div class="text-xs text-gray-500 mb-1">
+                            BRONZE
+                        </div>
+                        <div class="text-2xl font-extrabold text-amber-700"
+                             th:text="${bronzeCount}">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="bg-[#f5f8fc] rounded-xl p-4 border border-gray-100">
+                        <div class="text-xs text-gray-500 mb-1">
+                            SILVER
+                        </div>
+                        <div class="text-2xl font-extrabold text-slate-500"
+                             th:text="${silverCount}">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="bg-[#f5f8fc] rounded-xl p-4 border border-gray-100">
+                        <div class="text-xs text-gray-500 mb-1">
+                            GOLD
+                        </div>
+                        <div class="text-2xl font-extrabold text-yellow-500"
+                             th:text="${goldCount}">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="bg-[#f5f8fc] rounded-xl p-4 border border-gray-100 col-span-2">
+                        <div class="text-xs text-gray-500 mb-1">
+                            VIP
+                        </div>
+                        <div class="text-2xl font-extrabold text-purple-600"
+                             th:text="${vipCount}">
+                            0
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
         </div>
 
-        <div class="stat">
-            <div class="stat-title">관리자</div>
-            <div class="stat-value text-error"
-                 th:text="${adminCount}">
-                0
-            </div>
-        </div>
+        <div class="card bg-white shadow-xl border border-gray-100 lg:col-span-2">
+            <div class="card-body p-5">
 
-        <div class="stat">
-            <div class="stat-title">일반회원</div>
-            <div class="stat-value text-success"
-                 th:text="${memberCount - adminCount}">
-                0
+                <div class="mb-3">
+                    <h3 class="text-xl font-bold text-[#0b1f3a]">
+                        멤버십 인원 분포
+                    </h3>
+                    <p class="text-sm text-gray-500 mt-1">
+                        등급별 회원 수를 막대그래프로 확인합니다.
+                    </p>
+                </div>
+
+                <div style="height: 230px;">
+                    <canvas id="membershipChart"></canvas>
+                </div>
+
             </div>
         </div>
 
@@ -112,6 +191,7 @@
                         <th>이메일</th>
                         <th>권한</th>
                         <th>등급</th>
+                        <th>할인율</th>
                         <th>상세보기</th>
                         <th>저장</th>
                     </tr>
@@ -190,6 +270,32 @@
                                     </option>
                                 </select>
                             </td>
+                            <td>
+    <span th:if="${member.membership == 'VIP'}"
+          class="font-bold text-purple-600">
+        10%
+    </span>
+
+                                <span th:if="${member.membership == 'GOLD'}"
+                                      class="font-bold text-yellow-500">
+        5%
+    </span>
+
+                                <span th:if="${member.membership == 'SILVER'}"
+                                      class="font-bold text-slate-500">
+        3%
+    </span>
+
+                                <span th:if="${member.membership == 'BRONZE'}"
+                                      class="font-bold text-amber-700">
+        1%
+    </span>
+
+                                <span th:if="${member.membership == 'ADMIN'}">
+        -
+    </span>
+                            </td>
+
 
                             <td>
                                 <a th:href="@{/admin/member/view(memberId=${member.memberId})}"
@@ -257,6 +363,8 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
     const roleSelectList = document.querySelectorAll(".role-select");
 
@@ -279,6 +387,53 @@
 
         handleRoleChange();
         roleSelect.addEventListener("change", handleRoleChange);
+    });
+</script>
+
+<script th:inline="javascript">
+    const bronzeCount = [[${bronzeCount}]];
+    const silverCount = [[${silverCount}]];
+    const goldCount = [[${goldCount}]];
+    const vipCount = [[${vipCount}]];
+
+    const ctx = document.getElementById("membershipChart");
+
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: [
+                "BRONZE",
+                "SILVER",
+                "GOLD",
+                "VIP"
+            ],
+            datasets: [{
+                label: "회원 수",
+                data: [
+                    bronzeCount,
+                    silverCount,
+                    goldCount,
+                    vipCount
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
     });
 </script>
 
