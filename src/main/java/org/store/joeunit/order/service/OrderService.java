@@ -99,7 +99,21 @@ public class OrderService {
 
     @Transactional
     public void cancelOrder(Long orderId) {
+
+        OrderDto order =
+        orderMapper.selectOrderDetail(orderId);
+
         orderMapper.updateOrderStatusToCancel(orderId);
+
+        Long totalspent =
+                orderMapper.selectTotalSpentByMember(
+                        order.getMemberId()
+                );
+
+        memberService.updateMembershipByTotal(
+                order.getMemberId(),
+                totalspent
+        );
     }
 
     @Transactional
