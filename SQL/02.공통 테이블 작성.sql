@@ -27,6 +27,10 @@ CREATE TABLE shop_member (
         CHECK (membership IN ('BRONZE', 'SILVER', 'GOLD', 'VIP'))
 );
 
+ALTER TABLE shop_member
+    ADD CONSTRAINT ck_member_total_purchase
+        CHECK (total_purchase >= 0);
+
 CREATE TABLE category (
     category_id     NUMBER PRIMARY KEY,
     category_name   VARCHAR2(50) NOT NULL UNIQUE,
