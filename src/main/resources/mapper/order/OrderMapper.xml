@@ -34,19 +34,36 @@
         WHERE member_id = #{memberId} AND product_id = (SELECT MAX(product_id) FROM product WHERE product_name = #{productName})
     </delete>
 
-    <!-- ✨ 목록에서 '결제금액'을 띄우기 위해 final_price 추가 ✨ -->
     <select id="selectMyOrderList" resultType="org.store.joeunit.order.dto.OrderDto">
         SELECT o.order_id as orderId,
-        o.member_membership as memberMembership,
+        m.membership as memberMembership,
         o.order_status as orderStatus,
+        o.total_price as totalPrice,
+        o.discount_price as discountAmount,
         o.final_price as finalPrice
         FROM orders o
+        JOIN shop_member m ON o.member_id = m.member_id
         WHERE o.member_id = #{memberId}
         ORDER BY o.created_at DESC
     </select>
 
     <select id="selectOrderDetail" resultType="org.store.joeunit.order.dto.OrderDto">
-        SELECT * FROM orders WHERE order_id = #{orderId}
+        SELECT o.order_id as orderId,
+        o.member_id as memberId,
+        o.total_price as totalPrice,
+        o.discount_price as discountAmount,
+        o.final_price as finalPrice,
+        m.membership as memberMembership,
+        o.order_status as orderStatus,
+        o.receiver_name as receiverName,
+        o.receiver_phone as receiverPhone,
+        o.zipcode as zipcode,
+        o.address as address,
+        o.detail_address as detailAddress,
+        o.created_at as createdAt
+        FROM orders o
+        JOIN shop_member m ON o.member_id = m.member_id
+        WHERE o.order_id = #{orderId}
     </select>
 
     <select id="selectOrderItemsByOrderId" resultType="org.store.joeunit.order.dto.OrderItemDto">
@@ -60,7 +77,6 @@
     <delete id="deleteOrderItems">DELETE FROM order_item WHERE order_id = #{orderId}</delete>
     <delete id="deleteOrder">DELETE FROM orders WHERE order_id = #{orderId}</delete>
 
-    <!-- ✨ [유지] 누적 결제 금액 합산 (취소된 주문 제외) : 화면 출력 및 Member 팀원 전달용 ✨ -->
     <select id="selectTotalSpentByMember" resultType="long">
         SELECT NVL(SUM(final_price), 0)
         FROM orders
