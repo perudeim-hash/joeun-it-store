@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <title>나의 주문 내역</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" th:href="@{/css/common/head.css}">
     <link rel="stylesheet" th:href="@{/css/order/order_list.css}">
+    <script th:src="@{/js/order/order_list.js}" defer></script>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-900">
 <div th:replace="~{common/head :: head}"></div>
 
 <div class="main-content">
@@ -15,43 +18,34 @@
         <thead>
         <tr>
             <th>주문번호</th>
-            <th>회원등급</th> <th>주문상태</th>
+            <th>회원등급</th>
+            <th>주문상태</th>
             <th>관리</th>
         </tr>
         </thead>
         <tbody>
+        <tr th:if="${#lists.isEmpty(orders)}">
+            <td colspan="4" style="text-align:center; padding: 20px;">주문 내역이 없습니다.</td>
+        </tr>
         <tr th:each="order : ${orders}">
+            <td><a th:href="@{'/order/detail/' + ${order.orderId}}" th:text="'#' + ${order.orderId}">#</a></td>
             <td>
-                <a th:href="@{'/order/detail/' + ${order.orderId}}" th:text="'#' + ${order.orderId}"></a>
+                <span class="badge"
+                      th:classappend="${order.memberMembership != null ? 'badge-' + #strings.toLowerCase(order.memberMembership) : 'badge-bronze'}"
+                      th:text="${order.memberMembership != null ? order.memberMembership : 'BRONZE'}">
+                </span>
             </td>
-
+            <td th:text="${order.orderStatus}">ORDER_COMPLETE</td>
             <td>
-                        <span class="badge"
-                              th:classappend="${order.memberMembership == 'GOLD' ? 'badge-gold' : (order.memberMembership == 'SILVER' ? 'badge-silver' : 'badge-bronze')}"
-                              th:text="${order.memberMembership != null ? order.memberMembership : 'BRONZE'}">
-                        </span>
-            </td>
-
-            <td th:text="${order.orderStatus}"></td>
-
-            <td>
-                <button th:if="${order.orderStatus != 'ORDER_CANCEL'}"
-                        class="btn-cancel"
-                        th:onclick="'cancelOrder(' + ${order.orderId} + ')'">주문취소</button>
-
-                <button th:if="${order.orderStatus == 'ORDER_CANCEL'}"
-                        class="btn-delete"
-                        th:onclick="'deleteOrderHistory(' + ${order.orderId} + ')'">내역삭제</button>
+                <button type="button" th:if="${order.orderStatus != 'ORDER_CANCEL'}" class="btn-cancel" th:attr="onclick=|cancelOrder('${order.orderId}')|">주문취소</button>
+                <button type="button" th:if="${order.orderStatus == 'ORDER_CANCEL'}" class="btn-delete" th:attr="onclick=|deleteOrderHistory('${order.orderId}')|">내역삭제</button>
             </td>
         </tr>
         </tbody>
     </table>
-
     <div style="margin-top: 20px; text-align: right;">
-        <a href="/order/form" style="padding: 11px 22px; background: #1a73e8; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">새로운 테스트 주문하기</a>
+        <a href="/" class="btn btn-outline">🏠 홈으로 돌아가기</a>
     </div>
 </div>
-
-<script th:src="@{/js/order/order_list.js}"></script>
 </body>
 </html>

@@ -1,44 +1,106 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <title>상품 주문서</title>
-    <link rel="stylesheet" th:href="@{/css/common/head.css}">
-    <link rel="stylesheet" th:href="@{/css/order/order_form.css}">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/common/head.css">
+    <link rel="stylesheet" href="/css/order/order_form.css">
+    <script src="/js/order/order_form.js" defer></script>
 </head>
-<body>
+<body class="bg-white text-gray-900">
 <div th:replace="~{common/head :: head}"></div>
 
-<div class="order-wrapper">
-    <div class="order-card">
-        <h2>🛍️ 상품 주문서</h2>
-
-        <div class="form-group">
-            <label>상품 번호</label>
-            <input type="number" id="productId" value="1">
-        </div>
-
-        <div class="form-group">
-            <label>상품명</label>
-            <input type="text" id="productName" value="갤럭시 S24">
-        </div>
-
-        <div class="form-group">
-            <label>주문 수량</label>
-            <input type="number" id="quantity" value="2" oninput="updateTotal()">
-        </div>
-
-        <div class="form-group">
-            <label>상품 단가 (원)</label>
-            <input type="number" id="orderPrice" value="1150000" oninput="updateTotal()">
-        </div>
-
-        <div class="total-price" id="totalPriceDisplay">총 결제금액: 2,300,000원</div>
-
-        <button type="button" class="btn-pay" id="payBtn" onclick="placeOrder()">결제하기</button>
+<main class="order-layout" style="max-width: 1400px; margin: 40px auto; padding: 0 20px;">
+    <div class="order-title-box mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">상품 주문서</h1>
+        <p class="text-gray-500 mt-2">주문하실 상품 및 결제 정보를 확인해 주세요.</p>
     </div>
-</div>
 
-<script th:src="@{/js/order/order_form.js}"></script>
+    <div class="order-content grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-start">
+        <section class="order-list card bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+            <div class="card-body p-0">
+                <div class="order-header grid grid-cols-[minmax(240px,1.6fr)_110px_100px_130px] gap-3 p-4 bg-gray-50 border-b border-gray-200 font-bold text-gray-700 items-center">
+                    <span>상품 정보</span>
+                    <span class="text-right">가격</span>
+                    <span class="text-center">수량</span>
+                    <span class="text-right">합계</span>
+                </div>
+
+                <div class="order-row grid grid-cols-[1fr] lg:grid-cols-[minmax(240px,1.6fr)_110px_100px_130px] gap-3 p-5 border-b border-gray-100 items-center" th:each="item : ${orderItems}">
+                    <div class="product-info flex items-center gap-4">
+                        <div class="product-image-wrap w-20 h-20 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center">
+                            <img class="product-image w-full h-full object-cover" th:src="${item.imagePath != null ? item.imagePath : '/images/no-image.png'}" alt="상품 이미지">
+                        </div>
+                        <div class="product-text">
+                            <p class="product-brand text-sm text-blue-600 font-bold mb-1" th:text="${item.brand != null ? item.brand : '조은IT'}">브랜드</p>
+                            <h3 class="product-name text-lg font-bold text-gray-900 leading-snug" th:text="${item.productName}">상품명</h3>
+                        </div>
+                    </div>
+
+                    <div class="price-box text-right font-bold text-gray-600">
+                        <span th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')}">0</span>원
+                    </div>
+                    <div class="quantity-box text-center font-bold text-gray-700">
+                        <span th:text="${item.quantity}">1</span>개
+                    </div>
+                    <div class="item-total-box text-right font-extrabold text-gray-900">
+                        <span th:text="${#numbers.formatInteger(item.itemTotalPrice, 3, 'COMMA')}">0</span>원
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside class="order-summary card bg-white border border-gray-200 rounded-2xl shadow-sm lg:sticky lg:top-6">
+            <div class="card-body p-6">
+                <h2 class="summary-title text-xl font-bold mb-4 text-gray-900">결제 정보</h2>
+
+                <div class="member-grade-info mb-4" th:if="${memberGradeName != null}">
+                    <div class="grade-box flex justify-between items-center bg-blue-50 p-3 rounded-lg">
+                        <span class="grade-label text-sm text-gray-600 font-bold">회원 등급</span>
+                        <div class="flex items-center gap-2">
+                            <span class="grade-value font-extrabold text-lg"
+                                  th:classappend="${memberGradeName == 'VIP' ? 'text-grade-vip' :
+                                                   memberGradeName == '골드' ? 'text-grade-gold' :
+                                                   memberGradeName == '실버' ? 'text-grade-silver' : 'text-grade-bronze'}"
+                                  th:text="${memberGradeName}">BRONZE</span>
+                            <span class="discount-badge bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold" th:if="${discountRate > 0}" th:text="${discountRate} + '% 할인'"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-line flex justify-between text-gray-600 mb-2">
+                    <span>상품 금액</span>
+                    <strong><span th:text="${#numbers.formatInteger(totalPrice, 3, 'COMMA')}">0</span>원</strong>
+                </div>
+
+                <div class="discount-info flex justify-between text-red-500 mb-2" th:if="${discountAmount > 0}">
+                    <span>등급 할인 금액</span>
+                    <strong>-<span th:text="${#numbers.formatInteger(discountAmount, 3, 'COMMA')}">0</span>원</strong>
+                </div>
+
+                <div class="divider my-3"></div>
+
+                <div class="summary-total flex justify-between items-center">
+                    <span class="text-gray-900 font-bold">최종 결제 금액</span>
+                    <strong class="text-blue-600 text-2xl"><span th:text="${#numbers.formatInteger(finalPrice, 3, 'COMMA')}">0</span>원</strong>
+                </div>
+
+                <input type="hidden" id="hiddenTotalPrice" th:value="${totalPrice}">
+                <input type="hidden" id="hiddenFinalPrice" th:value="${finalPrice}">
+                <input type="hidden" id="hiddenDiscountRate" th:value="${discountRate}">
+                <input type="hidden" id="hiddenDiscountAmount" th:value="${discountAmount}">
+
+                <button type="button" class="btn btn-primary w-full mt-6 text-lg h-12" onclick="placeOrder()">
+                    결제하기
+                </button>
+                <a href="/cart/carts" class="btn btn-outline w-full mt-2 h-12 flex items-center justify-center decoration-transparent">
+                    장바구니로 돌아가기
+                </a>
+            </div>
+        </aside>
+    </div>
+</main>
 </body>
 </html>
