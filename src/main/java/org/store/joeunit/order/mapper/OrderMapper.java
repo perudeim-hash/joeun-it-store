@@ -10,14 +10,14 @@ import java.util.List;
 public interface OrderMapper {
     void insertOrder(OrderDto orderDto);
     void insertOrderItem(OrderItemDto orderItemDto);
-
-    // Cart 오류 우회를 위해 productId 대신 productName으로 장바구니를 비웁니다.
     void deleteCartItemAfterOrder(@Param("memberId") Long memberId, @Param("productName") String productName);
-
     List<OrderDto> selectMyOrderList(Long memberId);
     OrderDto selectOrderDetail(Long orderId);
     List<OrderItemDto> selectOrderItemsByOrderId(Long orderId);
     void updateOrderStatusToCancel(Long orderId);
     void deleteOrderItems(Long orderId);
     void deleteOrder(Long orderId);
+
+    // ✨ 누적 결제 금액 (화면 표시용)
+    Long selectTotalSpentByMember(Long memberId);
 }
