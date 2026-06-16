@@ -1,0 +1,155 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Malgun Gothic', sans-serif;
+    background:#f8f9fa;
+}
+
+.container{
+    width:1200px;
+    margin:50px auto;
+}
+
+.board-title{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.board-title h1{
+    font-size:36px;
+    color:#222;
+}
+
+/* 검색 영역 */
+.search-area{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:30px;
+}
+
+.search-area select,
+.search-area input{
+    height:45px;
+    border:1px solid #ddd;
+    border-radius:5px;
+    padding:0 15px;
+}
+
+.search-area input{
+    width:400px;
+}
+
+.search-area button{
+    width:100px;
+    border:none;
+    background:#4b57ff;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.search-area button:hover{
+    background:#3742fa;
+}
+
+/* 게시판 */
+.board-table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+.board-table thead{
+    background:#4b57ff;
+    color:white;
+}
+
+.board-table th{
+    padding:15px;
+}
+
+.board-table td{
+    padding:18px;
+    border-bottom:1px solid #eee;
+    text-align:center;
+}
+
+.board-table td.title{
+    text-align:left;
+}
+
+.board-table tr:hover{
+    background:#f5f7ff;
+}
+
+.board-table a{
+    color:#222;
+    text-decoration:none;
+}
+
+.board-table a:hover{
+    color:#4b57ff;
+}
+
+/* 버튼 영역 */
+.board-bottom{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:20px;
+}
+
+.write-btn{
+    background:#4b57ff;
+    color:white;
+    padding:12px 25px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.write-btn:hover{
+    background:#3742fa;
+}
+
+/* 페이지네이션 */
+.pagination{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    margin-top:40px;
+}
+
+.pagination a{
+    width:40px;
+    height:40px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-decoration:none;
+    border:1px solid #ddd;
+    color:#333;
+    border-radius:5px;
+}
+
+.pagination a:hover{
+    background:#4b57ff;
+    color:white;
+}
+
+.pagination a.active{
+    background:#4b57ff;
+    color:white;
+}
+
+/* 반응형 */
+@media(max-width:1200px){
+    .container{
+        width:95%;
+    }
+}

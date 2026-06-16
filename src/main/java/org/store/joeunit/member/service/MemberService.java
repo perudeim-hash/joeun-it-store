@@ -88,6 +88,85 @@ public class MemberService {
     //아이디로 회원 조회
     public MemberDto findByLoginId(String loginId) {
         return memberDao.findByLoginId(loginId);
+
+    }
+    // 아이디 찾기
+    public MemberDto findByEmailAndPhone(
+            String email,
+            String phone
+    ) {
+        return memberDao.findByEmailAndPhone(email, phone);
+    }
+    // 비밀번호 찾기
+    public MemberDto findForPasswordReset(
+            String loginId,
+            String email,
+            String phone
+    ) {
+        return memberDao.findForPasswordReset(
+                loginId,
+                email,
+                phone
+        );
+    }
+    public MemberDto findByNicknameAndEmail(
+            String nickname,
+            String email
+    ) {
+        return memberDao.findByNickNameAndEmail(
+                nickname,
+                email
+        );
+    }
+    public  MemberDto findByLoginIdAndEmail(
+            String loginId,
+            String email
+    ) {
+        return memberDao.findByLoginIdAndEmail(
+                loginId,
+                email
+        );
+    }
+    public int getBronzeCount() {
+        return memberDao.getBronzeCount();
+    }
+    public int getSilverCount() {
+        return memberDao.getSilverCount();
+    }
+    public int getGoldCount() {
+        return memberDao.getGoldCount();
+    }
+    public int getVipCount() {
+        return memberDao.getVipCount();
+    }
+    public String calculateMembership(Long totalPurchase) {
+        if(totalPurchase == null) {
+            return "BRONZE";
+        }
+        if(totalPurchase >= 1_000_000) {
+            return "VIP";
+        }
+        if(totalPurchase >= 500_000) {
+            return "GOLD";
+        }
+        if(totalPurchase >= 100_000) {
+            return  "SILVER";
+        }
+        return "BRONZE";
+    }
+
+    // 등급별 할인율 계산
+    public int calculateDiscountRate(String membership) {
+        if("VIP".equals(membership)) {
+            return 10;
+        }
+        if("GOLD".equals(membership)) {
+            return 5;
+        }
+        if("SILVER".equals(membership)) {
+            return 3;
+        }
+        return 1;
     }
 
 }

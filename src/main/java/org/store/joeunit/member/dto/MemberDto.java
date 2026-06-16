@@ -30,4 +30,7 @@ public class MemberDto {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    private long totalPurchase;
+    private Integer discountRate;
 }
