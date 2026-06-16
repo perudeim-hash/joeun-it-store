@@ -64,9 +64,8 @@
     </insert>
 
     <update id="increaseCartItemQuantity" parameterType="CartItemDto">
-        UPDATE CART_ITEM SET QUANTITY = QUANTITY + #{quantity}, UPDATED_AT = SYSDATE WHERE CART_ITEM_id = #{cartItemId}
-        AND MEMBER_id = #{memberId} AND
-        PRODUCT_ID = #{productId}
+        UPDATE CART_ITEM SET QUANTITY = QUANTITY + #{quantity}, UPDATED_AT = SYSDATE WHERE MEMBER_id = #{memberId}
+        AND PRODUCT_ID = #{productId}
     </update>
 
     <update id="updateCartItemQuantity" parameterType="CartItemDto">
