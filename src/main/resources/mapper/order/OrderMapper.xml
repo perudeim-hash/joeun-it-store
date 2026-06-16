@@ -36,13 +36,12 @@
 
     <select id="selectMyOrderList" resultType="org.store.joeunit.order.dto.OrderDto">
         SELECT o.order_id as orderId,
-        m.membership as memberMembership,
+        o.member_membership as memberMembership,
         o.order_status as orderStatus,
         o.total_price as totalPrice,
         o.discount_price as discountAmount,
         o.final_price as finalPrice
         FROM orders o
-        JOIN shop_member m ON o.member_id = m.member_id
         WHERE o.member_id = #{memberId}
         ORDER BY o.created_at DESC
     </select>
@@ -53,7 +52,7 @@
         o.total_price as totalPrice,
         o.discount_price as discountAmount,
         o.final_price as finalPrice,
-        m.membership as memberMembership,
+        o.member_membership as memberMembership,
         o.order_status as orderStatus,
         o.receiver_name as receiverName,
         o.receiver_phone as receiverPhone,
@@ -62,7 +61,6 @@
         o.detail_address as detailAddress,
         o.created_at as createdAt
         FROM orders o
-        JOIN shop_member m ON o.member_id = m.member_id
         WHERE o.order_id = #{orderId}
     </select>
 
