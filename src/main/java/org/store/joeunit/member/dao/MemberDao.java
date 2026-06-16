@@ -80,4 +80,7 @@ public interface MemberDao {
     int getSilverCount();
     int getGoldCount();
     int getVipCount();
+
+    //누적 금액
+    int updateTotalPurchase(MemberDto memberDto);
 }

@@ -5,16 +5,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.store.joeunit.cart.dto.CartItemDto;
 import org.store.joeunit.cart.service.CartService;
+import org.store.joeunit.member.service.MemberService;
 import org.store.joeunit.order.dto.OrderDto;
 import org.store.joeunit.order.dto.OrderItemDto;
 import org.store.joeunit.order.mapper.OrderMapper;
+
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
+
     private final OrderMapper orderMapper;
     private final CartService cartService;
+    private final MemberService memberService;
 
     public List<OrderDto> getOrderList(Long memberId) {
         return orderMapper.selectMyOrderList(memberId);
@@ -22,41 +26,77 @@ public class OrderService {
 
     public OrderDto getOrderDetail(Long orderId) {
         OrderDto order = orderMapper.selectOrderDetail(orderId);
-        if(order != null) {
-            order.setOrderItems(orderMapper.selectOrderItemsByOrderId(orderId));
+
+        if (order != null) {
+            order.setOrderItems(
+                    orderMapper.selectOrderItemsByOrderId(orderId)
+            );
         }
+
         return order;
     }
 
     @Transactional
     public void placeOrderFromCart(Long memberId, OrderDto orderDto) {
-        List<CartItemDto> cartItems = cartService.getCartItems(CartItemDto.builder().memberId(memberId).build());
 
-        if (orderDto.getTotalPrice() == null) orderDto.setTotalPrice(0L);
-        if (orderDto.getFinalPrice() == null) orderDto.setFinalPrice(orderDto.getTotalPrice());
-        if (orderDto.getDiscountAmount() == null) orderDto.setDiscountAmount(0L);
+        List<CartItemDto> cartItems =
+                cartService.getCartItems(
+                        CartItemDto.builder()
+                                .memberId(memberId)
+                                .build()
+                );
+
+        if (orderDto.getTotalPrice() == null) {
+            orderDto.setTotalPrice(0L);
+        }
+
+        if (orderDto.getFinalPrice() == null) {
+            orderDto.setFinalPrice(orderDto.getTotalPrice());
+        }
+
+        if (orderDto.getDiscountAmount() == null) {
+            orderDto.setDiscountAmount(0L);
+        }
 
         orderMapper.insertOrder(orderDto);
 
-        for (CartItemDto item : cartItems) {
-            Long safeOrderPrice = Long.parseLong(String.valueOf(item.getPrice()));
-            Long safeTotalPrice = Long.parseLong(String.valueOf(item.getItemTotalPrice()));
+        // 주문 완료 후 회원 누적구매액 증가 + 멤버십 자동 갱신
+        memberService.updateMembership(
+                memberId,
+                orderDto.getFinalPrice()
+        );
 
-            OrderItemDto orderItem = OrderItemDto.builder()
-                    .orderId(orderDto.getOrderId())
-                    .productId(0L)
-                    .productName(item.getProductName())
-                    .orderPrice(safeOrderPrice)
-                    .quantity(item.getQuantity())
-                    .itemTotalPrice(safeTotalPrice)
-                    .build();
+        for (CartItemDto item : cartItems) {
+
+            Long safeOrderPrice =
+                    Long.parseLong(
+                            String.valueOf(item.getPrice())
+                    );
+
+            Long safeTotalPrice =
+                    Long.parseLong(
+                            String.valueOf(item.getItemTotalPrice())
+                    );
+
+            OrderItemDto orderItem =
+                    OrderItemDto.builder()
+                            .orderId(orderDto.getOrderId())
+                            .productId(0L)
+                            .productName(item.getProductName())
+                            .orderPrice(safeOrderPrice)
+                            .quantity(item.getQuantity())
+                            .itemTotalPrice(safeTotalPrice)
+                            .build();
 
             orderMapper.insertOrderItem(orderItem);
-            orderMapper.deleteCartItemAfterOrder(memberId, item.getProductName());
+
+            orderMapper.deleteCartItemAfterOrder(
+                    memberId,
+                    item.getProductName()
+            );
         }
     }
 
-    // ✨ [수정됨] 회원 등급 조작 없이 취소 처리만 하도록 롤백 ✨
     @Transactional
     public void cancelOrder(Long orderId) {
         orderMapper.updateOrderStatusToCancel(orderId);
@@ -68,7 +108,6 @@ public class OrderService {
         orderMapper.deleteOrder(orderId);
     }
 
-    // ✨ [추가] 컨트롤러에서 쓸 수 있도록 누적 금액만 넘겨줌 ✨
     public long getTotalSpent(Long memberId) {
         return orderMapper.selectTotalSpentByMember(memberId);
     }
