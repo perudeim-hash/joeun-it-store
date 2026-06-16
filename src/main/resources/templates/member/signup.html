@@ -120,22 +120,45 @@
                         </label>
 
                         <div class="flex gap-2">
-                            <input type="email"
-                                   id="email"
-                                   name="email"
-                                   placeholder="이메일을 입력하세요"
+
+                            <input type="text"
+                                   id="emailId"
+                                   placeholder="이메일"
                                    class="input input-bordered flex-1 focus:outline-none focus:border-[#0066cc]">
+
+                            <span class="flex items-center">@</span>
+
+                            <select id="emailDomain"
+                                    class="select select-bordered w-44">
+
+                                <option value="naver.com">naver.com</option>
+                                <option value="gmail.com">gmail.com</option>
+                                <option value="daum.net">daum.net</option>
+                                <option value="kakao.com">kakao.com</option>
+                                <option value="직접입력">직접입력</option>
+
+                            </select>
 
                             <button type="button"
                                     id="btn-email-check"
                                     class="btn btn-outline border-[#0066cc] text-[#0066cc] hover:bg-[#0066cc] hover:text-white w-28">
                                 중복확인
                             </button>
+
                         </div>
 
-                        <p id="email-check-message" class="text-sm mt-1"></p>
-                    </div>
+                        <input type="text"
+                               id="customDomain"
+                               placeholder="도메인 직접 입력"
+                               class="input input-bordered mt-2 hidden">
 
+                        <input type="hidden"
+                               id="email"
+                               name="email">
+
+                        <p id="email-check-message"
+                           class="text-sm mt-1"></p>
+                    </div>
                     <div class="form-control mb-4">
                         <label class="label">
                             <span class="label-text font-semibold">전화번호</span>
@@ -346,6 +369,74 @@
                 value.substring(7, 11);
         }
     });
+    const emailId =
+        document.querySelector("#emailId");
+
+    const emailDomain =
+        document.querySelector("#emailDomain");
+
+    const customDomain =
+        document.querySelector("#customDomain");
+
+    const email =
+        document.querySelector("#email");
+
+    function makeEmailValue() {
+
+        let domain =
+            emailDomain.value;
+
+        if(domain === "직접입력") {
+            domain =
+                customDomain.value;
+        }
+
+        if(emailId.value.trim() !== ""
+            && domain.trim() !== "") {
+
+            email.value =
+                emailId.value.trim()
+                + "@"
+                + domain.trim();
+
+        } else {
+
+            email.value = "";
+        }
+    }
+
+    emailId.addEventListener(
+        "input",
+        makeEmailValue
+    );
+
+    emailDomain.addEventListener(
+        "change",
+        function() {
+
+            if(emailDomain.value === "직접입력") {
+
+                customDomain.classList.remove(
+                    "hidden"
+                );
+
+            } else {
+
+                customDomain.classList.add(
+                    "hidden"
+                );
+
+                customDomain.value = "";
+            }
+
+            makeEmailValue();
+        }
+    );
+
+    customDomain.addEventListener(
+        "input",
+        makeEmailValue
+    );
 
     function searchPostcode() {
         new daum.Postcode({
