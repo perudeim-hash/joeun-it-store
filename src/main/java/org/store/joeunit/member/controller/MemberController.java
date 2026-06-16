@@ -40,6 +40,38 @@ public class MemberController {
 
             return "redirect:/member/signup";
         }
+        // 아이디 중복 검사
+        if (memberService.idCheck(memberDto.getLoginId()) > 0) {
+            redirectAttributes.addFlashAttribute(
+                    "signupError",
+                    "이미 사용중인 아이디입니다."
+            );
+
+            return "redirect:/member/signup";
+        }
+
+// 이메일 중복 검사
+        if (memberDto.getEmail() != null
+                && !memberDto.getEmail().trim().isEmpty()
+                && memberService.emailCheck(memberDto.getEmail()) > 0) {
+
+            redirectAttributes.addFlashAttribute(
+                    "signupError",
+                    "이미 사용중인 이메일입니다."
+            );
+
+            return "redirect:/member/signup";
+        }
+
+// 닉네임 중복 검사
+        if (memberService.nicknameCheck(memberDto.getNickname()) > 0) {
+            redirectAttributes.addFlashAttribute(
+                    "signupError",
+                    "이미 사용중인 닉네임입니다."
+            );
+
+            return "redirect:/member/signup";
+        }
 
         memberService.signup(memberDto);
 
