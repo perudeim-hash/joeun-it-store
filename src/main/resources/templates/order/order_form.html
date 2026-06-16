@@ -61,10 +61,11 @@
                         <span class="grade-label text-sm text-gray-600 font-bold">회원 등급</span>
                         <div class="flex items-center gap-2">
                             <span class="grade-value font-extrabold text-lg"
-                                  th:classappend="${memberGradeName == 'VIP' ? 'text-grade-vip' :
-                                                   memberGradeName == '골드' ? 'text-grade-gold' :
-                                                   memberGradeName == '실버' ? 'text-grade-silver' : 'text-grade-bronze'}"
+                                  th:classappend="${#strings.toUpperCase(memberGradeName) == 'VIP' ? 'text-grade-vip' :
+                                                   #strings.toUpperCase(memberGradeName) == 'GOLD' ? 'text-grade-gold' :
+                                                   #strings.toUpperCase(memberGradeName) == 'SILVER' ? 'text-grade-silver' : 'text-grade-bronze'}"
                                   th:text="${memberGradeName}">BRONZE</span>
+
                             <span class="discount-badge bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold" th:if="${discountRate > 0}" th:text="${discountRate} + '% 할인'"></span>
                         </div>
                     </div>
@@ -72,19 +73,19 @@
 
                 <div class="summary-line flex justify-between text-gray-600 mb-2">
                     <span>상품 금액</span>
-                    <strong><span th:text="${#numbers.formatInteger(totalPrice, 3, 'COMMA')}">0</span>원</strong>
+                    <strong><span th:text="${#numbers.formatInteger(totalPrice, 1, 'COMMA')}">0</span>원</strong>
                 </div>
 
                 <div class="discount-info flex justify-between text-red-500 mb-2" th:if="${discountAmount > 0}">
                     <span>등급 할인 금액</span>
-                    <strong>-<span th:text="${#numbers.formatInteger(discountAmount, 3, 'COMMA')}">0</span>원</strong>
+                    <strong>-<span th:text="${#numbers.formatInteger(discountAmount, 1, 'COMMA')}">0</span>원</strong>
                 </div>
 
                 <div class="divider my-3"></div>
 
                 <div class="summary-total flex justify-between items-center">
                     <span class="text-gray-900 font-bold">최종 결제 금액</span>
-                    <strong class="text-blue-600 text-2xl"><span th:text="${#numbers.formatInteger(finalPrice, 3, 'COMMA')}">0</span>원</strong>
+                    <strong class="text-blue-600 text-2xl"><span th:text="${#numbers.formatInteger(finalPrice, 1, 'COMMA')}">0</span>원</strong>
                 </div>
 
                 <input type="hidden" id="hiddenTotalPrice" th:value="${totalPrice}">

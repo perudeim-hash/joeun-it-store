@@ -90,10 +90,10 @@
                 <div class="flex items-center gap-2">
                     <span class="px-2 py-0.5 rounded text-xs font-bold bg-red-100 text-red-600"
                           th:if="${order.totalPrice > order.finalPrice}"
-                          th:text="${#strings.toUpperCase(order.memberMembership) == 'VIP' ? '30%' :
-                                    #strings.toUpperCase(order.memberMembership) == 'GOLD' ? '20%' :
-                                    #strings.toUpperCase(order.memberMembership) == 'SILVER' ? '15%' :
-                                    #strings.toUpperCase(order.memberMembership) == 'BRONZE' ? '10%' : '0%'} + ' 할인'">
+                          th:text="${#strings.toUpperCase(order.memberMembership) == 'VIP' ? '10%' :
+                                    #strings.toUpperCase(order.memberMembership) == 'GOLD' ? '5%' :
+                                    #strings.toUpperCase(order.memberMembership) == 'SILVER' ? '3%' :
+                                    #strings.toUpperCase(order.memberMembership) == 'BRONZE' ? '1%' : '0%'} + ' 할인'">
                     </span>
                     <span class="font-bold" th:text="'-' + ${#numbers.formatInteger(order.totalPrice - order.finalPrice, 1, 'COMMA')} + '원'"></span>
                 </div>

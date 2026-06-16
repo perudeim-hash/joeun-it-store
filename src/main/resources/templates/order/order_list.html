@@ -20,12 +20,14 @@
             <th>주문번호</th>
             <th>회원등급</th>
             <th>주문상태</th>
+            <!-- ✨ 건별 결제금액 헤더 추가 ✨ -->
+            <th>결제금액</th>
             <th>관리</th>
         </tr>
         </thead>
         <tbody>
         <tr th:if="${#lists.isEmpty(orders)}">
-            <td colspan="4" style="text-align:center; padding: 20px;">주문 내역이 없습니다.</td>
+            <td colspan="5" style="text-align:center; padding: 20px;">주문 내역이 없습니다.</td>
         </tr>
         <tr th:each="order : ${orders}">
             <td><a th:href="@{'/order/detail/' + ${order.orderId}}" th:text="'#' + ${order.orderId}">#</a></td>
@@ -35,7 +37,16 @@
                       th:text="${order.memberMembership != null ? order.memberMembership : 'BRONZE'}">
                 </span>
             </td>
-            <td th:text="${order.orderStatus}">ORDER_COMPLETE</td>
+
+            <!-- ✨ 주문 상태 한글화 & 컬러링 ✨ -->
+            <td>
+                <span th:if="${order.orderStatus == 'ORDER_COMPLETE'}" class="text-blue-600 font-bold">주문 성공</span>
+                <span th:if="${order.orderStatus == 'ORDER_CANCEL'}" class="text-red-500 font-bold line-through">주문 취소</span>
+            </td>
+
+            <!-- ✨ 해당 주문의 최종 결제 금액 표시 ✨ -->
+            <td class="font-extrabold text-gray-900" th:text="${#numbers.formatInteger(order.finalPrice != null ? order.finalPrice : 0, 1, 'COMMA')} + '원'"></td>
+
             <td>
                 <button type="button" th:if="${order.orderStatus != 'ORDER_CANCEL'}" class="btn-cancel" th:attr="onclick=|cancelOrder('${order.orderId}')|">주문취소</button>
                 <button type="button" th:if="${order.orderStatus == 'ORDER_CANCEL'}" class="btn-delete" th:attr="onclick=|deleteOrderHistory('${order.orderId}')|">내역삭제</button>
@@ -43,7 +54,13 @@
         </tr>
         </tbody>
     </table>
-    <div style="margin-top: 20px; text-align: right;">
+
+    <!-- ✨ 총 누적 결제 금액 & 홈으로 돌아가기 버튼 배치 ✨ -->
+    <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 20px;">
+        <div class="text-lg font-bold">
+            <span class="text-gray-600">누적 결제 금액 : </span>
+            <span class="text-blue-600 text-xl" th:text="${#numbers.formatInteger(totalSpent != null ? totalSpent : 0, 1, 'COMMA')} + '원'">0원</span>
+        </div>
         <a href="/" class="btn btn-outline">🏠 홈으로 돌아가기</a>
     </div>
 </div>
