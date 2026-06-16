@@ -164,12 +164,32 @@
                             <span class="label-text font-semibold">전화번호</span>
                         </label>
 
-                        <input type="text"
-                               name="phone"
-                               placeholder="010-1234-5678"
-                               class="input input-bordered w-full focus:outline-none focus:border-[#0066cc]"
-                               maxlength="13"
-                               required>
+                        <div class="flex gap-2">
+
+                            <input type="text"
+                                   value="010"
+                                   class="input input-bordered w-20 bg-gray-100"
+                                   readonly>
+
+                            <input type="text"
+                                   id="phoneMiddle"
+                                   placeholder="1234"
+                                   maxlength="4"
+                                   class="input input-bordered flex-1"
+                                   required>
+
+                            <input type="text"
+                                   id="phoneLast"
+                                   placeholder="5678"
+                                   maxlength="4"
+                                   class="input input-bordered flex-1"
+                                   required>
+
+                        </div>
+
+                        <input type="hidden"
+                               id="phone"
+                               name="phone">
                     </div>
 
                     <div class="form-control mb-4">
