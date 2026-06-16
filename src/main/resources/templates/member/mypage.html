@@ -125,6 +125,30 @@
                     </div>
 
                     <div class="bg-[#f5f8fc] rounded-xl p-4 border border-gray-100">
+                        <div class="text-sm text-gray-500 mb-1">할인율</div>
+
+                        <div class="font-bold text-[#0066cc]">
+
+        <span th:if="${memberDto.membership == 'VIP'}">
+            10%
+        </span>
+
+                            <span th:if="${memberDto.membership == 'GOLD'}">
+            5%
+        </span>
+
+                            <span th:if="${memberDto.membership == 'SILVER'}">
+            3%
+        </span>
+
+                            <span th:if="${memberDto.membership == 'BRONZE'}">
+            1%
+        </span>
+
+                        </div>
+                    </div>
+
+                    <div class="bg-[#f5f8fc] rounded-xl p-4 border border-gray-100">
                         <div class="text-sm text-gray-500 mb-1">권한</div>
                         <div class="font-bold text-[#0b1f3a]"
                              th:text="${memberDto.role}">

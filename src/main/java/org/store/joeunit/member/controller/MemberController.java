@@ -326,4 +326,89 @@ public class MemberController {
 
         return "redirect:/";
     }
+
+    @GetMapping("/find-id")
+    public String findIdPage() {
+        return "member/find-id";
+    }
+
+    @PostMapping("/find-id")
+    public String findId(
+            @RequestParam String nickname,
+            @RequestParam String email,
+            Model model
+    ) {
+
+        MemberDto memberDto =
+                memberService.findByNicknameAndEmail(
+                        nickname,
+                        email
+                );
+
+        if (memberDto == null) {
+
+            model.addAttribute(
+                    "findError",
+                    "이메일 또는 닉네임이 잘못되었습니다."
+            );
+
+            return "member/find-id";
+        }
+
+        model.addAttribute(
+                "loginId",
+                memberDto.getLoginId()
+        );
+
+        return "member/find-id-result";
+    }
+
+    @GetMapping("/find-password")
+    public String findPasswordPage() {
+        return "member/find-password";
+    }
+
+    @PostMapping("/find-password")
+    public String findPassword(
+            @RequestParam String loginId,
+            @RequestParam String email,
+            Model model
+    ) {
+        MemberDto memberDto =
+                memberService.findByLoginIdAndEmail(
+                        loginId,
+                        email
+                );
+        if(memberDto==null) {
+
+            model.addAttribute(
+                    "findError",
+                    "아이디 또는 이메일이 잘못되었습니다."
+            );
+
+            return "member/find-password";
+        }
+
+        model.addAttribute(
+                "memberId",
+                memberDto.getMemberId()
+        );
+
+        return "member/reset-password";
+    }
+    @PostMapping("/reset-password")
+    public  String resetPassword(
+            Long memberId,
+            String password
+    ) {
+
+        MemberDto memberDto = new MemberDto();
+
+        memberDto.setMemberId(memberId);
+        memberDto.setPassword(password);
+
+        memberService.changePassword(memberDto);
+
+        return "redirect:/member/login";
+    }
 }

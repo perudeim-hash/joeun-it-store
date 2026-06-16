@@ -14,6 +14,9 @@ CREATE TABLE shop_member (
     role            VARCHAR2(20) DEFAULT 'USER' NOT NULL,
     membership      VARCHAR2(20) DEFAULT 'BRONZE' NOT NULL,
 
+    total_purchase  NUMBER DEFAULT 0 NOT NULL,
+    discount_rate   NUMBER DEFAULT 1 NOT NULL,
+
     created_at      DATE DEFAULT SYSDATE,
     updated_at      DATE,
 
