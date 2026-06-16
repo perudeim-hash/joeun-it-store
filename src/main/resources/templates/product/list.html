@@ -24,10 +24,7 @@
 
 <div class="max-w-[1400px] mx-auto mt-10 flex gap-8">
 
-    <!-- ==========================
-         왼쪽 메뉴
-    ========================== -->
-
+    <!-- 왼쪽 메뉴 -->
     <div class="w-64 shrink-0">
 
         <div class="card bg-base-100 shadow-xl">
@@ -45,8 +42,10 @@
                     상품목록
                 </a>
 
+                <!-- ADMIN 회원만 상품등록 버튼 표시 -->
                 <a href="/product/write"
-                   class="btn btn-outline btn-success w-full">
+                   class="btn btn-outline btn-success w-full"
+                   th:if="${session.loggedMember != null and session.loggedMember.role == 'ADMIN'}">
                     상품등록
                 </a>
 
@@ -56,10 +55,7 @@
 
     </div>
 
-    <!-- ==========================
-         오른쪽 영역
-    ========================== -->
-
+    <!-- 오른쪽 영역 -->
     <div class="flex-1 min-w-0">
 
         <div class="mb-6">
@@ -70,19 +66,37 @@
 
         </div>
 
-        <!-- 수정 : onclick 제거 후 JS 이벤트 연결 -->
+        <!-- 카테고리 버튼 -->
         <div class="flex gap-2 mb-8">
 
-            <button type="button" class="btn btn-outline btn-primary category-btn" data-category="0">전체</button>
-            <button type="button" class="btn btn-outline btn-primary category-btn" data-category="1">스마트폰</button>
-            <button type="button" class="btn btn-outline btn-primary category-btn" data-category="2">노트북</button>
-            <button type="button" class="btn btn-outline btn-primary category-btn" data-category="3">태블릿</button>
-            <button type="button" class="btn btn-outline btn-primary category-btn" data-category="4">기타기기</button>
+            <a href="/product/list"
+               class="btn btn-outline btn-primary">
+                전체
+            </a>
+
+            <a href="/product/list?categoryId=1"
+               class="btn btn-outline btn-primary">
+                스마트폰
+            </a>
+
+            <a href="/product/list?categoryId=2"
+               class="btn btn-outline btn-primary">
+                노트북
+            </a>
+
+            <a href="/product/list?categoryId=3"
+               class="btn btn-outline btn-primary">
+                태블릿
+            </a>
+
+            <a href="/product/list?categoryId=4"
+               class="btn btn-outline btn-primary">
+                기타기기
+            </a>
 
         </div>
 
         <!-- 상품 목록 -->
-
         <div id="productList"
              class="grid grid-cols-4 gap-6">
 
@@ -93,7 +107,7 @@
 
                     <figure class="h-[250px] overflow-hidden">
 
-                        <img th:src="@{/uploads/{img}(img=${product.imageName})}"
+                        <img th:src="${product.imagePath != null ? product.imagePath : '/images/no-image.png'}"
                              th:alt="${product.productName}"
                              class="w-full h-full object-cover rounded-lg">
 
@@ -106,20 +120,26 @@
                     <a th:href="@{/product/view(productId=${product.productId})}"
                        class="font-bold text-lg hover:text-primary line-clamp-2">
 
-                        <span th:text="${product.productName}"></span>
+                        <span th:text="${product.productName}">
+                            상품명
+                        </span>
 
                     </a>
 
                     <div class="text-sm text-gray-500">
 
                         브랜드 :
-                        <span th:text="${product.brand}"></span>
+                        <span th:text="${product.brand}">
+                            브랜드
+                        </span>
 
                     </div>
 
                     <div class="text-2xl font-bold text-error">
 
-                        <span th:text="${#numbers.formatInteger(product.price,3,'COMMA')}"></span>
+                        <span th:text="${#numbers.formatInteger(product.price,3,'COMMA')}">
+                            0
+                        </span>
                         원
 
                     </div>
@@ -127,7 +147,9 @@
                     <div class="text-sm text-gray-500">
 
                         판매량 :
-                        <span th:text="${product.salesCount}"></span>
+                        <span th:text="${product.salesCount != null ? product.salesCount : 0}">
+                            0
+                        </span>
                         개 판매
 
                     </div>
@@ -136,6 +158,7 @@
 
                         <span class="badge badge-success"
                               th:text="${product.status}">
+                            SALE
                         </span>
 
                     </div>
@@ -146,16 +169,61 @@
 
         </div>
 
+        <!-- 상품이 없을 때 -->
+        <div th:if="${productList == null or #lists.isEmpty(productList)}"
+             class="card bg-base-100 shadow-md mt-8">
+
+            <div class="card-body text-center">
+
+                <h2 class="card-title justify-center">
+                    등록된 상품이 없습니다.
+                </h2>
+
+                <p class="text-gray-500">
+                    상품을 등록하거나 다른 카테고리를 선택해 주세요.
+                </p>
+
+                <a href="/product/write"
+                   class="btn btn-success mt-4"
+                   th:if="${session.loggedMember != null and session.loggedMember.role == 'ADMIN'}">
+                    상품등록
+                </a>
+
+            </div>
+
+        </div>
+
         <div id="paging"
              class="flex flex-wrap justify-center gap-2 mt-10">
+
+            <a th:if="${currentPage > 1}"
+               th:href="@{/product/list(page=${currentPage - 1}, categoryId=${categoryId})}"
+               class="btn btn-sm btn-outline">
+                이전
+            </a>
+
+            <th:block th:each="pageNum : ${#numbers.sequence(1, totalPage)}">
+
+                <a th:href="@{/product/list(page=${pageNum}, categoryId=${categoryId})}"
+                   class="btn btn-sm"
+                   th:classappend="${pageNum == currentPage} ? ' btn-primary' : ' btn-outline'"
+                   th:text="${pageNum}">
+                    1
+                </a>
+
+            </th:block>
+
+            <a th:if="${currentPage < totalPage}"
+               th:href="@{/product/list(page=${currentPage + 1}, categoryId=${categoryId})}"
+               class="btn btn-sm btn-outline">
+                다음
+            </a>
+
         </div>
 
     </div>
 
 </div>
-
-<!-- 수정 : 모든 AJAX 및 이벤트 처리는 list.js -->
-<script src="/js/product/list.js"></script>
 
 </body>
 </html>

@@ -77,7 +77,7 @@
                         <strong class="text-primary"><span id="cart-final-price" th:text="${#numbers.formatInteger(cartTotalPrice != null ? cartTotalPrice : 0, 3, 'COMMA')}">0</span>원</strong>
                     </div>
 
-                    <form action="/order/list" method="post" class="mt-4">
+                    <form action="/order/form" method="post" class="mt-4">
                         <button type="submit" class="btn btn-primary w-full">
                             주문하기
                         </button>
