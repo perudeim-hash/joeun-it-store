@@ -32,16 +32,18 @@ public class OrderViewController {
         if (totalPrice == null) totalPrice = 0L;
 
         String grade = loginMember.getMembership();
-        int discountRate = 0;
-        String memberGradeName = "일반";
+
+        // 브론즈 1%, 실버 3%, 골드 5%, VIP 10% 등급 할인율 적용
+        int discountRate = 1;
+        String memberGradeName = "BRONZE";
 
         if (grade != null) {
             switch (grade.toUpperCase()) {
-                case "VIP": discountRate = 30; memberGradeName = "VIP"; break;
-                case "GOLD": discountRate = 20; memberGradeName = "골드"; break;
-                case "SILVER": discountRate = 15; memberGradeName = "실버"; break;
-                case "BRONZE": discountRate = 10; memberGradeName = "브론즈"; break;
-                default: discountRate = 0; memberGradeName = "일반";
+                case "VIP": discountRate = 10; memberGradeName = "VIP"; break;
+                case "GOLD": discountRate = 5; memberGradeName = "GOLD"; break;
+                case "SILVER": discountRate = 3; memberGradeName = "SILVER"; break;
+                case "BRONZE": discountRate = 1; memberGradeName = "BRONZE"; break;
+                default: discountRate = 1; memberGradeName = "BRONZE";
             }
         }
 
@@ -64,10 +66,14 @@ public class OrderViewController {
         if (loginMember == null) return "redirect:/member/login";
 
         model.addAttribute("orders", orderService.getOrderList(loginMember.getMemberId()));
+
+        // ✨ [추가] 하단 UI에 표시할 나의 누적 결제 금액(취소 제외) 데이터를 모델에 추가 ✨
+        long totalSpent = orderService.getTotalSpent(loginMember.getMemberId());
+        model.addAttribute("totalSpent", totalSpent);
+
         return "order/order_list";
     }
 
-    // [신규 추가] 주문 상세 페이지 이동 로직
     @GetMapping("/detail/{orderId}")
     public String orderDetail(@PathVariable Long orderId, Model model, HttpSession session) {
         MemberDto loginMember = (MemberDto) session.getAttribute("loggedMember");
@@ -75,7 +81,6 @@ public class OrderViewController {
 
         OrderDto order = orderService.getOrderDetail(orderId);
 
-        // 주문 내역이 없거나 본인 주문이 아니면 목록으로 튕겨냄 (보안)
         if (order == null || !order.getMemberId().equals(loginMember.getMemberId())) {
             return "redirect:/order/list";
         }

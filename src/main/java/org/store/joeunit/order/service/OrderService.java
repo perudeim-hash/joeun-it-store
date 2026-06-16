@@ -39,13 +39,11 @@ public class OrderService {
         orderMapper.insertOrder(orderDto);
 
         for (CartItemDto item : cartItems) {
-            // 어떤 숫자 타입(int/Long)이 와도 에러가 나지 않도록 안전하게 변환
             Long safeOrderPrice = Long.parseLong(String.valueOf(item.getPrice()));
             Long safeTotalPrice = Long.parseLong(String.valueOf(item.getItemTotalPrice()));
 
             OrderItemDto orderItem = OrderItemDto.builder()
                     .orderId(orderDto.getOrderId())
-                    // XML 쿼리에서 이름을 통해 직접 번호를 찾을 것이므로 0으로 둡니다.
                     .productId(0L)
                     .productName(item.getProductName())
                     .orderPrice(safeOrderPrice)
@@ -54,12 +52,11 @@ public class OrderService {
                     .build();
 
             orderMapper.insertOrderItem(orderItem);
-
-            // Cart 쪽 수정을 막기 위해, 삭제할 때도 "상품 이름"을 넘겨줍니다.
             orderMapper.deleteCartItemAfterOrder(memberId, item.getProductName());
         }
     }
 
+    // ✨ [수정됨] 회원 등급 조작 없이 취소 처리만 하도록 롤백 ✨
     @Transactional
     public void cancelOrder(Long orderId) {
         orderMapper.updateOrderStatusToCancel(orderId);
@@ -69,5 +66,10 @@ public class OrderService {
     public void deleteOrderHistory(Long orderId) {
         orderMapper.deleteOrderItems(orderId);
         orderMapper.deleteOrder(orderId);
+    }
+
+    // ✨ [추가] 컨트롤러에서 쓸 수 있도록 누적 금액만 넘겨줌 ✨
+    public long getTotalSpent(Long memberId) {
+        return orderMapper.selectTotalSpentByMember(memberId);
     }
 }

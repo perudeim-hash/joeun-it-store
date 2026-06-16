@@ -37,7 +37,7 @@ public class OrderController {
             return "success";
         } catch (Exception e) {
             e.printStackTrace();
-            return e.getMessage();
+            return "서버 오류: " + e.getMessage();
         }
     }
 
@@ -48,7 +48,6 @@ public class OrderController {
             return "success";
         } catch (Exception e) {
             e.printStackTrace();
-            // 서버 에러를 숨기지 않고 프론트로 전송
             return "서버 오류: " + e.getMessage();
         }
     }
@@ -64,14 +63,15 @@ public class OrderController {
         }
     }
 
+    // ✨ 할인율 1%, 3%, 5%, 10% ✨
     private int getDiscountRate(String membership) {
-        if (membership == null) return 0;
+        if (membership == null) return 1;
         switch (membership.toUpperCase()) {
-            case "VIP": return 30;
-            case "GOLD": return 20;
-            case "SILVER": return 15;
-            case "BRONZE": return 10;
-            default: return 0;
+            case "VIP": return 10;
+            case "GOLD": return 5;
+            case "SILVER": return 3;
+            case "BRONZE": return 1;
+            default: return 1;
         }
     }
 }
