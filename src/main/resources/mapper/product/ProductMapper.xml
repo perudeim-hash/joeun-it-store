@@ -172,5 +172,29 @@
         WHERE CATEGORY_ID = #{categoryId}
 
     </select>
+    <select id="getBestProducts"
+            resultType="org.store.joeunit.product.dto.ProductDto">
+
+        SELECT *
+        FROM (
+        SELECT *
+        FROM PRODUCT
+        ORDER BY PRODUCT_ID DESC
+        )
+        WHERE ROWNUM <![CDATA[ <= ]]> 6
+
+    </select>
+
+    <select id="getNewProducts"
+            resultType="org.store.joeunit.product.dto.ProductDto">
+
+    SELECT *
+    FROM (
+    SELECT *
+    FROM PRODUCT
+    ORDER BY CREATED_AT DESC
+    )
+    WHERE ROWNUM <![CDATA[ <= ]]> 6
+    </select>
 
 </mapper>
