@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.store.joeunit.board.dao.ReplyDao">
+
+    <select id="getReplyList" resultType="org.store.joeunit.board.dto.ReplyDto">
+        SELECT * FROM reply WHERE board_no = #{boardNo} ORDER BY reply_no DESC
+    </select>
+
+    <insert id="insert" parameterType="org.store.joeunit.board.dto.ReplyDto">
+        INSERT INTO reply (board_no, writer, content)
+        VALUES (#{boardNo}, #{writer}, #{content})
+    </insert>
+
+</mapper>
