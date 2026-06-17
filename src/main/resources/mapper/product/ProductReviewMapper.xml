@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.store.joeunit.product.dao.ProductReviewDao">
+
+    <select id="getList"
+            resultType="org.store.joeunit.product.dto.ProductReviewDto">
+
+        SELECT
+        r.review_id AS reviewId,
+        r.product_id AS productId,
+        r.member_id AS memberId,
+        r.rating,
+        r.content,
+        r.created_at AS createdAt,
+        r.updated_at AS updatedAt,
+        m.nickname
+        FROM product_review r
+        JOIN shop_member m
+        ON r.member_id = m.member_id
+        WHERE r.product_id = #{productId}
+        ORDER BY r.review_id DESC
+
+    </select>
+
+    <select id="getById"
+            resultType="org.store.joeunit.product.dto.ProductReviewDto">
+
+        SELECT
+        review_id AS reviewId,
+        product_id AS productId,
+        member_id AS memberId,
+        rating,
+        content,
+        created_at AS createdAt,
+        updated_at AS updatedAt
+        FROM product_review
+        WHERE review_id = #{reviewId}
+
+    </select>
+
+    <insert id="insert"
+            parameterType="org.store.joeunit.product.dto.ProductReviewDto">
+
+        INSERT INTO product_review (
+        review_id,
+        product_id,
+        member_id,
+        rating,
+        content,
+        created_at
+        ) VALUES (
+        seq_product_review.NEXTVAL,
+        #{productId},
+        #{memberId},
+        #{rating},
+        #{content},
+        SYSDATE
+        )
+
+    </insert>
+
+    <delete id="delete">
+
+        DELETE FROM product_review
+        WHERE review_id = #{reviewId}
+
+    </delete>
+
+    <select id="hasPurchased"
+            resultType="int">
+
+        SELECT COUNT(*)
+        FROM orders o
+        JOIN order_item oi
+        ON o.order_id = oi.order_id
+        WHERE o.member_id = #{memberId}
+        AND oi.product_id = #{productId}
+        AND o.order_status != 'ORDER_CANCEL'
+
+    </select>
+
+    <select id="getAverageRating"
+            resultType="double">
+
+        SELECT AVG(rating)
+        FROM product_review
+        WHERE product_id = #{productId}
+
+    </select>
+
+    <select id="getReviewCount"
+            resultType="int">
+
+        SELECT COUNT(*)
+        FROM product_review
+        WHERE product_id = #{productId}
+
+    </select>
+
+    <select id="hasReviewed"
+            resultType="int">
+
+        SELECT COUNT(*)
+        FROM product_review
+        WHERE member_id = #{memberId}
+        AND product_id = #{productId}
+
+    </select>
+
+    <update id="update"
+            parameterType="org.store.joeunit.product.dto.ProductReviewDto">
+
+        UPDATE product_review
+        SET
+        rating = #{rating},
+        content = #{content},
+        updated_at = SYSDATE
+        WHERE review_id = #{reviewId}
+        AND member_id = #{memberId}
+
+    </update>
+
+</mapper>
