@@ -1,139 +1,67 @@
 <header class="site-header" th:fragment="head">
-
     <div class="header-top">
         <div class="header-inner">
-
             <a href="/" class="logo">
                 <span class="logo-main">조은IT</span>
                 <span class="logo-sub">쇼핑몰</span>
             </a>
-
             <form class="search-box" action="/product/list" method="get">
                 <input type="text"
                        name="keyword"
                        placeholder="검색어를 입력하세요"
                        class="search-input">
-
                 <button type="submit" class="search-button">
-                    🔍
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </button>
             </form>
-
             <div class="top-menu">
-
-                <!-- 로그인 안 된 상태 -->
                 <th:block th:if="${session.loggedMember == null}">
-
-                    <a href="/member/login">
-                        로그인
-                    </a>
-
+                    <a href="/member/login">로그인</a>
                     <span>|</span>
-
-                    <a href="/member/signup">
-                        회원가입
-                    </a>
-
+                    <a href="/member/signup">회원가입</a>
                 </th:block>
 
-                <!-- 로그인 된 상태 -->
                 <th:block th:if="${session.loggedMember != null}">
-
                     <span class="welcome-text">
-                        <span th:text="${session.loggedMember.nickname}">
-                            회원
-                        </span>님 환영합니다
+                        <span th:text="${session.loggedMember.nickname}">석진</span>님 환영합니다
                     </span>
-
                     <span>|</span>
-
-                    <!-- 관리자만 보임 -->
                     <a th:if="${session.loggedMember.role == 'ADMIN'}"
                        href="/admin/member/list"
-                       class="admin-link">
-                        회원관리
-                    </a>
-
+                       class="admin-link">관리자페이지</a>
                     <span th:if="${session.loggedMember.role == 'ADMIN'}">|</span>
-
-                    <a href="/member/mypage">
-                        마이페이지
-                    </a>
-
+                    <a href="/member/mypage">마이페이지</a>
                     <span>|</span>
-
-                    <a href="/member/logout">
-                        로그아웃
-                    </a>
-
+                    <a href="/member/logout">로그아웃</a>
                 </th:block>
-
                 <span>|</span>
-
-                <a href="/board">고객센터</a>
+                <a href="#">고객센터</a>
             </div>
 
             <div class="icon-menu">
-
                 <a href="/cart/carts" class="icon-item cart-icon">
                     <span class="icon">🛒</span>
                     <span>장바구니</span>
                     <em class="cart-count" th:text="${cartCount != null ? cartCount : 0}">0</em>
                 </a>
-
                 <a href="/order/list" class="icon-item">
                     <span class="icon">📋</span>
                     <span>주문조회</span>
                 </a>
-
             </div>
-
         </div>
     </div>
-
     <nav class="header-nav">
         <div class="nav-inner">
-
             <ul class="nav-menu">
-                <li>
-                    <a href="/product/list">
-                        전체 상품
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/product/list?categoryId=1">
-                        스마트폰
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/product/list?categoryId=2">
-                        노트북
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/product/list?categoryId=3">
-                        태블릿
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/product/list?categoryId=4">
-                        기타주변기기
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/board">
-                        게시판
-                    </a>
-                </li>
-
+                <li><a href="/product/list">전체 상품</a></li>
+                <li><a href="/product/list?categoryId=1">스마트폰</a></li>
+                <li><a href="/product/list?categoryId=2">노트북</a></li>
+                <li><a href="/product/list?categoryId=3">태블릿</a></li>
+                <li><a href="/product/list?categoryId=4">기타주변기기</a></li>
+                <!-- ✨ 드롭다운 제거, ALL로 이동 ✨ -->
+                <li><a href="/board/list?type=ALL">게시판</a></li>
             </ul>
-
         </div>
     </nav>
-
 </header>

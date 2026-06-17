@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 수정</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" th:href="@{/css/common/head.css}">
+</head>
+<body class="bg-gray-50">
+<div th:replace="~{common/head :: head}"></div>
+
+<div class="container mx-auto px-4 mt-10" style="max-width: 800px;">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-3">게시글 수정</h2>
+
+    <form action="/board/update" method="post" enctype="multipart/form-data" class="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
+        <input type="hidden" name="boardId" th:value="${board.boardId}">
+        <input type="hidden" name="boardType" th:value="${board.boardType}">
+
+        <div class="mb-5">
+            <label class="block text-gray-700 font-bold mb-2">제목</label>
+            <input type="text" name="title" th:value="${board.title}" class="w-full border border-gray-300 rounded px-4 py-2 outline-none focus:border-blue-500" required>
+        </div>
+
+        <div class="mb-5">
+            <div class="flex justify-between items-end mb-2">
+                <label class="block text-gray-700 font-bold">사진 첨부 (새로 등록 시 기존 사진은 모두 지워집니다)</label>
+                <span id="fileCount" class="text-sm font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">0 / 3장</span>
+            </div>
+
+            <input type="file" name="files" multiple accept="image/*" onchange="previewImages(event)" class="w-full border border-gray-300 rounded px-4 py-2 outline-none focus:border-blue-500 bg-gray-50 mb-3">
+
+            <div id="imagePreviewContainer" class="flex gap-4 flex-wrap">
+                <div th:if="${board.imagePath != null}" class="relative">
+                    <span class="absolute top-1 left-1 bg-black text-white text-xs px-2 py-1 rounded opacity-70">기존 사진1</span>
+                    <img th:src="${board.imagePath}" class="w-32 h-32 object-cover rounded shadow-sm border border-gray-300 opacity-60">
+                </div>
+                <div th:if="${board.imagePath2 != null}" class="relative">
+                    <span class="absolute top-1 left-1 bg-black text-white text-xs px-2 py-1 rounded opacity-70">기존 사진2</span>
+                    <img th:src="${board.imagePath2}" class="w-32 h-32 object-cover rounded shadow-sm border border-gray-300 opacity-60">
+                </div>
+                <div th:if="${board.imagePath3 != null}" class="relative">
+                    <span class="absolute top-1 left-1 bg-black text-white text-xs px-2 py-1 rounded opacity-70">기존 사진3</span>
+                    <img th:src="${board.imagePath3}" class="w-32 h-32 object-cover rounded shadow-sm border border-gray-300 opacity-60">
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 font-bold mb-2">내용</label>
+            <textarea name="content" rows="10" class="w-full border border-gray-300 rounded px-4 py-3 outline-none focus:border-blue-500 resize-none" required th:text="${board.content}"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-3 mt-4">
+            <button type="button" onclick="history.back()" class="px-6 py-2 border border-gray-300 rounded text-gray-700 font-bold hover:bg-gray-50">취소</button>
+            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded font-bold hover:bg-blue-700 shadow">수정완료</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function previewImages(event) {
+        const files = event.target.files;
+        const container = document.getElementById('imagePreviewContainer');
+        const countSpan = document.getElementById('fileCount');
+
+        container.innerHTML = '';
+
+        if (files.length > 3) {
+            alert('사진은 최대 3장까지만 업로드할 수 있습니다!');
+            event.target.value = '';
+            countSpan.textContent = '0 / 3장';
+            return;
+        }
+
+        countSpan.textContent = files.length + ' / 3장';
+
+        for(let i = 0; i < files.length; i++) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'w-32 h-32 object-cover rounded shadow-sm border border-blue-400 border-2';
+                container.appendChild(img);
+            }
+            reader.readAsDataURL(files[i]);
+        }
+    }
+</script>
+</body>
+</html>

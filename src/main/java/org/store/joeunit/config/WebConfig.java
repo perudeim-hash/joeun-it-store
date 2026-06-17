@@ -6,10 +6,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
+        // /uploads/ 로 시작하는 모든 요청을 프로젝트의 uploads 폴더와 매핑
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:uploads/");
     }
