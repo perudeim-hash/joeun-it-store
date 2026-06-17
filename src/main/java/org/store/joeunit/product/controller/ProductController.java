@@ -110,6 +110,16 @@ public class ProductController {
     public String writeProcess(
             ProductDto productDto) throws Exception {
 
+        // 가격 음수 방지
+        if (productDto.getPrice() < 0) {
+            productDto.setPrice(0);
+        }
+
+        // 재고 음수 방지
+        if (productDto.getStock() < 0) {
+            productDto.setStock(0);
+        }
+
         MultipartFile upload =
                 productDto.getUpload();
 
@@ -147,6 +157,16 @@ public class ProductController {
     @PostMapping("/product/modify")
     public String modifyProcess(
             ProductDto productDto) throws Exception {
+
+        // 가격 음수 방지
+        if (productDto.getPrice() < 0) {
+            productDto.setPrice(0);
+        }
+
+        // 재고 음수 방지
+        if (productDto.getStock() < 0) {
+            productDto.setStock(0);
+        }
 
         MultipartFile upload =
                 productDto.getUpload();

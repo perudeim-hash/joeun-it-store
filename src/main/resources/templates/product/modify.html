@@ -1,125 +1,337 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      data-theme="light">
 
 <head>
     <meta charset="UTF-8">
     <title>상품수정</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet"/>
-    <link rel="stylesheet" href="/css/common/head.css">
+    <!DOCTYPE html>
 
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-</head>
+    <html lang="ko"
+          xmlns:th="http://www.thymeleaf.org"
+          data-theme="light">
 
-<body class="bg-base-200">
+    <head>
+        <meta charset="UTF-8">
+        <title>상품수정</title>
 
-<div th:replace="~{common/head :: head}"></div>
 
-<div class="container mx-auto p-10">
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet"/>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-    <form action="/product/modify" method="post" enctype="multipart/form-data">
+        <link rel="stylesheet" href="/css/common/head.css">
 
-        <input type="hidden" name="productId" th:value="${product.productId}">
 
-        <!-- 이미지 유지 -->
-        <input type="hidden" name="imageName" th:value="${product.imageName}">
-        <input type="hidden" name="imagePath" th:value="${product.imagePath}">
+    </head>
 
-        <!-- 수정폼에 없는 값 유지 -->
-        <input type="hidden" name="categoryId" th:value="${product.categoryId}">
-        <input type="hidden" name="modelName" th:value="${product.modelName}">
-        <input type="hidden" name="cpu" th:value="${product.cpu}">
-        <input type="hidden" name="ram" th:value="${product.ram}">
-        <input type="hidden" name="storageCapacity" th:value="${product.storageCapacity}">
-        <input type="hidden" name="screenSize" th:value="${product.screenSize}">
-        <input type="hidden" name="os" th:value="${product.os}">
-        <input type="hidden" name="color" th:value="${product.color}">
+    <body class="bg-base-200">
 
-        <div class="card bg-base-100 shadow-xl">
+    <div th:replace="~{common/head :: head}"></div>
 
-            <div class="card-body">
+    <div class="container mx-auto p-10">
 
-                <h1 class="text-3xl font-bold">
-                    상품수정
-                </h1>
+        <h1 class="text-4xl font-bold mb-2">
+            상품수정
+        </h1>
 
-                <div class="flex justify-center">
+        <p class="text-base-content/60 mb-8">
+            상품 정보를 수정합니다.
+        </p>
 
-                    <img th:if="${product.imageName != null}"
-                         th:src="@{/uploads/{img}(img=${product.imageName})}"
-                         th:alt="${product.productName}"
-                         class="w-72 h-72 object-cover rounded-lg border shadow">
+        <form action="/product/modify"
+              method="post"
+              enctype="multipart/form-data">
 
-                    <img th:if="${product.imageName == null}"
-                         src="/images/no-image.png"
-                         alt="no-image"
-                         class="w-72 h-72 object-cover rounded-lg border shadow">
+            <input type="hidden"
+                   name="productId"
+                   th:value="${product.productId}">
 
-                </div>
+            <input type="hidden"
+                   name="imageName"
+                   th:value="${product.imageName}">
 
-                <div class="flex justify-center">
+            <input type="hidden"
+                   name="imagePath"
+                   th:value="${product.imagePath}">
 
-                    <img id="preview"
-                         src=""
-                         class="hidden w-72 h-72 object-cover rounded-lg border shadow mt-3">
+            <div class="card bg-base-100 shadow-xl">
 
-                </div>
+                <div class="card-body">
 
-                <input type="text"
-                       name="productName"
-                       th:value="${product.productName}"
-                       class="input input-bordered">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                <input type="text"
-                       name="brand"
-                       th:value="${product.brand}"
-                       class="input input-bordered">
+                        <!-- 상품정보 -->
 
-                <input type="number"
-                       name="price"
-                       th:value="${product.price}"
-                       class="input input-bordered">
+                        <div class="lg:col-span-2">
 
-                <input type="number"
-                       name="stock"
-                       th:value="${product.stock}"
-                       class="input input-bordered">
+                            <div class="grid grid-cols-2 gap-4">
 
-                <textarea name="description"
-                          class="textarea textarea-bordered"
-                          th:text="${product.description}">
-                </textarea>
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">카테고리</span>
+                                    </label>
 
-                <input type="file"
-                       name="upload"
-                       accept="image/*"
-                       class="file-input file-input-bordered"
-                       onchange="previewImage(this)">
+                                    <select name="categoryId"
+                                            class="select select-bordered w-full">
 
-                <div class="card-actions justify-end">
+                                        <option value="1"
+                                                th:selected="${product.categoryId == 1}">
+                                            스마트폰
+                                        </option>
 
-                    <button type="submit"
-                            class="btn btn-success">
-                        수정완료
-                    </button>
+                                        <option value="2"
+                                                th:selected="${product.categoryId == 2}">
+                                            노트북
+                                        </option>
 
-                    <a href="/product/list"
-                       class="btn btn-neutral">
-                        취소
-                    </a>
+                                        <option value="3"
+                                                th:selected="${product.categoryId == 3}">
+                                            태블릿
+                                        </option>
+
+                                        <option value="4"
+                                                th:selected="${product.categoryId == 4}">
+                                            기타기기
+                                        </option>
+
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">상품명</span>
+                                    </label>
+
+                                    <input type="text"
+                                           name="productName"
+                                           th:value="${product.productName}"
+                                           class="input input-bordered w-full">
+                                </div>
+
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">브랜드</span>
+                                    </label>
+
+                                    <input type="text"
+                                           name="brand"
+                                           th:value="${product.brand}"
+                                           class="input input-bordered w-full">
+                                </div>
+
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">모델명</span>
+                                    </label>
+
+                                    <input type="text"
+                                           name="modelName"
+                                           th:value="${product.modelName}"
+                                           class="input input-bordered w-full">
+                                </div>
+
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">가격</span>
+                                    </label>
+
+                                    <input type="number"
+                                           name="price"
+                                           th:value="${product.price}"
+                                           placeholder="가격"
+                                           min="0"
+                                           required
+                                           class="input input-bordered w-full">
+                                </div>
+
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">재고</span>
+                                    </label>
+
+                                    <input type="number"
+                                           name="stock"
+                                           th:value="${product.stock}"
+                                           placeholder="재고"
+                                           min="0"
+                                           required
+                                           class="input input-bordered w-full">
+                                </div>
+
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">CPU</span>
+                                    </label>
+
+                                    <input type="text"
+                                           name="cpu"
+                                           th:value="${product.cpu}"
+                                           class="input input-bordered w-full">
+                                </div>
+
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">RAM</span>
+                                    </label>
+
+                                    <input type="text"
+                                           name="ram"
+                                           th:value="${product.ram}"
+                                           class="input input-bordered w-full">
+                                </div>
+
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">저장공간</span>
+                                    </label>
+
+                                    <input type="text"
+                                           name="storageCapacity"
+                                           th:value="${product.storageCapacity}"
+                                           class="input input-bordered w-full">
+                                </div>
+
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">화면크기</span>
+                                    </label>
+
+                                    <input type="text"
+                                           name="screenSize"
+                                           th:value="${product.screenSize}"
+                                           class="input input-bordered w-full">
+                                </div>
+
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">운영체제</span>
+                                    </label>
+
+                                    <input type="text"
+                                           name="os"
+                                           th:value="${product.os}"
+                                           class="input input-bordered w-full">
+                                </div>
+
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">색상</span>
+                                    </label>
+
+                                    <input type="text"
+                                           name="color"
+                                           th:value="${product.color}"
+                                           class="input input-bordered w-full">
+                                </div>
+
+                            </div>
+
+                            <div class="mt-6">
+
+                                <label class="label">
+                            <span class="label-text">
+                                상품설명
+                            </span>
+                                </label>
+
+                                <textarea name="description"
+                                          class="textarea textarea-bordered w-full h-40"
+                                          th:text="${product.description}">
+                        </textarea>
+
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <div>
+
+                                <label class="label">
+                            <span class="label-text font-semibold">
+                                상품 이미지 변경
+                            </span>
+                                </label>
+
+                                <input type="file"
+                                       id="imageFile"
+                                       name="upload"
+                                       accept="image/*"
+                                       class="file-input file-input-bordered w-full">
+
+                            </div>
+
+                        </div>
+
+                        <!-- 이미지 영역 -->
+
+                        <div>
+
+                            <div class="card bg-base-200 shadow-md mb-4">
+
+                                <div class="card-body items-center">
+
+                                    <h3 class="font-bold">
+                                        기존 이미지
+                                    </h3>
+
+                                    <img th:src="@{/uploads/{img}(img=${product.imageName})}"
+                                         class="w-48 h-48 object-cover rounded-xl border shadow">
+
+                                </div>
+
+                            </div>
+
+                            <div class="card bg-base-200 shadow-md">
+
+                                <div class="card-body items-center">
+
+                                    <h3 class="font-bold">
+                                        수정 이미지
+                                    </h3>
+
+                                    <img id="preview"
+                                         th:src="@{/uploads/{img}(img=${product.imageName})}"
+                                         class="w-48 h-48 object-cover rounded-xl border shadow">
+
+                                    <p class="text-xs text-gray-500">
+                                        새 이미지를 선택하면 미리보기가 변경됩니다.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="flex justify-end gap-2 mt-4">
+
+                        <button type="submit"
+                                class="btn btn-success">
+                            수정완료
+                        </button>
+
+                        <a href="/product/list"
+                           class="btn btn-error">
+                            취소
+                        </a>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+        </form>
 
-    </form>
 
-</div>
+    </div>
 
-<script src="/js/product/modify.js"></script>
+    <script src="/js/product/modify.js"></script>
 
-</body>
-</html>
+    </body>
+    </html>
