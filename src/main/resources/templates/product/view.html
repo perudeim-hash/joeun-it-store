@@ -131,7 +131,8 @@
                 <th:block th:if="${loginMember != null and loginMember.role == 'USER'}">
 
                     <form action="/cart/add"
-                          method="post">
+                          method="post"
+                          th:if="${product.stock != null and product.stock > 0 and product.status == 'SALE'}">
 
                         <input type="hidden"
                                name="productId"
@@ -147,6 +148,12 @@
                         </button>
 
                     </form>
+
+                    <button type="button"
+                            class="btn btn-disabled"
+                            th:if="${product.stock == null or product.stock <= 0 or product.status != 'SALE'}">
+                        품절
+                    </button>
 
                     <a href="/product/list"
                        class="btn btn-primary">
