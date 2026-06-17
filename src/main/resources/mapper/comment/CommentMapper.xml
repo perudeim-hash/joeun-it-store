@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.store.joeunit.comment.mapper.CommentMapper">
+
+    <insert id="insertComment" parameterType="org.store.joeunit.comment.dto.CommentDto">
+        INSERT INTO board_comment (comment_id, board_id, member_id, content, created_at, is_secret, parent_id)
+        VALUES (seq_board_comment.NEXTVAL, #{boardId}, #{memberId}, #{content}, SYSDATE, #{isSecret}, #{parentId, jdbcType=NUMERIC})
+    </insert>
+
+    <select id="selectCommentsByBoardId" resultType="org.store.joeunit.comment.dto.CommentDto">
+        SELECT c.comment_id as commentId, c.board_id as boardId, c.member_id as memberId,
+        c.content as content, c.created_at as createdAt, c.is_secret as isSecret, c.parent_id as parentId,
+        m.nickname as writerNickname, m.membership as writerMembership, m.role as writerRole
+        FROM board_comment c
+        JOIN shop_member m ON c.member_id = m.member_id
+        WHERE c.board_id = #{boardId}
+        ORDER BY c.created_at ASC
+    </select>
+
+    <!-- 부모 댓글의 상태를 확인하기 위한 조회 -->
+    <select id="selectCommentById" resultType="org.store.joeunit.comment.dto.CommentDto">
+        SELECT comment_id as commentId, board_id as boardId, member_id as memberId,
+        content as content, created_at as createdAt, is_secret as isSecret, parent_id as parentId
+        FROM board_comment
+        WHERE comment_id = #{commentId}
+    </select>
+
+    <delete id="deleteComment">
+        DELETE FROM board_comment WHERE comment_id = #{commentId}
+    </delete>
+
+</mapper>

@@ -1,223 +1,136 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" data-theme="light">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>조은IT쇼핑몰 - 게시글 상세</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시물 상세</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="stylesheet" href="/css/common/head.css">
+    <link rel="stylesheet" th:href="@{/css/common/head.css}">
+    <link rel="stylesheet" th:href="@{/css/board/viewstyle.css}">
 </head>
-
-<body class="bg-gray-50 text-gray-900 min-h-screen">
-
+<body class="bg-gray-50">
 <div th:replace="~{common/head :: head}"></div>
 
-<main class="max-w-5xl mx-auto px-4 py-10">
+<div class="container mx-auto px-4 mt-10" style="max-width: 900px;">
+    <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
+        <div class="text-2xl font-bold text-gray-900 mb-4" th:text="${board.title}">게시물 제목</div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
-
-        <div class="mb-6">
-
-            <div class="flex items-center gap-2 mb-3">
-
-                <span class="badge badge-outline"
-                      th:text="${board.boardType}">
-                    QNA
-                </span>
-
-                <span th:if="${board.productName != null}"
-                      class="badge badge-ghost"
-                      th:text="${board.productName}">
-                    상품명
-                </span>
-
+        <div class="flex items-center gap-3 border-y border-gray-200 py-3 text-sm text-gray-600 mb-8">
+            <div class="flex items-center gap-1.5">
+                <span>작성자:</span>
+                <strong class="text-gray-900" th:text="${board.writerNickname}"></strong>
+                <span class="badge" th:classappend="${board.writerRole == 'ADMIN' ? 'badge-admin' : (board.writerMembership != null ? 'badge-' + #strings.toLowerCase(board.writerMembership) : 'badge-bronze')}" th:text="${board.writerRole == 'ADMIN' ? 'ADMIN' : (board.writerMembership != null ? board.writerMembership : 'BRONZE')}"></span>
             </div>
 
-            <h1 class="text-3xl font-bold text-gray-800"
-                th:text="${board.title}">
-                게시글 제목
-            </h1>
+            <div class="text-gray-300">|</div>
 
-        </div>
-
-        <div class="flex flex-wrap gap-6 text-sm text-gray-500 mb-8 pb-6 border-b border-gray-100">
-
-            <span>
-                작성자:
-                <strong th:text="${board.nickname != null ? board.nickname : '알 수 없음'}">
-                    홍길동
-                </strong>
-            </span>
-
-            <span>
-                등록일:
-                <strong th:text="${board.createdAt != null ? #temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm') : '-'}">
-                    2026-06-16
-                </strong>
-            </span>
-
-            <span>
-                조회수:
-                <strong th:text="${board.hit}">
-                    0
-                </strong>
-            </span>
-
-        </div>
-
-        <div class="min-h-[300px] text-lg leading-relaxed text-gray-700 mb-10 whitespace-pre-wrap"
-             th:text="${board.content}">
-            게시글 내용이 들어갈 자리입니다.
-        </div>
-
-        <div class="flex justify-between gap-2 pb-8 border-b border-gray-100">
-
-            <a href="/board"
-               class="btn btn-outline border-gray-200 hover:bg-gray-100">
-                목록으로
-            </a>
-
-            <div class="flex gap-2"
-                 th:if="${session.loggedMember != null and session.loggedMember.memberId == board.memberId}">
-
-                <a th:href="@{/board/edit(boardId=${board.boardId})}"
-                   class="btn btn-outline btn-primary">
-                    수정
-                </a>
-
-                <form th:action="@{/board/delete}"
-                      method="post"
-                      onsubmit="return confirm('게시글을 삭제하시겠습니까?');">
-
-                    <input type="hidden"
-                           name="boardId"
-                           th:value="${board.boardId}">
-
-                    <button type="submit"
-                            class="btn btn-outline btn-error">
-                        삭제
-                    </button>
-
-                </form>
-
+            <div class="flex items-center gap-1">
+                <span>작성일:</span>
+                <span th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span>
             </div>
 
-        </div>
+            <div class="text-gray-300">|</div>
 
-        <div class="mt-10">
-
-            <h3 class="text-xl font-bold mb-4">
-                댓글
-            </h3>
-
-            <form th:action="@{/board-comment/write}"
-                  method="post"
-                  class="flex flex-col sm:flex-row gap-2 mb-6"
-                  th:if="${session.loggedMember != null}">
-
-                <input type="hidden"
-                       name="boardId"
-                       th:value="${board.boardId}">
-
-                <div class="input input-bordered bg-gray-50 flex items-center sm:w-36 rounded-xl text-gray-500">
-
-                    <span th:text="${session.loggedMember.nickname}">
-                        작성자
-                    </span>
-
-                </div>
-
-                <input type="text"
-                       name="content"
-                       placeholder="댓글을 입력하세요"
-                       class="input input-bordered flex-grow rounded-xl"
-                       required>
-
-                <button type="submit"
-                        class="btn btn-primary bg-blue-600 border-blue-600 hover:bg-blue-700 text-white rounded-xl">
-                    등록
-                </button>
-
-            </form>
-
-            <div th:if="${session.loggedMember == null}"
-                 class="mb-6 p-4 bg-gray-50 rounded-xl text-sm text-gray-500">
-
-                댓글을 작성하려면
-                <a href="/member/login"
-                   class="text-blue-600 hover:underline">
-                    로그인
-                </a>
-                이 필요합니다.
-
+            <div class="flex items-center gap-1">
+                <span>조회수:</span>
+                <span th:text="${board.hit}"></span>
             </div>
 
-            <div class="space-y-4">
-
-                <div th:each="comment : ${boardCommentList}"
-                     class="p-4 bg-gray-50 rounded-xl">
-
-                    <div class="flex items-center justify-between gap-4 mb-2">
-
-                        <div>
-
-                            <div class="font-bold text-sm text-gray-700"
-                                 th:text="${comment.nickname != null ? comment.nickname : '알 수 없음'}">
-                                작성자
-                            </div>
-
-                            <div class="text-xs text-gray-400"
-                                 th:text="${comment.createdAt != null ? #temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm') : '-'}">
-                                2026-06-16
-                            </div>
-
-                        </div>
-
-                        <form th:if="${session.loggedMember != null and session.loggedMember.memberId == comment.memberId}"
-                              th:action="@{/board-comment/delete}"
-                              method="post"
-                              onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
-
-                            <input type="hidden"
-                                   name="commentId"
-                                   th:value="${comment.commentId}">
-
-                            <input type="hidden"
-                                   name="boardId"
-                                   th:value="${board.boardId}">
-
-                            <button type="submit"
-                                    class="btn btn-xs btn-outline btn-error">
-                                삭제
-                            </button>
-
-                        </form>
-
-                    </div>
-
-                    <div class="text-gray-700 whitespace-pre-wrap"
-                         th:text="${comment.content}">
-                        댓글 내용입니다.
-                    </div>
-
-                </div>
-
-                <div th:if="${boardCommentList == null or #lists.isEmpty(boardCommentList)}"
-                     class="p-8 text-center bg-gray-50 rounded-xl text-gray-400">
-
-                    등록된 댓글이 없습니다.
-
-                </div>
-
+            <div class="ml-auto flex items-center" th:if="${board.boardType == 'QNA'}">
+                <span th:if="${board.replyStatus == '답변대기'}" class="bg-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-bold">답변대기</span>
+                <span th:if="${board.replyStatus == '답변완료'}" class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">답변완료</span>
             </div>
-
         </div>
 
+        <div class="min-h-[200px] text-gray-800 leading-relaxed">
+            <div class="flex flex-col gap-4 mb-8 text-center items-center">
+                <img th:if="${board.imagePath != null}" th:src="${board.imagePath}" class="max-w-full h-auto rounded shadow-sm border border-gray-100">
+                <img th:if="${board.imagePath2 != null}" th:src="${board.imagePath2}" class="max-w-full h-auto rounded shadow-sm border border-gray-100">
+                <img th:if="${board.imagePath3 != null}" th:src="${board.imagePath3}" class="max-w-full h-auto rounded shadow-sm border border-gray-100">
+            </div>
+            <span th:text="${board.content}" style="white-space: pre-wrap;"></span>
+        </div>
+
+        <div class="flex justify-end gap-2 mt-10 border-t pt-4">
+            <a th:href="@{/board/list(type=${board.boardType})}" class="px-5 py-2 border border-gray-300 rounded font-bold text-gray-700 hover:bg-gray-50">목록</a>
+            <button th:if="${session.loggedMember != null and (session.loggedMember.memberId == board.memberId or session.loggedMember.role == 'ADMIN')}" th:onclick="|location.href='/board/update?id=${board.boardId}'|" class="px-5 py-2 bg-blue-600 text-white rounded font-bold hover:bg-blue-700">수정</button>
+            <button th:if="${session.loggedMember != null and (session.loggedMember.memberId == board.memberId or session.loggedMember.role == 'ADMIN')}" th:onclick="|if(confirm('정말 삭제하시겠습니까?')) location.href='/board/delete?id=${board.boardId}'|" class="px-5 py-2 bg-red-600 text-white rounded font-bold hover:bg-red-700">삭제</button>
+        </div>
     </div>
 
-</main>
+    <div class="mt-8 bg-white p-8 rounded-lg shadow-sm border border-gray-200">
+        <h3 class="font-bold text-lg mb-4">댓글</h3>
+        <form action="/comment/write" method="post" class="flex flex-col gap-3">
+            <input type="hidden" name="boardId" th:value="${board.boardId}">
+            <textarea name="content" class="w-full border border-gray-300 rounded p-3 outline-none focus:border-blue-500 resize-none" rows="3" required placeholder="댓글을 입력하세요"></textarea>
+            <div class="flex justify-between items-center">
+                <label class="flex items-center gap-2 cursor-pointer font-bold text-gray-600"><input type="checkbox" name="isSecretCheck" value="Y" class="w-4 h-4 text-blue-600"> 🔒 비밀 댓글로 작성하기</label>
+                <button type="submit" class="px-6 py-2 bg-gray-800 text-white font-bold rounded hover:bg-gray-900">댓글 등록</button>
+            </div>
+        </form>
 
+        <div class="mt-8">
+            <div th:each="comment : ${commentList}" class="border-b border-gray-100 py-4">
+
+                <div class="flex justify-between items-center mb-2">
+                    <div class="flex items-center gap-2">
+                        <strong class="text-gray-900" th:text="${comment.writerNickname}"></strong>
+                        <span class="badge" th:classappend="${comment.writerRole == 'ADMIN' ? 'badge-admin' : (comment.writerMembership != null ? 'badge-' + #strings.toLowerCase(comment.writerMembership) : 'badge-bronze')}" th:text="${comment.writerRole == 'ADMIN' ? 'ADMIN' : (comment.writerMembership != null ? comment.writerMembership : 'BRONZE')}"></span>
+                        <span class="text-xs text-gray-500" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                    </div>
+                    <button th:if="${session.loggedMember != null and (session.loggedMember.role == 'ADMIN' or session.loggedMember.memberId == comment.memberId)}" th:onclick="|if(confirm('댓글을 삭제하시겠습니까?')) location.href='/comment/delete?id=${comment.commentId}&boardId=${board.boardId}'|" class="text-xs text-red-500 font-bold hover:text-red-700">삭제</button>
+                </div>
+
+                <div th:if="${comment.isSecret == 'Y' and !(session.loggedMember != null and (session.loggedMember.role == 'ADMIN' or session.loggedMember.memberId == board.memberId or session.loggedMember.memberId == comment.memberId))}">
+                    <div class="text-gray-400 italic">🔒 작성자와 게시글 관리자만 볼 수 있는 비밀 댓글입니다.</div>
+                </div>
+                <div th:unless="${comment.isSecret == 'Y' and !(session.loggedMember != null and (session.loggedMember.role == 'ADMIN' or session.loggedMember.memberId == board.memberId or session.loggedMember.memberId == comment.memberId))}">
+                    <span th:if="${comment.isSecret == 'Y'}" class="text-xs text-red-500 font-bold">[비밀 댓글]</span>
+                    <div class="text-gray-800 mt-1" th:text="${comment.content}" style="white-space: pre-wrap;"></div>
+
+                    <div class="mt-2 text-right" th:if="${session.loggedMember != null}">
+                        <button th:if="${comment.isSecret == 'N' or (session.loggedMember.memberId == board.memberId or session.loggedMember.memberId == comment.memberId)}" th:onclick="'toggleReplyForm(' + ${comment.commentId} + ')'" class="text-xs font-bold text-gray-500 hover:text-blue-600 bg-gray-100 px-3 py-1 rounded">↳ 대댓글 작성</button>
+                    </div>
+                </div>
+
+                <div th:id="'replyForm_' + ${comment.commentId}" class="hidden mt-3 ml-8 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <form action="/comment/write" method="post" class="flex flex-col gap-2">
+                        <input type="hidden" name="boardId" th:value="${board.boardId}">
+                        <input type="hidden" name="parentId" th:value="${comment.commentId}">
+                        <textarea name="content" class="w-full border border-gray-300 rounded p-2 text-sm outline-none focus:border-blue-500 resize-none" rows="2" required th:placeholder="${comment.isSecret == 'Y' ? '이 대댓글은 자동으로 [비밀 대댓글] 처리됩니다.' : '대댓글을 입력하세요'}"></textarea>
+                        <div class="flex justify-end">
+                            <button type="submit" class="px-4 py-1.5 bg-blue-600 text-white font-bold text-sm rounded hover:bg-blue-700">등록</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div th:if="${!comment.replies.isEmpty()}" class="mt-4 ml-4 md:ml-8 space-y-3 border-l-2 border-blue-200 pl-4">
+                    <div th:each="reply : ${comment.replies}" class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-blue-500 font-bold">↳</span>
+                                <strong class="text-sm text-gray-900" th:text="${reply.writerNickname}"></strong>
+                                <span class="badge" th:classappend="${reply.writerRole == 'ADMIN' ? 'badge-admin' : (reply.writerMembership != null ? 'badge-' + #strings.toLowerCase(reply.writerMembership) : 'badge-bronze')}" th:text="${reply.writerRole == 'ADMIN' ? 'ADMIN' : (reply.writerMembership != null ? reply.writerMembership : 'BRONZE')}"></span>
+                                <span class="text-xs text-gray-500" th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                            </div>
+                            <button th:if="${session.loggedMember != null and (session.loggedMember.role == 'ADMIN' or session.loggedMember.memberId == reply.memberId)}" th:onclick="|if(confirm('대댓글을 삭제하시겠습니까?')) location.href='/comment/delete?id=${reply.commentId}&boardId=${board.boardId}'|" class="text-xs text-red-500 font-bold hover:text-red-700">삭제</button>
+                        </div>
+
+                        <div th:if="${reply.isSecret == 'Y' and !(session.loggedMember != null and (session.loggedMember.role == 'ADMIN' or session.loggedMember.memberId == board.memberId or session.loggedMember.memberId == reply.memberId or session.loggedMember.memberId == comment.memberId))}">
+                            <div class="text-gray-400 italic text-sm mt-1">🔒 권한이 있는 사용자만 볼 수 있는 비밀 대댓글입니다.</div>
+                        </div>
+                        <div th:unless="${reply.isSecret == 'Y' and !(session.loggedMember != null and (session.loggedMember.role == 'ADMIN' or session.loggedMember.memberId == board.memberId or session.loggedMember.memberId == reply.memberId or session.loggedMember.memberId == comment.memberId))}">
+                            <span th:if="${reply.isSecret == 'Y'}" class="text-xs text-red-500 font-bold">[비밀 대댓글]</span>
+                            <div class="text-sm text-gray-800 mt-1" th:text="${reply.content}" style="white-space: pre-wrap;"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>function toggleReplyForm(id) { document.getElementById('replyForm_' + id).classList.toggle('hidden'); }</script>
 </body>
 </html>

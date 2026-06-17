@@ -34,7 +34,6 @@ a {
     position: relative;
 }
 
-/* 로고 */
 .logo {
     width: 230px;
     font-size: 30px;
@@ -50,7 +49,6 @@ a {
     color: #0066cc;
 }
 
-/* 검색창 */
 .search-box {
     display: flex;
     width: 430px;
@@ -82,7 +80,6 @@ a {
     background-color: #155ca8;
 }
 
-/* 상단 우측 작은 메뉴 */
 .top-menu {
     position: absolute;
     top: 10px;
@@ -97,7 +94,6 @@ a {
     color: #1f73d1;
 }
 
-/* 아이콘 메뉴 */
 .icon-menu {
     margin-left: auto;
     padding-top: 50px;
@@ -141,7 +137,6 @@ a {
     text-align: center;
 }
 
-/* 하단 네비게이션 */
 .header-nav {
     height: 48px;
     border-bottom: 1px solid #ddd;
@@ -157,21 +152,6 @@ a {
     align-items: center;
 }
 
-.all-category-btn {
-    width: 180px;
-    height: 48px;
-    border: none;
-    background-color: #005dc1;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.all-category-btn:hover {
-    background-color: #004ea3;
-}
-
 .nav-menu {
     flex: 1;
     height: 100%;
@@ -181,11 +161,12 @@ a {
     list-style: none;
 }
 
-.nav-menu li {
+.nav-menu > li {
     flex: 1;
+    position: relative;
 }
 
-.nav-menu a {
+.nav-menu > li > a {
     height: 48px;
     display: flex;
     align-items: center;
@@ -194,45 +175,61 @@ a {
     font-size: 15px;
 }
 
-.nav-menu a:hover {
+.nav-menu > li > a:hover {
     color: #1f73d1;
 }
 
-/* 전체 카테고리 드롭다운 */
-.category-dropdown {
-    display: none;
-    position: absolute;
-    top: 48px;
-    left: 0;
-    width: 180px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-top: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    z-index: 1000;
+/* 회원 등급 뱃지 */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    padding: 0 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+    /* 텍스트 중앙 정렬 보정 */
+    transform: translateY(2px);
 }
 
-.category-dropdown.active {
-    display: block;
+.badge-vip {
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    color: #ffffff;
+    border: none;
 }
 
-.category-dropdown a {
-    display: block;
-    padding: 14px 18px;
-    font-size: 14px;
-    border-bottom: 1px solid #eee;
+.badge-gold {
+    background-color: #fef08a;
+    color: #a16207;
+    border: 1px solid #fde047;
 }
 
-.category-dropdown a:last-child {
-    border-bottom: none;
+.badge-silver {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
 }
 
-.category-dropdown a:hover {
-    background-color: #f3f7ff;
-    color: #1f73d1;
+.badge-bronze {
+    background-color: #ffedd5;
+    color: #9a3412;
+    border: 1px solid #fed7aa;
 }
 
-/* 반응형 최소 대응 */
+/* 관리자 뱃지 */
+.badge-admin {
+    background: linear-gradient(135deg, #111827, #4b5563);
+    color: #fbbf24;
+    border: 1px solid #f59e0b;
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+}
+
 @media (max-width: 1200px) {
     .header-inner,
     .nav-inner {
