@@ -7,44 +7,97 @@
 
     <select id="getList" resultType="org.store.joeunit.board.dto.BoardDto">
         SELECT
-            BOARD_NO AS boardNo,
-            TITLE,
-            CONTENT,
-            WRITER,
-            CREATED_AT AS createdAt,
-            UPDATED_AT AS updatedAt,
-            VIEW_COUNT AS viewCount
-        FROM BOARD
-        ORDER BY BOARD_NO DESC
+        b.board_id AS boardId,
+        b.member_id AS memberId,
+        b.product_id AS productId,
+        b.board_type AS boardType,
+        b.title AS title,
+        b.content AS content,
+        b.hit AS hit,
+        b.created_at AS createdAt,
+        b.updated_at AS updatedAt,
+        m.nickname AS nickname,
+        p.product_name AS productName
+        FROM board b
+        JOIN shop_member m
+        ON b.member_id = m.member_id
+        LEFT JOIN product p
+        ON b.product_id = p.product_id
+        ORDER BY b.board_id DESC
     </select>
 
-    <select id="getById" parameterType="long" resultType="org.store.joeunit.board.dto.BoardDto">
+    <select id="getById"
+            parameterType="long"
+            resultType="org.store.joeunit.board.dto.BoardDto">
         SELECT
-            BOARD_NO AS boardNo, TITLE, CONTENT, WRITER,
-            CREATED_AT AS createdAt, UPDATED_AT AS updatedAt, VIEW_COUNT AS viewCount
-        FROM BOARD
-        WHERE BOARD_NO = #{boardNo}
+        b.board_id AS boardId,
+        b.member_id AS memberId,
+        b.product_id AS productId,
+        b.board_type AS boardType,
+        b.title AS title,
+        b.content AS content,
+        b.hit AS hit,
+        b.created_at AS createdAt,
+        b.updated_at AS updatedAt,
+        m.nickname AS nickname,
+        p.product_name AS productName
+        FROM board b
+        JOIN shop_member m
+        ON b.member_id = m.member_id
+        LEFT JOIN product p
+        ON b.product_id = p.product_id
+        WHERE b.board_id = #{boardId}
     </select>
 
-    <insert id="insert" parameterType="org.store.joeunit.board.dto.BoardDto">
-        INSERT INTO BOARD (
-            BOARD_NO, TITLE, CONTENT, WRITER, CREATED_AT, UPDATED_AT, VIEW_COUNT
+    <insert id="insert"
+            parameterType="org.store.joeunit.board.dto.BoardDto">
+        INSERT INTO board (
+        board_id,
+        member_id,
+        product_id,
+        board_type,
+        title,
+        content,
+        hit,
+        created_at,
+        updated_at
         ) VALUES (
-                     BOARD_SEQ.NEXTVAL, #{title}, #{content}, #{writer}, SYSTIMESTAMP, SYSTIMESTAMP, 0
-                 )
+        seq_board.NEXTVAL,
+        #{memberId},
+        #{productId, jdbcType=NUMERIC},
+        #{boardType},
+        #{title},
+        #{content},
+        0,
+        SYSDATE,
+        SYSDATE
+        )
     </insert>
-    <update id="update" parameterType="org.store.joeunit.board.dto.BoardDto">
-        UPDATE BOARD
-        SET TITLE = #{title}, CONTENT = #{content}, UPDATED_AT = SYSTIMESTAMP
-        WHERE BOARD_NO = #{boardNo}
+
+    <update id="update"
+            parameterType="org.store.joeunit.board.dto.BoardDto">
+        UPDATE board
+        SET
+        title = #{title},
+        content = #{content},
+        board_type = #{boardType},
+        product_id = #{productId},
+        updated_at = SYSDATE
+        WHERE board_id = #{boardId}
+        AND member_id = #{memberId}
     </update>
 
-    <delete id="delete" parameterType="long">
-        DELETE FROM BOARD WHERE BOARD_NO = #{boardNo}
+    <delete id="delete"
+            parameterType="long">
+        DELETE FROM board
+        WHERE board_id = #{boardId}
     </delete>
 
-    <update id="updateHit" parameterType="long">
-        UPDATE BOARD SET VIEW_COUNT = VIEW_COUNT + 1 WHERE BOARD_NO = #{boardNo}
+    <update id="updateHit"
+            parameterType="long">
+        UPDATE board
+        SET hit = hit + 1
+        WHERE board_id = #{boardId}
     </update>
 
 </mapper>
