@@ -83,5 +83,12 @@ public class ProductService {
         return productMapper.getNewProducts();
     }
 
+    public int increaseSalesAndDecreaseStock(Integer productId, Integer quantity) {
+        return productMapper.increaseSalesAndDecreaseStock(productId, quantity);
+    }
+    public int decreaseSalesAndIncreaseStock(Integer productId, Integer quantity) {
+        return productMapper.decreaseSalesAndIncreaseStock(productId, quantity);
+    }
+
 
 }

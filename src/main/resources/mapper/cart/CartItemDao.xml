@@ -5,19 +5,21 @@
 <mapper namespace="org.store.joeunit.cart.dao.CartItemDao">
     <select id="findCartItemsByMemberId" resultType="CartItemDto" parameterType="CartItemDto">
         SELECT
-        ci.CART_ITEM_ID ,
-        p.image_path,
-        p.PRODUCT_NAME ,
-        p.BRAND ,
-        p.PRICE ,
-        ci.QUANTITY ,
-        p.STOCK,
-        (ci.QUANTITY * p.price) AS itemTotalPrice
-        FROM CART_ITEM ci
+        ci.cart_item_id AS cartItemId,
+        ci.member_id AS memberId,
+        ci.product_id AS productId,
+        p.image_path AS imagePath,
+        p.product_name AS productName,
+        p.brand AS brand,
+        p.price AS price,
+        ci.quantity AS quantity,
+        p.stock AS stock,
+        (ci.quantity * p.price) AS itemTotalPrice
+        FROM cart_item ci
         JOIN product p
-        ON ci.PRODUCT_ID = p.PRODUCT_ID
-        WHERE ci.MEMBER_ID = #{memberId}
-        ORDER BY ci.CART_ITEM_ID desc
+        ON ci.product_id = p.product_id
+        WHERE ci.member_id = #{memberId}
+        ORDER BY ci.cart_item_id DESC
     </select>
 
     <select id="findCartItemByMemberIdAndProductId" resultType="CartItemDto"  parameterType="CartItemDto">
@@ -29,6 +31,18 @@
         FROM CART_ITEM
         WHERE MEMBER_ID = #{memberId}
         AND PRODUCT_ID = #{productId}
+    </select>
+
+
+    <select id="findCartItemByMemberIdAndCartItemId" resultType="CartItemDto" parameterType="CartItemDto">
+        SELECT
+        cart_item_id AS cartItemId,
+        member_id AS memberId,
+        product_id AS productId,
+        quantity AS quantity
+        FROM cart_item
+        WHERE member_id = #{memberId}
+        AND cart_item_id = #{cartItemId}
     </select>
 
     <select id="cartItemTotalPrice" resultType="Long"  parameterType="CartItemDto">
@@ -64,7 +78,10 @@
     </insert>
 
     <update id="increaseCartItemQuantity" parameterType="CartItemDto">
-        UPDATE CART_ITEM SET QUANTITY = QUANTITY + #{quantity}, UPDATED_AT = SYSDATE WHERE MEMBER_id = #{memberId}
+        UPDATE
+        CART_ITEM
+        SET QUANTITY = QUANTITY + #{quantity}, UPDATED_AT = SYSDATE
+        WHERE MEMBER_id = #{memberId}
         AND PRODUCT_ID = #{productId}
     </update>
 

@@ -190,13 +190,44 @@
     <select id="getNewProducts"
             resultType="org.store.joeunit.product.dto.ProductDto">
 
-    SELECT *
-    FROM (
-    SELECT *
-    FROM PRODUCT
-    ORDER BY CREATED_AT DESC
-    )
-    WHERE ROWNUM <![CDATA[ <= ]]> 6
+        SELECT *
+        FROM (
+        SELECT *
+        FROM PRODUCT
+        ORDER BY CREATED_AT DESC
+        )
+        WHERE ROWNUM <![CDATA[ <= ]]> 6
     </select>
 
-</mapper>
+    <update id="increaseSalesAndDecreaseStock">
+        UPDATE product
+        SET
+        sales_count = NVL(sales_count, 0) + #{quantity},
+        stock = stock - #{quantity},
+        status = CASE
+        WHEN stock - #{quantity} &lt;= 0 THEN 'SOLD_OUT'
+        ELSE status
+        END,
+        updated_at = SYSDATE
+        WHERE product_id = #{productId}
+        AND stock >= #{quantity}
+    </update>
+
+    <update id="decreaseSalesAndIncreaseStock">
+        UPDATE product
+        SET
+        sales_count = GREATEST(NVL(sales_count, 0) - #{quantity}, 0),
+        stock = stock + #{quantity},
+        status = CASE
+        WHEN stock + #{quantity} > 0 THEN 'SALE'
+        ELSE status
+        END,
+        updated_at = SYSDATE
+        WHERE product_id = #{productId}
+    </update>
+
+
+
+        </mapper>
+
+

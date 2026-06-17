@@ -1,215 +1,233 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" data-theme="light">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      data-theme="light">
+
 <head>
     <meta charset="UTF-8">
-    <title>조은IT쇼핑몰 - 게시글 상세</title>
+    <title>상품상세</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" rel="stylesheet" type="text/css"/>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
     <link rel="stylesheet" href="/css/common/head.css">
 </head>
 
-<body class="bg-gray-50 text-gray-900 min-h-screen">
+<body class="bg-base-200">
 
 <div th:replace="~{common/head :: head}"></div>
 
-<main class="max-w-5xl mx-auto px-4 py-10">
+<div class="max-w-[1200px] mx-auto mt-10 mb-20">
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
+    <div class="card bg-base-100 shadow-xl">
 
-        <div class="mb-6">
+        <div class="card-body p-8">
 
-            <div class="flex items-center gap-2 mb-3">
-
-                <span class="badge badge-outline"
-                      th:text="${board.boardType}">
-                    QNA
-                </span>
-
-                <span th:if="${board.productName != null}"
-                      class="badge badge-ghost"
-                      th:text="${board.productName}">
-                    상품명
-                </span>
-
-            </div>
-
-            <h1 class="text-3xl font-bold text-gray-800"
-                th:text="${board.title}">
-                게시글 제목
+            <h1 class="text-4xl font-bold mb-6">
+                상품상세
             </h1>
 
-        </div>
+            <div class="divider"></div>
 
-        <div class="flex flex-wrap gap-6 text-sm text-gray-500 mb-8 pb-6 border-b border-gray-100">
+            <div class="flex gap-10">
 
-            <span>
-                작성자:
-                <strong th:text="${board.nickname != null ? board.nickname : '알 수 없음'}">
-                    홍길동
-                </strong>
-            </span>
+                <!-- 상품 정보 -->
+                <div class="flex-1">
 
-            <span>
-                등록일:
-                <strong th:text="${board.createdAt != null ? #temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm') : '-'}">
-                    2026-06-16
-                </strong>
-            </span>
+                    <div class="space-y-4 text-lg">
 
-            <span>
-                조회수:
-                <strong th:text="${board.hit}">
-                    0
-                </strong>
-            </span>
+                        <p>
+                            <strong>상품명 :</strong>
+                            <span th:text="${product.productName}">상품명</span>
+                        </p>
 
-        </div>
+                        <p>
+                            <strong>브랜드 :</strong>
+                            <span th:text="${product.brand}">브랜드</span>
+                        </p>
 
-        <div class="min-h-[300px] text-lg leading-relaxed text-gray-700 mb-10 whitespace-pre-wrap"
-             th:text="${board.content}">
-            게시글 내용이 들어갈 자리입니다.
-        </div>
+                        <p>
+                            <strong>모델명 :</strong>
+                            <span th:text="${product.modelName != null ? product.modelName : '-'}">모델명</span>
+                        </p>
 
-        <div class="flex justify-between gap-2 pb-8 border-b border-gray-100">
+                        <p>
+                            <strong>가격 :</strong>
+                            <span th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')}">0</span>
+                            원
+                        </p>
 
-            <a href="/board"
-               class="btn btn-outline border-gray-200 hover:bg-gray-100">
-                목록으로
-            </a>
+                        <p>
+                            <strong>재고 :</strong>
+                            <span th:text="${product.stock}">0</span>
+                            개
+                        </p>
 
-            <div class="flex gap-2"
-                 th:if="${session.loggedMember != null and session.loggedMember.memberId == board.memberId}">
+                        <p>
+                            <strong>판매량 :</strong>
+                            <span th:text="${product.salesCount != null ? product.salesCount : 0}">0</span>
+                            개
+                        </p>
 
-                <a th:href="@{/board/edit(boardId=${board.boardId})}"
-                   class="btn btn-outline btn-primary">
-                    수정
-                </a>
+                        <p>
+                            <strong>상태 :</strong>
+                            <span class="badge badge-success"
+                                  th:if="${product.status == 'SALE'}"
+                                  th:text="${product.status}">
+                                SALE
+                            </span>
 
-                <form th:action="@{/board/delete}"
-                      method="post"
-                      onsubmit="return confirm('게시글을 삭제하시겠습니까?');">
+                            <span class="badge badge-error"
+                                  th:if="${product.status == 'SOLD_OUT'}"
+                                  th:text="${product.status}">
+                                SOLD_OUT
+                            </span>
 
-                    <input type="hidden"
-                           name="boardId"
-                           th:value="${board.boardId}">
+                            <span class="badge badge-neutral"
+                                  th:if="${product.status == 'STOP'}"
+                                  th:text="${product.status}">
+                                STOP
+                            </span>
+                        </p>
 
-                    <button type="submit"
-                            class="btn btn-outline btn-error">
+                        <div class="divider"></div>
+
+                        <p>
+                            <strong>CPU :</strong>
+                            <span th:text="${product.cpu != null ? product.cpu : '-'}">CPU</span>
+                        </p>
+
+                        <p>
+                            <strong>RAM :</strong>
+                            <span th:text="${product.ram != null ? product.ram : '-'}">RAM</span>
+                        </p>
+
+                        <p>
+                            <strong>저장공간 :</strong>
+                            <span th:text="${product.storageCapacity != null ? product.storageCapacity : '-'}">저장공간</span>
+                        </p>
+
+                        <p>
+                            <strong>화면크기 :</strong>
+                            <span th:text="${product.screenSize != null ? product.screenSize : '-'}">화면크기</span>
+                        </p>
+
+                        <p>
+                            <strong>운영체제 :</strong>
+                            <span th:text="${product.os != null ? product.os : '-'}">운영체제</span>
+                        </p>
+
+                        <p>
+                            <strong>색상 :</strong>
+                            <span th:text="${product.color != null ? product.color : '-'}">색상</span>
+                        </p>
+
+                        <div class="divider"></div>
+
+                        <p>
+                            <strong>설명 :</strong>
+                        </p>
+
+                        <p class="text-base leading-7 whitespace-pre-wrap"
+                           th:text="${product.description != null ? product.description : '상품 설명이 없습니다.'}">
+                            상품 설명
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- 상품 이미지 -->
+                <div class="w-[450px] flex justify-center">
+
+                    <img th:if="${product.imagePath != null}"
+                         th:src="${product.imagePath}"
+                         th:alt="${product.productName}"
+                         class="w-full h-[450px] object-cover rounded-xl shadow-lg border">
+
+                    <img th:if="${product.imagePath == null}"
+                         src="/images/no-image.png"
+                         alt="no-image"
+                         class="w-full h-[450px] object-cover rounded-xl shadow-lg border">
+
+                </div>
+
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="flex justify-end gap-3">
+
+                <!-- 관리자 -->
+                <th:block th:if="${loginMember != null and loginMember.role == 'ADMIN'}">
+
+                    <a th:href="@{/product/modify(productId=${product.productId})}"
+                       class="btn btn-success">
+                        수정
+                    </a>
+
+                    <a th:href="@{/product/delete(productId=${product.productId})}"
+                       class="btn btn-error"
+                       onclick="return confirm('삭제하시겠습니까?');">
                         삭제
+                    </a>
+
+                    <a href="/product/list"
+                       class="btn btn-primary">
+                        목록
+                    </a>
+
+                </th:block>
+
+                <!-- 일반회원 -->
+                <th:block th:if="${loginMember != null and loginMember.role == 'USER'}">
+
+                    <form action="/cart/add"
+                          method="post"
+                          th:if="${product.stock != null and product.stock > 0 and product.status == 'SALE'}">
+
+                        <input type="hidden"
+                               name="productId"
+                               th:value="${product.productId}">
+
+                        <input type="hidden"
+                               name="quantity"
+                               value="1">
+
+                        <button type="submit"
+                                class="btn btn-warning">
+                            장바구니 담기
+                        </button>
+
+                    </form>
+
+                    <button type="button"
+                            class="btn btn-disabled"
+                            th:if="${product.stock == null or product.stock <= 0 or product.status != 'SALE'}">
+                        품절
                     </button>
 
-                </form>
+                    <a href="/product/list"
+                       class="btn btn-primary">
+                        목록
+                    </a>
 
-            </div>
+                </th:block>
 
-        </div>
+                <!-- 로그인 안 된 사용자 -->
+                <th:block th:if="${loginMember == null}">
 
-        <div class="mt-10">
+                    <a href="/member/login"
+                       class="btn btn-warning">
+                        로그인 후 장바구니 담기
+                    </a>
 
-            <h3 class="text-xl font-bold mb-4">
-                댓글
-            </h3>
+                    <a href="/product/list"
+                       class="btn btn-primary">
+                        목록
+                    </a>
 
-            <form th:action="@{/board-comment/write}"
-                  method="post"
-                  class="flex flex-col sm:flex-row gap-2 mb-6"
-                  th:if="${session.loggedMember != null}">
-
-                <input type="hidden"
-                       name="boardId"
-                       th:value="${board.boardId}">
-
-                <div class="input input-bordered bg-gray-50 flex items-center sm:w-36 rounded-xl text-gray-500">
-
-                    <span th:text="${session.loggedMember.nickname}">
-                        작성자
-                    </span>
-
-                </div>
-
-                <input type="text"
-                       name="content"
-                       placeholder="댓글을 입력하세요"
-                       class="input input-bordered flex-grow rounded-xl"
-                       required>
-
-                <button type="submit"
-                        class="btn btn-primary bg-blue-600 border-blue-600 hover:bg-blue-700 text-white rounded-xl">
-                    등록
-                </button>
-
-            </form>
-
-            <div th:if="${session.loggedMember == null}"
-                 class="mb-6 p-4 bg-gray-50 rounded-xl text-sm text-gray-500">
-
-                댓글을 작성하려면
-                <a href="/member/login"
-                   class="text-blue-600 hover:underline">
-                    로그인
-                </a>
-                이 필요합니다.
-
-            </div>
-
-            <div class="space-y-4">
-
-                <div th:each="comment : ${boardCommentList}"
-                     class="p-4 bg-gray-50 rounded-xl">
-
-                    <div class="flex items-center justify-between gap-4 mb-2">
-
-                        <div>
-
-                            <div class="font-bold text-sm text-gray-700"
-                                 th:text="${comment.nickname != null ? comment.nickname : '알 수 없음'}">
-                                작성자
-                            </div>
-
-                            <div class="text-xs text-gray-400"
-                                 th:text="${comment.createdAt != null ? #temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm') : '-'}">
-                                2026-06-16
-                            </div>
-
-                        </div>
-
-                        <form th:if="${session.loggedMember != null and session.loggedMember.memberId == comment.memberId}"
-                              th:action="@{/board-comment/delete}"
-                              method="post"
-                              onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
-
-                            <input type="hidden"
-                                   name="commentId"
-                                   th:value="${comment.commentId}">
-
-                            <input type="hidden"
-                                   name="boardId"
-                                   th:value="${board.boardId}">
-
-                            <button type="submit"
-                                    class="btn btn-xs btn-outline btn-error">
-                                삭제
-                            </button>
-
-                        </form>
-
-                    </div>
-
-                    <div class="text-gray-700 whitespace-pre-wrap"
-                         th:text="${comment.content}">
-                        댓글 내용입니다.
-                    </div>
-
-                </div>
-
-                <div th:if="${boardCommentList == null or #lists.isEmpty(boardCommentList)}"
-                     class="p-8 text-center bg-gray-50 rounded-xl text-gray-400">
-
-                    등록된 댓글이 없습니다.
-
-                </div>
+                </th:block>
 
             </div>
 
@@ -217,7 +235,7 @@
 
     </div>
 
-</main>
+</div>
 
 </body>
 </html>

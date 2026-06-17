@@ -1,6 +1,7 @@
 package org.store.joeunit.product.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.store.joeunit.product.dto.ProductDto;
 
 import java.util.List;
@@ -23,9 +24,9 @@ public interface ProductMapper {
 
     List<ProductDto> getCategoryList(Integer categoryId);
 
-    List<ProductDto> getPageList(Map<String,Object> paramMap);
+    List<ProductDto> getPageList(Map<String, Object> paramMap);
 
-    List<ProductDto> getCategoryPageList(Map<String,Object> paramMap);
+    List<ProductDto> getCategoryPageList(Map<String, Object> paramMap);
 
     List<ProductDto> getBestProducts();
 
@@ -35,5 +36,13 @@ public interface ProductMapper {
     int getTotalCount();
 
     int getCategoryTotalCount(Integer categoryId);
+
+    int increaseSalesAndDecreaseStock(@Param("productId") Integer productId,
+                                      @Param("quantity") Integer quantity);
+
+
+    int decreaseSalesAndIncreaseStock(@Param("productId") Integer productId,
+                                      @Param("quantity") Integer quantity);
+
 
 }
