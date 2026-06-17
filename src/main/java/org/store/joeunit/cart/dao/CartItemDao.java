@@ -11,6 +11,8 @@ public interface CartItemDao {
 
     CartItemDto findCartItemByMemberIdAndProductId(CartItemDto cartItemDto);
 
+    CartItemDto findCartItemByMemberIdAndCartItemId(CartItemDto cartItemDto);
+
     Long cartItemTotalPrice(CartItemDto cartItemDto);
 
     Long createCartItem(CartItemDto cartItemDto);

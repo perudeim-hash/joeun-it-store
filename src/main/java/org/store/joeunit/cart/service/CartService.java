@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.store.joeunit.cart.dao.CartItemDao;
 import org.store.joeunit.cart.dto.CartItemDto;
+import org.store.joeunit.product.service.ProductService;
 
 import java.util.List;
 
@@ -15,6 +16,8 @@ import java.util.List;
 public class CartService {
 
     private final CartItemDao cartItemDao;
+    private final ProductService productService;
+
 
     // 장바구니 목록 출력
     public List<CartItemDto> getCartItems(CartItemDto cartItemDto) {
@@ -26,6 +29,11 @@ public class CartService {
     public Long addCartItem(CartItemDto cartItemDto) {
         if (cartItemDto.getQuantity() <= 0) {
             throw new IllegalArgumentException("수량은 1개 이상 있어야 합니다.");
+        }
+        int productUpdateResult = productService.increaseSalesAndDecreaseStock(cartItemDto.getProductId(), cartItemDto.getQuantity());
+
+        if (productUpdateResult == 0) {
+            throw new IllegalArgumentException("재고가 부족합니다.");
         }
         CartItemDto findItem = cartItemDao.findCartItemByMemberIdAndProductId(cartItemDto);
         if (findItem == null) {
@@ -39,6 +47,28 @@ public class CartService {
         if (cartItemDto.getQuantity() <= 0) {
             throw new IllegalArgumentException("수량은 1개 이상 있어야 합니다.");
         }
+        CartItemDto findItem = cartItemDao.findCartItemByMemberIdAndCartItemId(cartItemDto);
+        if (findItem == null) {
+            throw new IllegalArgumentException("장바구니 상품을 찾을 수 없습니다.");
+        }
+        int oldQuantity = findItem.getQuantity();
+        int newQuantity = cartItemDto.getQuantity();
+        int diffQuantity = newQuantity - oldQuantity;
+
+        if (diffQuantity > 0) {
+            int productUpdateResult = productService.increaseSalesAndDecreaseStock(findItem.getProductId(), diffQuantity);
+
+            if (productUpdateResult == 0) {
+                throw new IllegalArgumentException("재고가 부족합니다.");
+            }
+        }
+
+        if (diffQuantity < 0) {
+            productService.decreaseSalesAndIncreaseStock(findItem.getProductId(), Math.abs(diffQuantity));
+
+        }
+
+
         CartItemDto itemDto = CartItemDto.builder()
                 .memberId(cartItemDto.getMemberId())
                 .cartItemId(cartItemDto.getCartItemId())
@@ -63,6 +93,13 @@ public class CartService {
                 .memberId(memberId)
                 .cartItemId(cartItemId)
                 .build();
+
+        CartItemDto findItem = cartItemDao.findCartItemByMemberIdAndCartItemId(itemDto);
+        if (findItem == null) {
+            throw new IllegalArgumentException("장바구니 상품을 찾을 수 없습니다.");
+        }
+        productService.decreaseSalesAndIncreaseStock(findItem.getProductId(), findItem.getQuantity());
+
         return cartItemDao.deleteCartItem(itemDto);
     }
 
@@ -71,6 +108,11 @@ public class CartService {
         CartItemDto itemDto = CartItemDto.builder()
                 .memberId(memberId)
                 .build();
+
+        List<CartItemDto> cartItem = cartItemDao.findCartItemsByMemberId(itemDto);
+        for (CartItemDto item : cartItem) {
+            productService.decreaseSalesAndIncreaseStock(item.getProductId(), item.getQuantity());
+        }
         return cartItemDao.deleteCartItemsByMemberId(itemDto);
     }
 

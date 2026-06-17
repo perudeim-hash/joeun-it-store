@@ -44,8 +44,14 @@
                             <div class="product-text">
                                 <p class="product-brand" th:text="${item.brand}">브랜드</p>
                                 <h3 class="product-name" th:text="${item.productName}">상품명</h3>
-                                <p class="product-stock">재고 <span th:text="${item.stock}">0</span>개</p>
-                            </div>
+                                <p class="product-stock">
+                                    남은 재고
+                                    <span th:id="'stock-' + ${item.cartItemId}"
+                                          th:text="${item.stock}">
+        0
+    </span>
+                                    개
+                                </p>                            </div>
                         </div>
                         <div class="price-box"><span th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')}">0</span>원</div>
                         <div class="quantity-box" th:data-cart-item-id="${item.cartItemId}" th:data-price="${item.price}" th:data-stock="${item.stock}">
