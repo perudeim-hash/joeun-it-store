@@ -1,127 +1,86 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Q&A 게시판</title>
+    <title>조은IT쇼핑몰 - Q&A 게시판</title>
 
-    <link rel="stylesheet" href="../../static/css/board/liststyle.css">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="/css/common/head.css">
 </head>
+<body class="bg-gray-50 text-gray-900 min-h-screen">
 
-<body>
+<div th:replace="~{common/head :: head}"></div>
 
-<div class="container">
+<main class="max-w-5xl mx-auto px-4 py-10">
 
-    <div class="board-title">
-        <h1>Q&A 게시판</h1>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
+
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 pb-6 border-b border-gray-100">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800 tracking-tight">Q&A 게시판</h1>
+                <p class="text-sm text-gray-400 mt-1">조은IT 쇼핑몰 이용 중 궁금하신 점을 남겨주세요.</p>
+            </div>
+
+            <form action="/board" method="get" class="join">
+                <select name="type" class="select select-bordered join-item font-medium text-sm focus:outline-none">
+                    <option value="title">제목</option>
+                    <option value="content">내용</option>
+                </select>
+                <input class="input input-bordered join-item focus:outline-none w-48 sm:w-64" name="keyword" placeholder="검색어를 입력하세요"/>
+                <button type="submit" class="btn btn-primary join-item bg-blue-600 border-blue-600 hover:bg-blue-700 text-white px-6">검색</button>
+            </form>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="table w-full text-center">
+                <thead>
+                <tr class="text-gray-500 text-sm border-b border-gray-100 bg-gray-50/50">
+                    <th class="py-4 w-16 font-semibold">번호</th>
+                    <th class="py-4 text-left font-semibold">제목</th>
+                    <th class="py-4 w-28 font-semibold">작성자</th>
+                    <th class="py-4 w-32 font-semibold">작성일</th>
+                    <th class="py-4 w-20 font-semibold">조회수</th>
+                </tr>
+                </thead>
+                <tbody class="text-gray-600 text-sm">
+                <tr th:each="board : ${list}" class="hover:bg-gray-50/80 transition-colors border-b border-gray-100">
+                    <td class="py-4 font-medium" th:text="${board.boardNo}">1</td>
+                    <td class="py-4 text-left font-medium text-blue-600 hover:underline cursor-pointer">
+                        <a th:href="@{/board/view(boardNo=${board.boardNo})}" th:text="${board.title}">
+                            상품 등록이 되지 않습니다.
+                        </a>
+                    </td>
+                    <td class="py-4 text-gray-500" th:text="${board.writer}">홍길동</td>
+                    <td class="py-4 text-gray-400" th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}">2026-06-15</td>
+                    <td class="py-4">
+                        <span class="badge badge-ghost font-mono" th:text="${board.viewCount}">120</span>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(list)}">
+                    <td colspan="5" class="py-12 text-gray-400">등록된 문의 글이 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-gray-100">
+            <div class="join shadow-sm border border-gray-100 rounded-lg">
+                <button class="join-item btn btn-sm bg-white hover:bg-gray-50 text-gray-500 border-none">«</button>
+                <button class="join-item btn btn-sm bg-blue-600 text-white border-none hover:bg-blue-700">1</button>
+                <button class="join-item btn btn-sm bg-white hover:bg-gray-50 text-gray-600 border-none">2</button>
+                <button class="join-item btn btn-sm bg-white hover:bg-gray-50 text-gray-600 border-none">3</button>
+                <button class="join-item btn btn-sm bg-white hover:bg-gray-50 text-gray-600 border-none">4</button>
+                <button class="join-item btn btn-sm bg-white hover:bg-gray-50 text-gray-600 border-none">5</button>
+                <button class="join-item btn btn-sm bg-white hover:bg-gray-50 text-gray-500 border-none">»</button>
+            </div>
+
+            <a th:href="@{/board/write}" class="btn btn-primary bg-blue-600 border-blue-600 hover:bg-blue-700 text-white px-6 shadow-md shadow-blue-100 rounded-xl w-full sm:w-auto">
+                ✏️ 글쓰기
+            </a>
+        </div>
     </div>
-
-    <!-- 검색 -->
-    <div class="search-area">
-        <select>
-            <option>제목</option>
-            <option>작성자</option>
-            <option>내용</option>
-        </select>
-
-        <input type="text" placeholder="검색어를 입력하세요">
-
-        <button>검색</button>
-    </div>
-
-    <div class="btn-area">
-        <button class="btn-list" onclick="goList()">목록</button>
-
-        <button class="btn-edit" onclick="goUpdate(1)">수정</button>
-
-        <button class="btn-delete" onclick="deletePost()">삭제</button>
-    </div>
-
-    <!-- 게시판 -->
-    <table class="board-table">
-
-        <thead>
-        <tr>
-            <th width="8%">번호</th>
-            <th>제목</th>
-            <th width="12%">작성자</th>
-            <th width="12%">작성일</th>
-            <th width="8%">조회수</th>
-        </tr>
-        </thead>
-
-        <tbody>
-
-        <tr>
-            <td>1</td>
-            <td class="title">
-                <a href="/qna/view?id=1">상품 등록이 되지 않습니다.</a>
-            </td>
-            <td>홍길동</td>
-            <td>2026-06-15</td>
-            <td>120</td>
-        </tr>
-
-        <tr>
-            <td>2</td>
-            <td class="title">
-                <a href="/qna/view?id=2">주문 수집 오류 문의</a>
-            </td>
-            <td>김철수</td>
-            <td>2026-06-12</td>
-            <td>95</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td class="title">
-                <a href="/qna/view?id=3">배송조회가 안됩니다.</a>
-            </td>
-            <td>이영희</td>
-            <td>2026-06-10</td>
-            <td>84</td>
-        </tr>
-        <tr>
-            <td>4</td>
-            <td class="title">
-                <a href="/qna/view?id=2">로그인 오류 문의</a>
-            </td>
-            <td>관리자</td>
-            <td>2025-02-09</td>
-            <td>63</td>
-        </tr>
-        <tr>
-            <td>5</td>
-            <td class="title">
-                <a href="/qna/view?id=2">API연동 방법 문의</a>
-            </td>
-            <td>박민수</td>
-            <td>2026-06-10</td>
-            <td>51</td>
-        </tr>
-
-        </tbody>
-
-    </table>
-
-    <div class="board-bottom">
-        <button class="write-btn">글쓰기</button>
-    </div>
-
-    <!-- 페이지 -->
-    <div class="pagination">
-        <a href="#">&lt;</a>
-        <a href="#" class="active">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">4</a>
-        <a href="#">5</a>
-        <a href="#">&gt;</a>
-    </div>
-
-</div>
-
-<!-- JS 분리 -->
-<script src="../../static/js/board/list.js"></script>
-
+</main>
 </body>
 </html>
