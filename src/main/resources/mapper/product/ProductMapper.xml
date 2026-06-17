@@ -179,7 +179,6 @@
         FROM (
         SELECT *
         FROM PRODUCT
-        WHERE STATUS = 'SALE'
         ORDER BY SALES_COUNT DESC,
         PRODUCT_ID DESC
         )
