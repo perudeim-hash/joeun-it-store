@@ -1,23 +1,31 @@
-function previewImage(input){
+document.addEventListener("DOMContentLoaded", () => {
 
-    const file = input.files[0];
+    const imageFile =
+        document.querySelector("#imageFile");
 
-    if(!file){
-        return;
-    }
+    const preview =
+        document.querySelector("#preview");
 
-    const reader = new FileReader();
+    imageFile.addEventListener("change", (e) => {
 
-    reader.onload = function(e){
+        const file = e.target.files[0];
 
-        const preview =
-            document.querySelector("#preview");
+        if(!file){
+            return;
+        }
 
-        preview.src =
-            e.target.result;
+        const reader = new FileReader();
 
-        preview.classList.remove("hidden");
-    };
+        reader.onload = (event) => {
 
-    reader.readAsDataURL(file);
-}
+            preview.src =
+                event.target.result;
+
+            preview.classList.remove("hidden");
+        };
+
+        reader.readAsDataURL(file);
+
+    });
+
+});

@@ -179,7 +179,9 @@
         FROM (
         SELECT *
         FROM PRODUCT
-        ORDER BY PRODUCT_ID DESC
+        WHERE STATUS = 'SALE'
+        ORDER BY SALES_COUNT DESC,
+        PRODUCT_ID DESC
         )
         WHERE ROWNUM <![CDATA[ <= ]]> 6
 

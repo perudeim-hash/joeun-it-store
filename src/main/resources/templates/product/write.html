@@ -9,122 +9,229 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
-<body class="bg-base-200">
+<body class="bg-base-200 min-h-screen">
 
-<div class="container mx-auto p-10">
+<div class="container mx-auto max-w-7xl p-10">
 
-    <h1 class="text-4xl font-bold mb-10">
-        상품등록
-    </h1>
+    <div class="mb-8">
+
+        <h1 class="text-4xl font-bold">
+            상품등록
+        </h1>
+
+        <p class="text-gray-500 mt-2">
+            새로운 상품 정보를 등록하세요.
+        </p>
+
+    </div>
 
     <form action="/product/write"
           method="post"
           enctype="multipart/form-data">
 
-        <div class="card bg-base-100 shadow-xl">
+        <div class="card bg-base-100 shadow-2xl">
 
-            <div class="card-body space-y-4">
+            <div class="card-body">
 
-                <select name="categoryId"
-                        class="select select-bordered">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                    <option value="1">스마트폰</option>
-                    <option value="2">노트북</option>
-                    <option value="3">태블릿</option>
-                    <option value="4">기타기기</option>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold">카테고리</span>
+                        </label>
 
-                </select>
+                        <select name="categoryId"
+                                class="select select-bordered w-full">
 
-                <input type="text"
-                       name="productName"
-                       placeholder="상품명"
-                       class="input input-bordered"
-                       required/>
+                            <option value="1">스마트폰</option>
+                            <option value="2">노트북</option>
+                            <option value="3">태블릿</option>
+                            <option value="4">기타기기</option>
 
-                <input type="text"
-                       name="brand"
-                       placeholder="브랜드"
-                       class="input input-bordered"/>
+                        </select>
+                    </div>
 
-                <input type="text"
-                       name="modelName"
-                       placeholder="모델명"
-                       class="input input-bordered"/>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold">상품명</span>
+                        </label>
 
-                <input type="number"
-                       name="price"
-                       placeholder="가격"
-                       class="input input-bordered"
-                       required/>
+                        <input type="text"
+                               name="productName"
+                               class="input input-bordered w-full"
+                               placeholder="상품명"
+                               required>
+                    </div>
 
-                <input type="number"
-                       name="stock"
-                       placeholder="재고"
-                       class="input input-bordered"
-                       required/>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold">브랜드</span>
+                        </label>
 
-                <input type="text"
-                       name="cpu"
-                       placeholder="CPU"
-                       class="input input-bordered"/>
+                        <input type="text"
+                               name="brand"
+                               class="input input-bordered w-full"
+                               placeholder="브랜드">
+                    </div>
 
-                <input type="text"
-                       name="ram"
-                       placeholder="RAM"
-                       class="input input-bordered"/>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold">모델명</span>
+                        </label>
 
-                <input type="text"
-                       name="storageCapacity"
-                       placeholder="저장공간"
-                       class="input input-bordered"/>
+                        <input type="text"
+                               name="modelName"
+                               class="input input-bordered w-full"
+                               placeholder="모델명">
+                    </div>
 
-                <input type="text"
-                       name="screenSize"
-                       placeholder="화면크기"
-                       class="input input-bordered"/>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold">가격</span>
+                        </label>
 
-                <input type="text"
-                       name="os"
-                       placeholder="운영체제"
-                       class="input input-bordered"/>
+                        <input type="number"
+                               name="price"
+                               class="input input-bordered w-full"
+                               placeholder="가격"
+                               required>
+                    </div>
 
-                <input type="text"
-                       name="color"
-                       placeholder="색상"
-                       class="input input-bordered"/>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold">재고</span>
+                        </label>
 
-                <textarea name="description"
-                          class="textarea textarea-bordered"
-                          placeholder="상품설명"></textarea>
+                        <input type="number"
+                               name="stock"
+                               class="input input-bordered w-full"
+                               placeholder="재고"
+                               required>
+                    </div>
 
-                <div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold">CPU</span>
+                        </label>
+
+                        <input type="text"
+                               name="cpu"
+                               class="input input-bordered w-full"
+                               placeholder="CPU">
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold">RAM</span>
+                        </label>
+
+                        <input type="text"
+                               name="ram"
+                               class="input input-bordered w-full"
+                               placeholder="RAM">
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold">저장공간</span>
+                        </label>
+
+                        <input type="text"
+                               name="storageCapacity"
+                               class="input input-bordered w-full"
+                               placeholder="저장공간">
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold">화면크기</span>
+                        </label>
+
+                        <input type="text"
+                               name="screenSize"
+                               class="input input-bordered w-full"
+                               placeholder="화면크기">
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold">운영체제</span>
+                        </label>
+
+                        <input type="text"
+                               name="os"
+                               class="input input-bordered w-full"
+                               placeholder="운영체제">
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold">색상</span>
+                        </label>
+
+                        <input type="text"
+                               name="color"
+                               class="input input-bordered w-full"
+                               placeholder="색상">
+                    </div>
+
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="form-control">
 
                     <label class="label">
-                        <span class="label-text font-semibold">
-                            상품 이미지
+                        <span class="label-text font-bold">
+                            상품설명
                         </span>
                     </label>
 
-                    <input type="file"
-                           name="upload"
-                           accept="image/*"
-                           class="file-input file-input-bordered w-full"
-                           onchange="previewImage(this)"/>
+                    <textarea
+                            name="description"
+                            rows="6"
+                            class="textarea textarea-bordered w-full"
+                            placeholder="상품설명">
+                    </textarea>
 
                 </div>
 
-                <div class="flex justify-center">
+                <div class="divider"></div>
 
-                    <img id="preview"
-                         src=""
-                         class="hidden w-72 h-72 object-cover rounded-lg border shadow">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                    <div>
+
+                        <label class="label">
+                            <span class="label-text font-bold">
+                                상품 이미지
+                            </span>
+                        </label>
+
+                        <input type="file"
+                               id="imageFile"
+                               name="upload"
+                               accept="image/*"
+                               class="file-input file-input-bordered w-full">
+
+                    </div>
+
+                    <div class="flex justify-center items-center">
+
+                        <img id="preview"
+                             src=""
+                             class="hidden w-80 h-80 object-contain rounded-xl border bg-white shadow">
+
+                    </div>
 
                 </div>
+
+                <div class="divider"></div>
 
                 <button type="submit"
-                        class="btn btn-primary">
+                        class="btn btn-primary btn-lg w-full">
 
-                    상품등록
+                    상품 등록
 
                 </button>
 

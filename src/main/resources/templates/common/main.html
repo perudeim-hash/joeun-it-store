@@ -99,8 +99,18 @@
       <div class="product-card"
            th:each="product : ${recommendProducts}">
 
-        <a th:href="@{/product/detail(productId=${product.productId})}"
-           class="product-image galaxy">
+        <a th:href="@{/product/view(productId=${product.productId})}"
+           class="product-image">
+
+          <img th:if="${product.imageName != null}"
+               th:src="@{'/uploads/' + ${product.imageName}}"
+               th:alt="${product.productName}">
+
+          <div th:if="${product.imageName == null}"
+               class="no-image">
+            NO IMAGE
+          </div>
+
         </a>
 
         <div class="product-info">
@@ -169,8 +179,22 @@
       <div class="product-card"
            th:each="product : ${newProducts}">
 
-        <a th:href="@{/product/detail(productId=${product.productId})}"
-           class="product-image galaxy">
+        <a th:href="@{/product/view(productId=${product.productId})}"
+           class="product-image">
+
+          <img th:if="${product.imageName != null}"
+               th:src="@{'/uploads/' + ${product.imageName}}"
+               th:alt="${product.productName}">
+
+          <div th:if="${product.imageName == null}"
+               class="no-image">
+            NO IMAGE
+          </div>
+
+          <span class="new-badge">
+        NEW
+    </span>
+
         </a>
 
         <div class="product-info">

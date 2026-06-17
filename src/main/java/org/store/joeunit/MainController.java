@@ -24,18 +24,7 @@ public class MainController {
                 "newProducts",
                 productService.getNewProducts()
         );
-        model.addAttribute(
-                "recommendProducts",
-                productService.getBestProducts()
-        );
-
-        model.addAttribute(
-                "newProducts",
-                productService.getNewProducts()
-        );
 
         return "common/main";
     }
-
-
 }
