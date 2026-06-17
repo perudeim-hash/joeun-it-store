@@ -24,3 +24,6 @@ CREATE TABLE product_review (
 CREATE SEQUENCE seq_product_review;
 
 COMMIT;
+
+NVL(ROUND(AVG(r.rating), 1), 0) AS averageRating,
+COUNT(r.review_id) AS reviewCount
