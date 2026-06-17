@@ -17,7 +17,7 @@
 
 <div th:replace="~{common/head :: head}"></div>
 
-<div class="max-w-[1200px] mx-auto mt-10">
+<div class="max-w-[1200px] mx-auto mt-10 mb-20">
 
     <div class="card bg-base-100 shadow-xl">
 
@@ -30,8 +30,6 @@
             <div class="divider"></div>
 
             <div class="flex gap-10">
-
-                <!-- 상품 정보 -->
 
                 <div class="flex-1">
 
@@ -63,11 +61,32 @@
                             <span th:text="${product.description}"></span>
                         </p>
 
+                        <div class="mt-4 flex items-center gap-3">
+
+                            <span class="font-bold">평점 :</span>
+
+                            <div class="text-yellow-400 text-2xl tracking-tight">
+                                <span th:each="i : ${#numbers.sequence(1,5)}"
+                                      th:text="${i <= averageRating ? '★' : '☆'}">
+                                </span>
+                            </div>
+
+                            <span class="font-bold text-lg">
+                                <span th:text="${averageRating}">0.0</span>
+                                / 5점
+                            </span>
+
+                            <span class="text-gray-500 text-sm">
+                                리뷰
+                                <span th:text="${reviewCount}">0</span>
+                                개
+                            </span>
+
+                        </div>
+
                     </div>
 
                 </div>
-
-                <!-- 상품 이미지 -->
 
                 <div class="w-[450px] flex justify-center">
 
@@ -89,8 +108,6 @@
 
             <div class="flex justify-end gap-3">
 
-                <!-- 관리자 -->
-
                 <th:block th:if="${loginMember != null and loginMember.role == 'ADMIN'}">
 
                     <a th:href="@{/product/modify(productId=${product.productId})}"
@@ -111,8 +128,6 @@
 
                 </th:block>
 
-                <!-- 일반회원 -->
-
                 <th:block th:if="${loginMember != null and loginMember.role == 'USER'}">
 
                     <form action="/cart/add"
@@ -128,9 +143,7 @@
 
                         <button type="submit"
                                 class="btn btn-warning">
-
                             장바구니 담기
-
                         </button>
 
                     </form>
@@ -141,6 +154,296 @@
                     </a>
 
                 </th:block>
+
+                <th:block th:if="${loginMember == null}">
+                    <a href="/product/list"
+                       class="btn btn-primary">
+                        목록
+                    </a>
+                </th:block>
+
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="mt-10">
+
+                <h2 class="text-2xl font-bold mb-4">
+                    상품 리뷰
+                </h2>
+
+                <div th:if="${reviewError != null}"
+                     class="alert alert-error mb-4">
+                    <span th:text="${reviewError}"></span>
+                </div>
+
+                <div th:if="${loginMember == null}"
+                     class="bg-base-200 border rounded-xl p-4 mt-4 flex justify-between items-center">
+
+                    <span>
+                        리뷰를 작성하려면 로그인이 필요합니다.
+                    </span>
+
+                    <a href="/member/login"
+                       class="btn btn-outline btn-sm">
+                        로그인
+                    </a>
+
+                </div>
+
+                <div th:if="${loginMember != null and hasReviewed}"
+                     class="alert alert-info mt-4">
+                    <span>
+                        이 상품에는 이미 리뷰를 작성했습니다.
+                    </span>
+                </div>
+
+                <div th:if="${loginMember != null and !canWriteReview and !hasReviewed}"
+                     class="alert alert-warning mt-4">
+                    <span>
+                        이 상품을 구매한 회원만 리뷰를 작성할 수 있습니다.
+                    </span>
+                </div>
+
+                <form th:action="@{/product-review/write}"
+                      method="post"
+                      th:if="${canWriteReview}"
+                      class="bg-base-200 border rounded-xl p-5 mt-4 space-y-4">
+
+                    <input type="hidden"
+                           name="productId"
+                           th:value="${product.productId}">
+
+                    <div>
+                        <label class="font-bold block mb-2">
+                            별점
+                        </label>
+
+                        <div class="rating rating-lg">
+
+                            <input type="radio"
+                                   name="rating"
+                                   value="1"
+                                   class="mask mask-star-2 bg-orange-400"
+                                   required>
+
+                            <input type="radio"
+                                   name="rating"
+                                   value="2"
+                                   class="mask mask-star-2 bg-orange-400">
+
+                            <input type="radio"
+                                   name="rating"
+                                   value="3"
+                                   class="mask mask-star-2 bg-orange-400">
+
+                            <input type="radio"
+                                   name="rating"
+                                   value="4"
+                                   class="mask mask-star-2 bg-orange-400">
+
+                            <input type="radio"
+                                   name="rating"
+                                   value="5"
+                                   class="mask mask-star-2 bg-orange-400">
+
+                        </div>
+
+                        <p class="text-sm text-gray-500 mt-2">
+                            별을 클릭해서 1점부터 5점까지 선택하세요.
+                        </p>
+
+                    </div>
+
+                    <div>
+                        <label class="font-bold block mb-2">
+                            리뷰 내용
+                        </label>
+
+                        <textarea name="content"
+                                  class="textarea textarea-bordered w-full"
+                                  rows="4"
+                                  maxlength="300"
+                                  required
+                                  placeholder="상품 리뷰를 작성하세요"></textarea>
+
+                        <p class="text-sm text-gray-500 mt-2">
+                            리뷰는 300자 이내로 작성 가능합니다.
+                        </p>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit"
+                                class="btn btn-primary">
+                            리뷰 등록
+                        </button>
+                    </div>
+
+                </form>
+
+                <div class="mt-8 space-y-4">
+
+                    <div th:if="${#lists.isEmpty(reviewList)}"
+                         class="text-gray-500 text-center py-6">
+                        아직 작성된 리뷰가 없습니다.
+                    </div>
+
+                    <div th:each="review : ${reviewList}"
+                         class="bg-base-100 border rounded-xl p-5 shadow-sm">
+
+                        <div class="flex justify-between items-start">
+
+                            <div>
+
+                                <p class="font-bold"
+                                   th:text="${review.nickname}">
+                                    닉네임
+                                </p>
+
+                                <div class="text-yellow-400 text-lg">
+
+                                    <span th:each="i : ${#numbers.sequence(1,5)}"
+                                          th:text="${i <= review.rating ? '★' : '☆'}">
+                                    </span>
+
+                                    <span class="text-gray-500 text-sm ml-2">
+                                        <span th:text="${review.rating}">
+                                            5
+                                        </span>/5점
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <form th:action="@{/product-review/delete}"
+                                  method="post"
+                                  th:if="${loginMember != null
+                                          and (loginMember.memberId == review.memberId
+                                          or loginMember.role == 'ADMIN')}">
+
+                                <input type="hidden"
+                                       name="reviewId"
+                                       th:value="${review.reviewId}">
+
+                                <input type="hidden"
+                                       name="productId"
+                                       th:value="${product.productId}">
+
+                                <button type="submit"
+                                        class="btn btn-error btn-xs"
+                                        onclick="return confirm('리뷰를 삭제하시겠습니까?')">
+                                    삭제
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                        <p class="mt-4 whitespace-pre-line"
+                           th:text="${review.content}">
+                            리뷰 내용
+                        </p>
+
+                        <div th:if="${loginMember != null and loginMember.memberId == review.memberId}"
+                             class="collapse collapse-arrow bg-base-200 mt-4">
+
+                            <input type="checkbox">
+
+                            <div class="collapse-title font-semibold">
+                                리뷰 수정하기
+                            </div>
+
+                            <div class="collapse-content">
+
+                                <form th:action="@{/product-review/update}"
+                                      method="post"
+                                      class="space-y-4">
+
+                                    <input type="hidden"
+                                           name="reviewId"
+                                           th:value="${review.reviewId}">
+
+                                    <input type="hidden"
+                                           name="productId"
+                                           th:value="${product.productId}">
+
+                                    <div>
+                                        <label class="font-bold block mb-2">
+                                            별점 수정
+                                        </label>
+
+                                        <div class="rating rating-md">
+
+                                            <input type="radio"
+                                                   name="rating"
+                                                   value="1"
+                                                   class="mask mask-star-2 bg-orange-400"
+                                                   th:checked="${review.rating == 1}"
+                                                   required>
+
+                                            <input type="radio"
+                                                   name="rating"
+                                                   value="2"
+                                                   class="mask mask-star-2 bg-orange-400"
+                                                   th:checked="${review.rating == 2}">
+
+                                            <input type="radio"
+                                                   name="rating"
+                                                   value="3"
+                                                   class="mask mask-star-2 bg-orange-400"
+                                                   th:checked="${review.rating == 3}">
+
+                                            <input type="radio"
+                                                   name="rating"
+                                                   value="4"
+                                                   class="mask mask-star-2 bg-orange-400"
+                                                   th:checked="${review.rating == 4}">
+
+                                            <input type="radio"
+                                                   name="rating"
+                                                   value="5"
+                                                   class="mask mask-star-2 bg-orange-400"
+                                                   th:checked="${review.rating == 5}">
+
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="font-bold block mb-2">
+                                            리뷰 내용 수정
+                                        </label>
+
+                                        <textarea name="content"
+                                                  class="textarea textarea-bordered w-full"
+                                                  rows="4"
+                                                  maxlength="300"
+                                                  required
+                                                  th:text="${review.content}">
+                                        </textarea>
+
+                                        <p class="text-sm text-gray-500 mt-2">
+                                            리뷰는 300자 이내로 작성 가능합니다.
+                                        </p>
+                                    </div>
+
+                                    <div class="flex justify-end">
+                                        <button type="submit"
+                                                class="btn btn-outline btn-sm">
+                                            수정 완료
+                                        </button>
+                                    </div>
+
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 

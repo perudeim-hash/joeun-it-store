@@ -128,6 +128,9 @@ public class ProductDto {
 
 
     private Integer salesCount;
+
+    private Double averageRating;
+    private Integer reviewCount;
 }
 
 
