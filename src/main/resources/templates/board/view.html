@@ -6,21 +6,65 @@
 
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdn.tailwindcss.com"></script>
+
     <link rel="stylesheet" href="/css/common/head.css">
 </head>
+
 <body class="bg-gray-50 text-gray-900 min-h-screen">
 
 <div th:replace="~{common/head :: head}"></div>
 
 <main class="max-w-5xl mx-auto px-4 py-10">
+
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
 
-        <h1 class="text-3xl font-bold text-gray-800 mb-6" th:text="${board.title}">게시글 제목</h1>
+        <div class="mb-6">
 
-        <div class="flex gap-6 text-sm text-gray-500 mb-8 pb-6 border-b border-gray-100">
-            <span th:text="'작성자: ' + ${board.writer}">홍길동</span>
-            <span th:text="'등록일: ' + ${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">2026-06-16</span>
-            <span th:text="'조회수: ' + ${board.viewCount}">0</span>
+            <div class="flex items-center gap-2 mb-3">
+
+                <span class="badge badge-outline"
+                      th:text="${board.boardType}">
+                    QNA
+                </span>
+
+                <span th:if="${board.productName != null}"
+                      class="badge badge-ghost"
+                      th:text="${board.productName}">
+                    상품명
+                </span>
+
+            </div>
+
+            <h1 class="text-3xl font-bold text-gray-800"
+                th:text="${board.title}">
+                게시글 제목
+            </h1>
+
+        </div>
+
+        <div class="flex flex-wrap gap-6 text-sm text-gray-500 mb-8 pb-6 border-b border-gray-100">
+
+            <span>
+                작성자:
+                <strong th:text="${board.nickname != null ? board.nickname : '알 수 없음'}">
+                    홍길동
+                </strong>
+            </span>
+
+            <span>
+                등록일:
+                <strong th:text="${board.createdAt != null ? #temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm') : '-'}">
+                    2026-06-16
+                </strong>
+            </span>
+
+            <span>
+                조회수:
+                <strong th:text="${board.hit}">
+                    0
+                </strong>
+            </span>
+
         </div>
 
         <div class="min-h-[300px] text-lg leading-relaxed text-gray-700 mb-10 whitespace-pre-wrap"
@@ -28,26 +72,150 @@
             게시글 내용이 들어갈 자리입니다.
         </div>
 
-        <div class="flex gap-2">
-            <a href="/board" class="btn btn-outline border-gray-200 hover:bg-gray-100">목록으로</a>
-        </div>
-        <div class="mt-10 border-t pt-8">
-            <h3 class="text-xl font-bold mb-4">댓글</h3>
+        <div class="flex justify-between gap-2 pb-8 border-b border-gray-100">
 
-            <form action="/reply/write" method="post" class="flex gap-2 mb-6">
-                <input type="hidden" name="boardNo" th:value="${board.boardNo}">
+            <a href="/board"
+               class="btn btn-outline border-gray-200 hover:bg-gray-100">
+                목록으로
+            </a>
 
-                <input type="text" name="writer" placeholder="작성자" class="input input-bordered w-32">
-                <input type="text" name="content" placeholder="댓글을 입력하세요" class="input input-bordered flex-grow">
-                <button type="submit" class="btn btn-primary">등록</button>
-            </form>
-            <div class="space-y-4">
-                <div th:each="reply : ${replyList}" class="p-4 bg-gray-50 rounded-xl">
-                    <div class="font-bold text-sm" th:text="${reply.writer}">작성자</div>
-                    <div class="text-gray-700" th:text="${reply.content}">댓글 내용입니다.</div>
-                </div>
+            <div class="flex gap-2"
+                 th:if="${session.loggedMember != null and session.loggedMember.memberId == board.memberId}">
+
+                <a th:href="@{/board/edit(boardId=${board.boardId})}"
+                   class="btn btn-outline btn-primary">
+                    수정
+                </a>
+
+                <form th:action="@{/board/delete}"
+                      method="post"
+                      onsubmit="return confirm('게시글을 삭제하시겠습니까?');">
+
+                    <input type="hidden"
+                           name="boardId"
+                           th:value="${board.boardId}">
+
+                    <button type="submit"
+                            class="btn btn-outline btn-error">
+                        삭제
+                    </button>
+
+                </form>
+
             </div>
+
         </div>
+
+        <div class="mt-10">
+
+            <h3 class="text-xl font-bold mb-4">
+                댓글
+            </h3>
+
+            <form th:action="@{/board-comment/write}"
+                  method="post"
+                  class="flex flex-col sm:flex-row gap-2 mb-6"
+                  th:if="${session.loggedMember != null}">
+
+                <input type="hidden"
+                       name="boardId"
+                       th:value="${board.boardId}">
+
+                <div class="input input-bordered bg-gray-50 flex items-center sm:w-36 rounded-xl text-gray-500">
+
+                    <span th:text="${session.loggedMember.nickname}">
+                        작성자
+                    </span>
+
+                </div>
+
+                <input type="text"
+                       name="content"
+                       placeholder="댓글을 입력하세요"
+                       class="input input-bordered flex-grow rounded-xl"
+                       required>
+
+                <button type="submit"
+                        class="btn btn-primary bg-blue-600 border-blue-600 hover:bg-blue-700 text-white rounded-xl">
+                    등록
+                </button>
+
+            </form>
+
+            <div th:if="${session.loggedMember == null}"
+                 class="mb-6 p-4 bg-gray-50 rounded-xl text-sm text-gray-500">
+
+                댓글을 작성하려면
+                <a href="/member/login"
+                   class="text-blue-600 hover:underline">
+                    로그인
+                </a>
+                이 필요합니다.
+
+            </div>
+
+            <div class="space-y-4">
+
+                <div th:each="comment : ${boardCommentList}"
+                     class="p-4 bg-gray-50 rounded-xl">
+
+                    <div class="flex items-center justify-between gap-4 mb-2">
+
+                        <div>
+
+                            <div class="font-bold text-sm text-gray-700"
+                                 th:text="${comment.nickname != null ? comment.nickname : '알 수 없음'}">
+                                작성자
+                            </div>
+
+                            <div class="text-xs text-gray-400"
+                                 th:text="${comment.createdAt != null ? #temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm') : '-'}">
+                                2026-06-16
+                            </div>
+
+                        </div>
+
+                        <form th:if="${session.loggedMember != null and session.loggedMember.memberId == comment.memberId}"
+                              th:action="@{/board-comment/delete}"
+                              method="post"
+                              onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
+
+                            <input type="hidden"
+                                   name="commentId"
+                                   th:value="${comment.commentId}">
+
+                            <input type="hidden"
+                                   name="boardId"
+                                   th:value="${board.boardId}">
+
+                            <button type="submit"
+                                    class="btn btn-xs btn-outline btn-error">
+                                삭제
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                    <div class="text-gray-700 whitespace-pre-wrap"
+                         th:text="${comment.content}">
+                        댓글 내용입니다.
+                    </div>
+
+                </div>
+
+                <div th:if="${boardCommentList == null or #lists.isEmpty(boardCommentList)}"
+                     class="p-8 text-center bg-gray-50 rounded-xl text-gray-400">
+
+                    등록된 댓글이 없습니다.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </main>
 
