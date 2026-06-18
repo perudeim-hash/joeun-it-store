@@ -98,10 +98,35 @@
         WHERE member_id = #{memberId}
     </update>
 
-    <!-- 회원탈퇴 -->
+    <!-- 회원탈퇴 : 자식 테이블 데이터 먼저 삭제 -->
+
+    <delete id="deleteProductReviewByMemberId">
+        DELETE FROM product_review
+        WHERE member_id = #{memberId}
+    </delete>
+
+    <delete id="deleteBoardCommentByMemberId">
+        DELETE FROM board_comment
+        WHERE member_id = #{memberId}
+    </delete>
+
+    <delete id="deleteBoardByMemberId">
+        DELETE FROM board
+        WHERE member_id = #{memberId}
+    </delete>
+
+    <delete id="deleteCartItemByMemberId">
+        DELETE FROM cart_item
+        WHERE member_id = #{memberId}
+    </delete>
+
+    <delete id="deleteOrdersByMemberId">
+        DELETE FROM orders
+        WHERE member_id = #{memberId}
+    </delete>
+
     <delete id="deleteMember">
-        DELETE
-        FROM shop_member
+        DELETE FROM shop_member
         WHERE member_id = #{memberId}
     </delete>
 

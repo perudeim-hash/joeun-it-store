@@ -30,8 +30,6 @@ public interface MemberDao {
     // 회원정보 수정
     int updateMember(MemberDto memberDto);
 
-    // 회원탈퇴
-    int deleteMember(Long memberId);
 
     // 비밀번호 변경
     int changePassword(MemberDto memberDto);
@@ -83,4 +81,18 @@ public interface MemberDao {
 
     //누적 금액
     int updateTotalPurchase(MemberDto memberDto);
+
+    void deleteProductReviewByMemberId(Long memberId);
+
+    void deleteCartItemByMemberId(Long memberId);
+
+    void deleteBoardCommentByMemberId(Long memberId);
+
+    void deleteBoardByMemberId(Long memberId);
+
+    void deleteOrderItemByMemberId(Long memberId);
+
+    void deleteOrdersByMemberId(Long memberId);
+
+    void deleteMember(Long memberId);
 }
