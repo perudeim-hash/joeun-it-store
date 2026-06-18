@@ -12,3 +12,4 @@ ALTER TABLE board_comment ADD parent_id NUMBER;
 ALTER TABLE board_comment ADD CONSTRAINT fk_comment_parent FOREIGN KEY (parent_id) REFERENCES board_comment(comment_id) ON DELETE CASCADE;
 
 COMMIT;
+

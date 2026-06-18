@@ -12,6 +12,16 @@
 <div th:replace="~{common/head :: head}"></div>
 
 <div class="container mx-auto px-4 mt-10" style="max-width: 900px;">
+
+    <th:block th:if="${board.boardType == 'INQUIRY'}">
+        <th:block th:if="${session.loggedMember == null}">
+            <script>alert('로그인 후 이용 가능합니다.'); location.href='/member/login';</script>
+        </th:block>
+        <th:block th:if="${session.loggedMember != null and session.loggedMember.role != 'ADMIN' and session.loggedMember.memberId != board.memberId}">
+            <script>alert('1:1 문의는 작성자 본인과 관리자만 열람할 수 있습니다.'); history.back();</script>
+        </th:block>
+    </th:block>
+
     <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
         <div class="text-2xl font-bold text-gray-900 mb-4" th:text="${board.title}">게시물 제목</div>
 
@@ -36,7 +46,7 @@
                 <span th:text="${board.hit}"></span>
             </div>
 
-            <div class="ml-auto flex items-center" th:if="${board.boardType == 'QNA'}">
+            <div class="ml-auto flex items-center" th:if="${board.boardType == 'QNA' or board.boardType == 'INQUIRY'}">
                 <span th:if="${board.replyStatus == '답변대기'}" class="bg-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-bold">답변대기</span>
                 <span th:if="${board.replyStatus == '답변완료'}" class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">답변완료</span>
             </div>
@@ -48,7 +58,7 @@
                 <img th:if="${board.imagePath2 != null}" th:src="${board.imagePath2}" class="max-w-full h-auto rounded shadow-sm border border-gray-100">
                 <img th:if="${board.imagePath3 != null}" th:src="${board.imagePath3}" class="max-w-full h-auto rounded shadow-sm border border-gray-100">
             </div>
-            <span th:text="${board.content}" style="white-space: pre-wrap;"></span>
+            <span th:text="${board.content}" style="white-space: pre-wrap; word-break: break-all;"></span>
         </div>
 
         <div class="flex justify-end gap-2 mt-10 border-t pt-4">
@@ -60,13 +70,33 @@
 
     <div class="mt-8 bg-white p-8 rounded-lg shadow-sm border border-gray-200">
         <h3 class="font-bold text-lg mb-4">댓글</h3>
+
         <form action="/comment/write" method="post" class="flex flex-col gap-3">
             <input type="hidden" name="boardId" th:value="${board.boardId}">
-            <textarea name="content" class="w-full border border-gray-300 rounded p-3 outline-none focus:border-blue-500 resize-none" rows="3" required placeholder="댓글을 입력하세요"></textarea>
-            <div class="flex justify-between items-center">
-                <label class="flex items-center gap-2 cursor-pointer font-bold text-gray-600"><input type="checkbox" name="isSecretCheck" value="Y" class="w-4 h-4 text-blue-600"> 🔒 비밀 댓글로 작성하기</label>
-                <button type="submit" class="px-6 py-2 bg-gray-800 text-white font-bold rounded hover:bg-gray-900">댓글 등록</button>
-            </div>
+
+            <th:block th:if="${session.loggedMember == null}">
+                <div class="flex justify-between items-end">
+                    <label class="block text-gray-700 font-bold text-sm">댓글 작성</label>
+                    <span class="text-xs font-bold text-gray-400">0 / 150자</span>
+                </div>
+                <textarea maxlength="150" class="w-full border border-gray-300 rounded p-3 outline-none resize-none bg-gray-100 cursor-pointer" rows="3" readonly onclick="alert('로그인 후 댓글 등록 바랍니다.'); location.href='/member/login';" placeholder="로그인 후 댓글 등록 바랍니다."></textarea>
+                <div class="flex justify-between items-center">
+                    <label class="flex items-center gap-2 font-bold text-gray-400 cursor-not-allowed"><input type="checkbox" disabled class="w-4 h-4 text-gray-300"> 🔒 비밀 댓글로 작성하기</label>
+                    <button type="button" onclick="alert('로그인 후 댓글 등록 바랍니다.'); location.href='/member/login';" class="px-6 py-2 bg-gray-400 text-white font-bold rounded cursor-pointer">댓글 등록</button>
+                </div>
+            </th:block>
+
+            <th:block th:unless="${session.loggedMember == null}">
+                <div class="flex justify-between items-end">
+                    <label class="block text-gray-700 font-bold text-sm">댓글 작성</label>
+                    <span id="commentCount" class="text-xs font-bold text-gray-400">0 / 150자</span>
+                </div>
+                <textarea name="content" maxlength="150" class="w-full border border-gray-300 rounded p-3 outline-none focus:border-blue-500 resize-none" rows="3" required placeholder="댓글을 입력하세요 (최대 150자)" oninput="document.getElementById('commentCount').innerText = this.value.length + ' / 150자';"></textarea>
+                <div class="flex justify-between items-center">
+                    <label class="flex items-center gap-2 cursor-pointer font-bold text-gray-600"><input type="checkbox" name="isSecretCheck" value="Y" class="w-4 h-4 text-blue-600"> 🔒 비밀 댓글로 작성하기</label>
+                    <button type="submit" class="px-6 py-2 bg-gray-800 text-white font-bold rounded hover:bg-gray-900">댓글 등록</button>
+                </div>
+            </th:block>
         </form>
 
         <div class="mt-8">
@@ -77,7 +107,6 @@
             </div>
 
             <div th:each="comment : ${commentList}" class="border-b border-gray-100 py-4">
-
                 <div class="flex justify-between items-center mb-2">
                     <div class="flex items-center gap-2">
                         <strong class="text-gray-900" th:text="${comment.writerNickname}"></strong>
@@ -92,7 +121,7 @@
                 </div>
                 <div th:unless="${comment.isSecret == 'Y' and !(session.loggedMember != null and (session.loggedMember.role == 'ADMIN' or session.loggedMember.memberId == board.memberId or session.loggedMember.memberId == comment.memberId))}">
                     <span th:if="${comment.isSecret == 'Y'}" class="text-xs text-red-500 font-bold">[비밀 댓글]</span>
-                    <div class="text-gray-800 mt-1" th:text="${comment.content}" style="white-space: pre-wrap;"></div>
+                    <div class="text-gray-800 mt-1" th:text="${comment.content}" style="white-space: pre-wrap; word-break: break-all;"></div>
 
                     <div class="mt-2 text-right" th:if="${session.loggedMember != null}">
                         <button th:if="${comment.isSecret == 'N' or (session.loggedMember.memberId == board.memberId or session.loggedMember.memberId == comment.memberId)}" th:onclick="'toggleReplyForm(' + ${comment.commentId} + ')'" class="text-xs font-bold text-gray-500 hover:text-blue-600 bg-gray-100 px-3 py-1 rounded">↳ 대댓글 작성</button>
@@ -103,7 +132,13 @@
                     <form action="/comment/write" method="post" class="flex flex-col gap-2">
                         <input type="hidden" name="boardId" th:value="${board.boardId}">
                         <input type="hidden" name="parentId" th:value="${comment.commentId}">
-                        <textarea name="content" class="w-full border border-gray-300 rounded p-2 text-sm outline-none focus:border-blue-500 resize-none" rows="2" required th:placeholder="${comment.isSecret == 'Y' ? '이 대댓글은 자동으로 [비밀 대댓글] 처리됩니다.' : '대댓글을 입력하세요'}"></textarea>
+
+                        <div class="flex justify-between items-end">
+                            <label class="block text-gray-700 font-bold text-xs">대댓글 작성</label>
+                            <span th:id="'replyCount_' + ${comment.commentId}" class="text-xs font-bold text-gray-400">0 / 150자</span>
+                        </div>
+                        <textarea name="content" maxlength="150" class="w-full border border-gray-300 rounded p-2 text-sm outline-none focus:border-blue-500 resize-none" rows="2" required th:placeholder="${comment.isSecret == 'Y' ? '이 대댓글은 자동으로 [비밀 대댓글] 처리됩니다. (최대 150자)' : '대댓글을 입력하세요 (최대 150자)'}" th:oninput="|document.getElementById('replyCount_' + ${comment.commentId}).innerText = this.value.length + ' / 150자';|"></textarea>
+
                         <div class="flex justify-end">
                             <button type="submit" class="px-4 py-1.5 bg-blue-600 text-white font-bold text-sm rounded hover:bg-blue-700">등록</button>
                         </div>
@@ -112,7 +147,6 @@
 
                 <div th:if="${!comment.replies.isEmpty()}" class="mt-4 ml-4 md:ml-8 space-y-3 border-l-2 border-blue-200 pl-4">
                     <div th:each="reply : ${comment.replies}" class="bg-gray-50 p-4 rounded-lg border border-gray-100">
-
                         <div class="flex justify-between items-center mb-2">
                             <div class="flex items-center gap-2">
                                 <span class="text-blue-500 font-bold">↳</span>
@@ -128,7 +162,7 @@
                         </div>
                         <div th:unless="${reply.isSecret == 'Y' and !(session.loggedMember != null and (session.loggedMember.role == 'ADMIN' or session.loggedMember.memberId == board.memberId or session.loggedMember.memberId == reply.memberId or session.loggedMember.memberId == comment.memberId))}">
                             <span th:if="${reply.isSecret == 'Y'}" class="text-xs text-red-500 font-bold">[비밀 대댓글]</span>
-                            <div class="text-sm text-gray-800 mt-1" th:text="${reply.content}" style="white-space: pre-wrap;"></div>
+                            <div class="text-sm text-gray-800 mt-1" th:text="${reply.content}" style="white-space: pre-wrap; word-break: break-all;"></div>
                         </div>
                     </div>
                 </div>
