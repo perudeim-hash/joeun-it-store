@@ -360,7 +360,15 @@ public class MemberController {
     }
 
     @GetMapping("/find-id")
-    public String findIdPage() {
+    public String findId(HttpSession session) {
+
+        MemberDto loginMember =
+                (MemberDto) session.getAttribute("loggedMember");
+
+        if(loginMember != null){
+            return "redirect:/";
+        }
+
         return "member/find-id";
     }
 
@@ -396,10 +404,17 @@ public class MemberController {
     }
 
     @GetMapping("/find-password")
-    public String findPasswordPage() {
+    public String findPassword(HttpSession session) {
+
+        MemberDto loginMember =
+                (MemberDto) session.getAttribute("loggedMember");
+
+        if(loginMember != null){
+            return "redirect:/";
+        }
+
         return "member/find-password";
     }
-
     @PostMapping("/find-password")
     public String findPassword(
             @RequestParam String loginId,

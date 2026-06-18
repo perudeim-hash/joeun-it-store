@@ -20,37 +20,82 @@
 <main class="main-page">
 
   <!-- 메인 배너 -->
+  <!-- 메인 배너 -->
   <section class="hero-section">
-    <button type="button" class="hero-arrow hero-prev">‹</button>
 
-    <div class="hero-content">
-      <div class="hero-text">
-        <p class="hero-small">최신 IT 기기, 모두 여기</p>
-        <h1>
-          <span>조은IT</span>쇼핑몰
-        </h1>
-        <p class="hero-desc">스마트한 선택, 합리적인 가격</p>
-        <a href="/product/list" class="hero-btn">지금 쇼핑하기</a>
+    <div class="hero-slide active theme-phone">
+
+      <div class="hero-inner">
+
+        <div class="hero-text">
+          <p class="hero-small">최신 IT 기기, 모두 여기</p>
+          <h1><span>조은IT</span>쇼핑몰</h1>
+          <p class="hero-desc">스마트한 선택, 합리적인 가격</p>
+          <a href="/product/list" class="hero-btn">지금 쇼핑하기</a>
+        </div>
+
+        <div class="hero-art phone-art">
+          <div class="art-tablet"></div>
+          <div class="art-phone"></div>
+          <div class="art-earbuds"></div>
+        </div>
+
       </div>
 
-      <div class="hero-visual">
-        <div class="device laptop"></div>
-        <div class="device phone"></div>
-        <div class="device tablet"></div>
-        <div class="device earbuds"></div>
-        <div class="device watch"></div>
-      </div>
     </div>
 
+    <div class="hero-slide theme-laptop">
+
+      <div class="hero-inner">
+
+        <div class="hero-text">
+          <p class="hero-small">노트북 특가전</p>
+          <h1><span>최신</span> 노트북 모음</h1>
+          <p class="hero-desc">학생·직장인 추천 노트북을 만나보세요</p>
+          <a href="/products?categoryId=2" class="hero-btn purple">노트북 보러가기</a>
+        </div>
+
+        <div class="hero-art laptop-art">
+          <div class="art-laptop-screen"></div>
+          <div class="art-laptop-body"></div>
+          <div class="art-mouse"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="hero-slide theme-gaming">
+
+      <div class="hero-inner">
+
+        <div class="hero-text dark">
+          <p class="hero-small">게이밍 기어 기획전</p>
+          <h1><span>키보드</span> · 마우스</h1>
+          <p class="hero-desc">게임과 작업 모두 만족하는 주변기기</p>
+          <a href="/products?categoryId=4" class="hero-btn cyan">기획전 보기</a>
+        </div>
+
+        <div class="hero-art gaming-art">
+          <div class="art-keyboard"></div>
+          <div class="art-gaming-mouse"></div>
+          <div class="art-headset"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <button type="button" class="hero-arrow hero-prev">‹</button>
     <button type="button" class="hero-arrow hero-next">›</button>
 
     <div class="hero-dots">
-      <button class="dot active"></button>
-      <button class="dot"></button>
-      <button class="dot"></button>
+      <button type="button" class="dot active"></button>
+      <button type="button" class="dot"></button>
+      <button type="button" class="dot"></button>
     </div>
-  </section>
 
+  </section>
   <!-- 카테고리 카드 -->
   <section class="category-section">
     <a href="/products?categoryId=1" class="category-card">
@@ -132,9 +177,7 @@
 
             <div class="product-icons">
 
-              <button type="button">
-                ♡
-              </button>
+
 
               <form action="/cart/add"
                     method="post">
@@ -216,9 +259,7 @@
 
             <div class="product-icons">
 
-              <button type="button">
-                ♡
-              </button>
+
 
               <form action="/cart/add"
                     method="post">
@@ -278,6 +319,7 @@
   </section>
 
 </main>
+
 
 </body>
 </html>
