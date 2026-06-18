@@ -47,8 +47,11 @@
         </div>
 
         <div class="mb-6">
-            <label class="block text-gray-700 font-bold mb-2">내용</label>
-            <textarea name="content" rows="10" class="w-full border border-gray-300 rounded px-4 py-3 outline-none focus:border-blue-500 resize-none" required th:text="${board.content}"></textarea>
+            <div class="flex justify-between items-end mb-2">
+                <label class="block text-gray-700 font-bold">내용</label>
+                <span id="updateContentCount" class="text-sm font-bold text-gray-400" th:text="${#strings.length(board.content)} + ' / 500자'">0 / 500자</span>
+            </div>
+            <textarea name="content" rows="10" maxlength="500" class="w-full border border-gray-300 rounded px-4 py-3 outline-none focus:border-blue-500 resize-none" required th:text="${board.content}" oninput="document.getElementById('updateContentCount').innerText = this.value.length + ' / 500자';"></textarea>
         </div>
 
         <div class="flex justify-end gap-3 mt-4">

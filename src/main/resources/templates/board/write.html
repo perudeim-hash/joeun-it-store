@@ -17,11 +17,18 @@
 
         <div class="mb-5">
             <label class="block text-gray-700 font-bold mb-2">게시판 분류</label>
+            <!-- ✨ 파라미터가 없거나 달라도 절대 500 에러가 나지 않는 안전한 검사 로직 적용 ✨ -->
             <select name="boardType" class="w-full border border-gray-300 rounded px-4 py-2 outline-none focus:border-blue-500" required>
-                <option value="" disabled selected>게시판을 선택하세요</option>
-                <option value="REVIEW">리뷰 / 자유 게시판</option>
-                <option value="QNA">Q&A 게시판</option>
-                <option th:if="${session.loggedMember != null and session.loggedMember.role == 'ADMIN'}" value="NOTICE" class="font-bold text-red-600">📢 공지사항</option>
+                <option value="" disabled th:selected="${param.type == null}">게시판을 선택하세요</option>
+                <option value="REVIEW" th:selected="${param.type != null and #strings.equals(param.type, 'REVIEW')}">리뷰 / 자유 게시판</option>
+                <option value="QNA" th:selected="${param.type != null and #strings.equals(param.type, 'QNA')}">상품 문의 (Q&A)</option>
+
+                <option value="INQUIRY" th:selected="${param.type != null and #strings.equals(param.type, 'INQUIRY')}">🔒 1:1 비밀 문의</option>
+
+                <th:block th:if="${session.loggedMember != null and session.loggedMember.role == 'ADMIN'}">
+                    <option value="NOTICE" class="font-bold text-red-600" th:selected="${param.type != null and #strings.equals(param.type, 'NOTICE')}">📢 공지사항</option>
+                    <option value="FAQ" class="font-bold text-blue-600" th:selected="${param.type != null and #strings.equals(param.type, 'FAQ')}">💡 자주 묻는 질문 (FAQ)</option>
+                </th:block>
             </select>
         </div>
 
@@ -43,8 +50,11 @@
         </div>
 
         <div class="mb-6">
-            <label class="block text-gray-700 font-bold mb-2">내용</label>
-            <textarea name="content" rows="10" class="w-full border border-gray-300 rounded px-4 py-3 outline-none focus:border-blue-500 resize-none" placeholder="내용을 입력하세요" required></textarea>
+            <div class="flex justify-between items-end mb-2">
+                <label class="block text-gray-700 font-bold">내용</label>
+                <span id="writeContentCount" class="text-sm font-bold text-gray-400">0 / 500자</span>
+            </div>
+            <textarea name="content" rows="10" maxlength="500" class="w-full border border-gray-300 rounded px-4 py-3 outline-none focus:border-blue-500 resize-none" placeholder="내용을 입력하세요 (최대 500자)" required oninput="document.getElementById('writeContentCount').innerText = this.value.length + ' / 500자';"></textarea>
         </div>
 
         <div class="flex justify-end gap-3 mt-4">
@@ -55,24 +65,21 @@
 </div>
 
 <script>
-    // ✨ 실제 서버로 파일을 넘기기 위한 DataTransfer 객체 (가장 중요) ✨
     const dataTransfer = new DataTransfer();
-
     function handleFiles(input) {
         const grid = document.getElementById('previewGrid');
         const newFiles = Array.from(input.files);
 
         if (dataTransfer.items.length + newFiles.length > 3) {
             document.getElementById('fileLimitText').classList.remove('hidden');
-            input.files = dataTransfer.files; // 기존 파일 유지
+            input.files = dataTransfer.files;
             return;
         } else {
             document.getElementById('fileLimitText').classList.add('hidden');
         }
 
         newFiles.forEach(file => {
-            dataTransfer.items.add(file); // 실제 폼 전송 데이터에 추가
-
+            dataTransfer.items.add(file);
             const reader = new FileReader();
             reader.onload = function(e) {
                 const div = document.createElement('div');
@@ -86,12 +93,8 @@
             reader.readAsDataURL(file);
         });
 
-        // input 요소에 최종 파일들 동기화 (이게 없으면 서버로 안 넘어감)
         input.files = dataTransfer.files;
-
-        if (dataTransfer.items.length >= 3) {
-            grid.firstElementChild.classList.add('hidden');
-        }
+        if (dataTransfer.items.length >= 3) { grid.firstElementChild.classList.add('hidden'); }
     }
 
     function removeFile(btn, fileName) {
@@ -104,10 +107,8 @@
                 break;
             }
         }
-
         fileInput.files = dataTransfer.files;
         btn.parentElement.remove();
-
         grid.firstElementChild.classList.remove('hidden');
         document.getElementById('fileLimitText').classList.add('hidden');
     }

@@ -95,5 +95,14 @@
     <delete id="deleteBoard">
         DELETE FROM board WHERE board_id = #{boardId}
     </delete>
-
+    <!-- 고객센터 메인용 FAQ Top 5 가져오기 (오라클 전용) -->
+    <select id="findTop5Faq" resultType="org.store.joeunit.board.dto.BoardDto">
+        <![CDATA[
+        SELECT * FROM (
+            SELECT * FROM board
+            WHERE board_type = 'FAQ'
+            ORDER BY created_at DESC
+        ) WHERE ROWNUM <= 5
+        ]]>
+    </select>
 </mapper>
