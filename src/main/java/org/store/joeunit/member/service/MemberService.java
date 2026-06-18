@@ -2,11 +2,11 @@ package org.store.joeunit.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.store.joeunit.member.dao.MemberDao;
 import org.store.joeunit.member.dto.MemberDto;
 
 import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -49,9 +49,19 @@ public class MemberService {
     }
 
     // 회원탈퇴
-    public int deleteMember(Long memberId) {
-        return memberDao.deleteMember(memberId);
+
+    @Transactional
+    public void deleteMember(Long memberId) {
+
+        memberDao.deleteProductReviewByMemberId(memberId);
+        memberDao.deleteBoardCommentByMemberId(memberId);
+        memberDao.deleteBoardByMemberId(memberId);
+        memberDao.deleteCartItemByMemberId(memberId);
+        memberDao.deleteOrdersByMemberId(memberId);
+        memberDao.deleteMember(memberId);
+
     }
+
 
     // 비밀번호 변경
     public int changePassword(MemberDto memberDto) {
