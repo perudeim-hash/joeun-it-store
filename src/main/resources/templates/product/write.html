@@ -88,9 +88,9 @@
                         </select>
 
                         <input type="text"
-                               id="brand"
+                               id="brandInput"
                                name="brand"
-                               class="input input-bordered w-full mt-2"
+                               class="input input-bordered w-full mt-2 hidden"
                                placeholder="브랜드 입력">
 
                     </div>
@@ -168,10 +168,26 @@
                             <span class="label-text font-bold">RAM</span>
                         </label>
 
+                        <select id="ramSelect"
+                                class="select select-bordered w-full">
+
+                            <option value="">선택</option>
+                            <option value="4GB">4GB</option>
+                            <option value="8GB">8GB</option>
+                            <option value="12GB">12GB</option>
+                            <option value="16GB">16GB</option>
+                            <option value="24GB">24GB</option>
+                            <option value="32GB">32GB</option>
+                            <option value="64GB">64GB</option>
+                            <option value="직접입력">직접입력</option>
+
+                        </select>
+
                         <input type="text"
+                               id="ram"
                                name="ram"
-                               class="input input-bordered w-full"
-                               placeholder="RAM">
+                               class="input input-bordered w-full mt-2 hidden"
+                               placeholder="RAM 입력">
 
                     </div>
                     <div class="form-control spec-item">
@@ -203,14 +219,34 @@
                     </div>
 
                     <div class="form-control spec-item">
+
                         <label class="label">
                             <span class="label-text font-bold">화면크기</span>
                         </label>
 
+                        <select id="screenSizeSelect"
+                                class="select select-bordered w-full">
+
+                            <option value="">선택</option>
+                            <option value="6.1인치">6.1인치</option>
+                            <option value="6.7인치">6.7인치</option>
+                            <option value="10.9인치">10.9인치</option>
+                            <option value="11인치">11인치</option>
+                            <option value="12.9인치">12.9인치</option>
+                            <option value="13인치">13인치</option>
+                            <option value="14인치">14인치</option>
+                            <option value="15.6인치">15.6인치</option>
+                            <option value="16인치">16인치</option>
+                            <option value="직접입력">직접입력</option>
+
+                        </select>
+
                         <input type="text"
+                               id="screenSize"
                                name="screenSize"
-                               class="input input-bordered w-full"
-                               placeholder="화면크기">
+                               class="input input-bordered w-full mt-2 hidden"
+                               placeholder="화면크기 입력">
+
                     </div>
 
                     <div class="form-control spec-item">
