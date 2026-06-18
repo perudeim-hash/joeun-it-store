@@ -70,6 +70,12 @@
         </form>
 
         <div class="mt-8">
+            <div th:if="${commentList == null or commentList.isEmpty()}" class="text-center py-12 bg-gray-50 rounded-lg border border-gray-200 border-dashed mb-4">
+                <div class="text-4xl mb-3">💬</div>
+                <h4 class="font-bold text-gray-800 text-lg mb-1">등록된 댓글이 없습니다.</h4>
+                <p class="text-sm text-gray-500">가장 먼저 댓글을 남겨 이 게시글의 첫 번째 소통자가 되어보세요!</p>
+            </div>
+
             <div th:each="comment : ${commentList}" class="border-b border-gray-100 py-4">
 
                 <div class="flex justify-between items-center mb-2">
