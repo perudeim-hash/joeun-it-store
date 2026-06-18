@@ -1,112 +1,116 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" data-theme="light">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>조은IT쇼핑몰 - Q&A 글쓰기</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 작성</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="stylesheet" href="/css/common/head.css">
+    <link rel="stylesheet" th:href="@{/css/common/head.css}">
 </head>
-
-<body class="bg-gray-50 text-gray-900 min-h-screen">
-
+<body class="bg-gray-50">
 <div th:replace="~{common/head :: head}"></div>
 
-<main class="max-w-3xl mx-auto px-4 py-12">
+<div class="container mx-auto px-4 mt-10" style="max-width: 800px;">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-3">게시글 작성</h2>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
+    <form id="boardForm" action="/board/write" method="post" enctype="multipart/form-data" class="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
 
-        <div class="mb-8 pb-4 border-b border-gray-100">
-
-            <h1 class="text-2xl font-bold text-gray-800 tracking-tight">
-                Q&A 문의글 작성
-            </h1>
-
-            <p class="text-sm text-gray-400 mt-1">
-                구매하시려는 상품이나 서비스에 대해 자유롭게 문의해 주세요.
-            </p>
-
+        <div class="mb-5">
+            <label class="block text-gray-700 font-bold mb-2">게시판 분류</label>
+            <select name="boardType" class="w-full border border-gray-300 rounded px-4 py-2 outline-none focus:border-blue-500" required>
+                <option value="" disabled selected>게시판을 선택하세요</option>
+                <option value="REVIEW">리뷰 / 자유 게시판</option>
+                <option value="QNA">Q&A 게시판</option>
+                <option th:if="${session.loggedMember != null and session.loggedMember.role == 'ADMIN'}" value="NOTICE" class="font-bold text-red-600">📢 공지사항</option>
+            </select>
         </div>
 
-        <form th:action="@{/board/write}"
-              method="post"
-              class="space-y-6">
+        <div class="mb-5">
+            <label class="block text-gray-700 font-bold mb-2">제목</label>
+            <input type="text" name="title" class="w-full border border-gray-300 rounded px-4 py-2 outline-none focus:border-blue-500" placeholder="제목을 입력하세요" required>
+        </div>
 
-            <input type="hidden"
-                   name="boardType"
-                   value="QNA">
-
-            <div class="form-control w-full">
-
-                <label class="label font-semibold text-gray-700 text-sm">
-                    작성자
+        <div class="mb-5">
+            <label class="block text-gray-700 font-bold mb-2">사진 첨부 (최대 3장)</label>
+            <div id="previewGrid" class="grid grid-cols-4 gap-4">
+                <label class="w-32 h-32 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 text-gray-400">
+                    <span class="text-3xl">+</span>
+                    <span class="text-xs">사진 추가</span>
+                    <input type="file" id="fileInput" name="files" multiple accept="image/*" class="hidden" onchange="handleFiles(this)">
                 </label>
-
-                <div class="input input-bordered bg-gray-50 flex items-center rounded-xl text-gray-500">
-
-                    <span th:if="${session.loggedMember != null}"
-                          th:text="${session.loggedMember.nickname}">
-                        로그인 회원
-                    </span>
-
-                    <span th:if="${session.loggedMember == null}">
-                        로그인이 필요합니다
-                    </span>
-
-                </div>
-
             </div>
+            <p id="fileLimitText" class="text-xs text-red-500 mt-2 font-bold hidden">이미지는 최대 3장까지만 업로드 가능합니다.</p>
+        </div>
 
-            <div class="form-control w-full">
+        <div class="mb-6">
+            <label class="block text-gray-700 font-bold mb-2">내용</label>
+            <textarea name="content" rows="10" class="w-full border border-gray-300 rounded px-4 py-3 outline-none focus:border-blue-500 resize-none" placeholder="내용을 입력하세요" required></textarea>
+        </div>
 
-                <label class="label font-semibold text-gray-700 text-sm">
-                    제목
-                </label>
+        <div class="flex justify-end gap-3 mt-4">
+            <button type="button" onclick="history.back()" class="px-6 py-2 border border-gray-300 rounded text-gray-700 font-bold hover:bg-gray-50">취소</button>
+            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded font-bold hover:bg-blue-700 shadow">등록하기</button>
+        </div>
+    </form>
+</div>
 
-                <input type="text"
-                       id="title"
-                       name="title"
-                       placeholder="제목을 입력하세요"
-                       class="input input-bordered focus:outline-none focus:border-blue-500 w-full rounded-xl"
-                       required>
+<script>
+    // ✨ 실제 서버로 파일을 넘기기 위한 DataTransfer 객체 (가장 중요) ✨
+    const dataTransfer = new DataTransfer();
 
-            </div>
+    function handleFiles(input) {
+        const grid = document.getElementById('previewGrid');
+        const newFiles = Array.from(input.files);
 
-            <div class="form-control w-full">
+        if (dataTransfer.items.length + newFiles.length > 3) {
+            document.getElementById('fileLimitText').classList.remove('hidden');
+            input.files = dataTransfer.files; // 기존 파일 유지
+            return;
+        } else {
+            document.getElementById('fileLimitText').classList.add('hidden');
+        }
 
-                <label class="label font-semibold text-gray-700 text-sm">
-                    문의 내용
-                </label>
+        newFiles.forEach(file => {
+            dataTransfer.items.add(file); // 실제 폼 전송 데이터에 추가
 
-                <textarea id="content"
-                          name="content"
-                          placeholder="문의하실 내용을 상세히 적어주세요."
-                          class="textarea textarea-bordered focus:outline-none focus:border-blue-500 w-full h-48 rounded-xl resize-none"
-                          required></textarea>
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                div.className = 'relative w-32 h-32';
+                div.innerHTML = `
+                    <img src="${e.target.result}" class="w-full h-full object-cover rounded border">
+                    <button type="button" onclick="removeFile(this, '${file.name}')" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 text-xs font-bold hover:bg-red-600">X</button>
+                `;
+                grid.insertBefore(div, grid.firstElementChild);
+            }
+            reader.readAsDataURL(file);
+        });
 
-            </div>
+        // input 요소에 최종 파일들 동기화 (이게 없으면 서버로 안 넘어감)
+        input.files = dataTransfer.files;
 
-            <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+        if (dataTransfer.items.length >= 3) {
+            grid.firstElementChild.classList.add('hidden');
+        }
+    }
 
-                <a th:href="@{/board}"
-                   class="btn bg-gray-100 hover:bg-gray-200 border-none text-gray-600 px-6 rounded-xl flex items-center justify-center">
-                    취소
-                </a>
+    function removeFile(btn, fileName) {
+        const grid = document.getElementById('previewGrid');
+        const fileInput = document.getElementById('fileInput');
 
-                <button type="submit"
-                        class="btn btn-primary bg-blue-600 border-blue-600 hover:bg-blue-700 text-white px-8 shadow-md shadow-blue-100 rounded-xl">
-                    등록하기
-                </button>
+        for (let i = 0; i < dataTransfer.items.length; i++) {
+            if (dataTransfer.items[i].getAsFile().name === fileName) {
+                dataTransfer.items.remove(i);
+                break;
+            }
+        }
 
-            </div>
+        fileInput.files = dataTransfer.files;
+        btn.parentElement.remove();
 
-        </form>
-
-    </div>
-
-</main>
-
+        grid.firstElementChild.classList.remove('hidden');
+        document.getElementById('fileLimitText').classList.add('hidden');
+    }
+</script>
 </body>
 </html>

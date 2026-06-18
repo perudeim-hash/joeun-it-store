@@ -1,155 +1,36 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+/* board-table 스타일 초기화 및 버그 수정 */
+.board-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
-body{
-    font-family:'Malgun Gothic', sans-serif;
-    background:#f8f9fa;
+/* ✨ 파란색 헤더 부분 */
+.board-table thead {
+    background-color: #4a5ee3;
+    color: #ffffff;
 }
 
-.container{
-    width:1200px;
-    margin:50px auto;
+/* ✨ 버그 수정: thead에는 hover 효과가 먹히지 않게 강제 고정 */
+.board-table thead tr:hover {
+    background-color: #4a5ee3 !important;
+    color: #ffffff !important;
 }
 
-.board-title{
-    text-align:center;
-    margin-bottom:40px;
+/* 내용물 부분 */
+.board-table tbody tr {
+    border-bottom: 1px solid #eef0f3;
 }
 
-.board-title h1{
-    font-size:36px;
-    color:#222;
+/* ✨ 버그 수정: tbody 안에 있는 내용물 줄만 호버되도록 지정 */
+.board-table tbody tr:hover {
+    background-color: #f8faff;
 }
 
-/* 검색 영역 */
-.search-area{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    margin-bottom:30px;
-}
-
+/* 검색창 높이 및 정렬 통일 */
 .search-area select,
-.search-area input{
-    height:45px;
-    border:1px solid #ddd;
-    border-radius:5px;
-    padding:0 15px;
-}
-
-.search-area input{
-    width:400px;
-}
-
-.search-area button{
-    width:100px;
-    border:none;
-    background:#4b57ff;
-    color:white;
-    border-radius:5px;
-    cursor:pointer;
-}
-
-.search-area button:hover{
-    background:#3742fa;
-}
-
-/* 게시판 */
-.board-table{
-    width:100%;
-    border-collapse:collapse;
-    background:white;
-}
-
-.board-table thead{
-    background:#4b57ff;
-    color:white;
-}
-
-.board-table th{
-    padding:15px;
-}
-
-.board-table td{
-    padding:18px;
-    border-bottom:1px solid #eee;
-    text-align:center;
-}
-
-.board-table td.title{
-    text-align:left;
-}
-
-.board-table tr:hover{
-    background:#f5f7ff;
-}
-
-.board-table a{
-    color:#222;
-    text-decoration:none;
-}
-
-.board-table a:hover{
-    color:#4b57ff;
-}
-
-/* 버튼 영역 */
-.board-bottom{
-    display:flex;
-    justify-content:flex-end;
-    margin-top:20px;
-}
-
-.write-btn{
-    background:#4b57ff;
-    color:white;
-    padding:12px 25px;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-}
-
-.write-btn:hover{
-    background:#3742fa;
-}
-
-/* 페이지네이션 */
-.pagination{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:8px;
-    margin-top:40px;
-}
-
-.pagination a{
-    width:40px;
-    height:40px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-decoration:none;
-    border:1px solid #ddd;
-    color:#333;
-    border-radius:5px;
-}
-
-.pagination a:hover{
-    background:#4b57ff;
-    color:white;
-}
-
-.pagination a.active{
-    background:#4b57ff;
-    color:white;
-}
-
-/* 반응형 */
-@media(max-width:1200px){
-    .container{
-        width:95%;
-    }
+.search-area input,
+.search-area button {
+    box-sizing: border-box; /* 패딩과 보더를 높이에 포함시켜 삐뚤어짐 방지 */
+    vertical-align: middle;
 }
