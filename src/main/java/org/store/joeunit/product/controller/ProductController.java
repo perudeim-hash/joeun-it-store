@@ -27,17 +27,13 @@ public class ProductController {
     private final ProductReviewService productReviewService;
 
     @GetMapping("/products")
-    public String products(
-            @RequestParam(defaultValue = "0") Integer categoryId) {
+    public String products(@RequestParam(defaultValue = "0") Integer categoryId) {
 
         return "redirect:/product/list?categoryId=" + categoryId;
     }
 
     @GetMapping("/product/list")
-    public String list(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(required = false) Integer categoryId,
-            Model model) {
+    public String list(@RequestParam(defaultValue = "1") int page, @RequestParam(required = false) Integer categoryId, Model model) {
 
         List<ProductDto> productDtoList;
         int totalCount;
@@ -61,59 +57,41 @@ public class ProductController {
     }
 
     @GetMapping("/product/write")
-    public String write() {
+    public String write(HttpSession session) {
+
+        MemberDto loginMember = (MemberDto) session.getAttribute("loggedMember");
+
+        if (loginMember == null) {
+            return "redirect:/member/login";
+        }
+        if (!"ADMIN".equals(loginMember.getRole())) {
+            return "redirect:/";
+        }
         return "product/write";
     }
 
     @GetMapping("/product/view")
-    public String view(
-            @RequestParam Integer productId,
-            Model model,
-            HttpSession session) {
+    public String view(@RequestParam Integer productId, Model model, HttpSession session) {
 
-        model.addAttribute(
-                "product",
-                productService.getById(productId)
-        );
+        model.addAttribute("product", productService.getById(productId));
 
-        model.addAttribute(
-                "reviewList",
-                productReviewService.getList(productId)
-        );
+        model.addAttribute("reviewList", productReviewService.getList(productId));
 
-        model.addAttribute(
-                "averageRating",
-                productReviewService.getAverageRating(productId)
-        );
+        model.addAttribute("averageRating", productReviewService.getAverageRating(productId));
 
-        model.addAttribute(
-                "reviewCount",
-                productReviewService.getReviewCount(productId)
-        );
+        model.addAttribute("reviewCount", productReviewService.getReviewCount(productId));
 
-        MemberDto loginMember =
-                (MemberDto) session.getAttribute("loggedMember");
+        MemberDto loginMember = (MemberDto) session.getAttribute("loggedMember");
 
-        model.addAttribute(
-                "loginMember",
-                loginMember
-        );
+        model.addAttribute("loginMember", loginMember);
 
         boolean canWriteReview = false;
         boolean hasReviewed = false;
 
         if (loginMember != null) {
-            boolean hasPurchased =
-                    productReviewService.hasPurchased(
-                            loginMember.getMemberId(),
-                            productId
-                    );
+            boolean hasPurchased = productReviewService.hasPurchased(loginMember.getMemberId(), productId);
 
-            hasReviewed =
-                    productReviewService.hasReviewed(
-                            loginMember.getMemberId(),
-                            productId
-                    );
+            hasReviewed = productReviewService.hasReviewed(loginMember.getMemberId(), productId);
 
             canWriteReview = hasPurchased && !hasReviewed;
         }
@@ -127,7 +105,25 @@ public class ProductController {
     @GetMapping("/product/modify")
     public String modify(
             @RequestParam Integer productId,
-            Model model) {
+            Model model,
+            HttpSession session) {
+
+        MemberDto loginMember =
+                (MemberDto) session.getAttribute(
+                        "loggedMember"
+                );
+
+        if(loginMember == null) {
+
+            return "redirect:/member/login";
+        }
+
+        if(!"ADMIN".equals(
+                loginMember.getRole()
+        )) {
+
+            return "redirect:/";
+        }
 
         model.addAttribute(
                 "product",
@@ -138,8 +134,8 @@ public class ProductController {
     }
 
     @PostMapping("/product/write")
-    public String writeProcess(
-            ProductDto productDto) throws Exception {
+    public String writeProcess(ProductDto productDto) throws Exception {
+
 
         System.out.println("========== 상품등록 ==========");
         System.out.println("categoryId = " + productDto.getCategoryId());
@@ -158,27 +154,21 @@ public class ProductController {
             productDto.setStock(0);
         }
 
-        MultipartFile upload =
-                productDto.getUpload();
+        MultipartFile upload = productDto.getUpload();
 
         if (upload != null && !upload.isEmpty()) {
 
-            String originalFileName =
-                    upload.getOriginalFilename();
+            String originalFileName = upload.getOriginalFilename();
 
-            String savedFileName =
-                    UUID.randomUUID() + "_" + originalFileName;
+            String savedFileName = UUID.randomUUID() + "_" + originalFileName;
 
-            Path uploadPath =
-                    Paths.get("uploads");
+            Path uploadPath = Paths.get("uploads");
 
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
 
-            upload.transferTo(
-                    uploadPath.resolve(savedFileName)
-            );
+            upload.transferTo(uploadPath.resolve(savedFileName));
 
             productDto.setImageName(savedFileName);
             productDto.setImagePath("/uploads/" + savedFileName);
@@ -200,8 +190,7 @@ public class ProductController {
     }
 
     @PostMapping("/product/modify")
-    public String modifyProcess(
-            ProductDto productDto) throws Exception {
+    public String modifyProcess(ProductDto productDto) throws Exception {
 
         // 가격 음수 방지
         if (productDto.getPrice() < 0) {
@@ -213,27 +202,21 @@ public class ProductController {
             productDto.setStock(0);
         }
 
-        MultipartFile upload =
-                productDto.getUpload();
+        MultipartFile upload = productDto.getUpload();
 
         if (upload != null && !upload.isEmpty()) {
 
-            String originalFileName =
-                    upload.getOriginalFilename();
+            String originalFileName = upload.getOriginalFilename();
 
-            String savedFileName =
-                    UUID.randomUUID() + "_" + originalFileName;
+            String savedFileName = UUID.randomUUID() + "_" + originalFileName;
 
-            Path uploadPath =
-                    Paths.get("uploads");
+            Path uploadPath = Paths.get("uploads");
 
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
 
-            upload.transferTo(
-                    uploadPath.resolve(savedFileName)
-            );
+            upload.transferTo(uploadPath.resolve(savedFileName));
 
             productDto.setImageName(savedFileName);
             productDto.setImagePath("/uploads/" + savedFileName);
@@ -246,18 +229,33 @@ public class ProductController {
 
     @GetMapping("/product/delete")
     public String delete(
-            @RequestParam Integer productId) {
+            @RequestParam Integer productId,
+            HttpSession session) {
+
+        MemberDto loginMember =
+                (MemberDto) session.getAttribute(
+                        "loggedMember"
+                );
+
+        if(loginMember == null) {
+
+            return "redirect:/member/login";
+        }
+
+        if(!"ADMIN".equals(
+                loginMember.getRole()
+        )) {
+
+            return "redirect:/";
+        }
 
         productService.delete(productId);
 
         return "redirect:/product/list";
     }
-
     @GetMapping("/product/category/{categoryId}")
     @ResponseBody
-    public Map<String, Object> categoryId(
-            @PathVariable Integer categoryId,
-            @RequestParam(defaultValue = "1") int page) {
+    public Map<String, Object> categoryId(@PathVariable Integer categoryId, @RequestParam(defaultValue = "1") int page) {
 
         List<ProductDto> productList;
         int totalCount;
@@ -266,23 +264,14 @@ public class ProductController {
             productList = productService.getPageList(page);
             totalCount = productService.getTotalCount();
         } else {
-            productList =
-                    productService.getCategoryPageList(
-                            categoryId,
-                            page
-                    );
+            productList = productService.getCategoryPageList(categoryId, page);
 
-            totalCount =
-                    productService.getCategoryTotalCount(
-                            categoryId
-                    );
+            totalCount = productService.getCategoryTotalCount(categoryId);
         }
 
-        int totalPage =
-                (int) Math.ceil((double) totalCount / 8);
+        int totalPage = (int) Math.ceil((double) totalCount / 8);
 
-        Map<String, Object> result =
-                new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
 
         result.put("productList", productList);
         result.put("currentPage", page);
