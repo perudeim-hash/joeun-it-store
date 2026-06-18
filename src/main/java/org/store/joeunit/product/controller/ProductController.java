@@ -176,7 +176,15 @@ public class ProductController {
             productDto.setImageName(savedFileName);
             productDto.setImagePath("/uploads/" + savedFileName);
         }
+        if(productDto.getCategoryId() == 4){
 
+            productDto.setCpu(null);
+            productDto.setRam(null);
+            productDto.setStorageCapacity(null);
+            productDto.setOs(null);
+            productDto.setScreenSize(null);
+
+        }
         productService.insert(productDto);
 
         return "redirect:/product/list";
