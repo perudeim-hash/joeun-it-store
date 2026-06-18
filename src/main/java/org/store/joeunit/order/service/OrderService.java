@@ -10,6 +10,7 @@ import org.store.joeunit.member.dto.MemberDto;
 import org.store.joeunit.order.dto.OrderDto;
 import org.store.joeunit.order.dto.OrderItemDto;
 import org.store.joeunit.order.mapper.OrderMapper;
+import org.store.joeunit.product.service.ProductService;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final CartService cartService;
     private final MemberService memberService;
+    private final ProductService productService;
 
     public List<OrderDto> getOrderList(Long memberId) {
         return orderMapper.selectMyOrderList(memberId);
@@ -69,6 +71,22 @@ public class OrderService {
 
         OrderDto order =
         orderMapper.selectOrderDetail(orderId);
+
+        if (order == null) {
+            throw new IllegalArgumentException("주문 정보를 찾을 수 없습니다.");
+        }
+        if ("ORDER_CANCEL".equals(order.getOrderStatus())) {
+            throw new IllegalArgumentException("이미 취소된 주문입니다.");
+        }
+
+        List<OrderItemDto> orderItems = orderMapper.selectOrderItemsByOrderId(orderId);
+
+        for (OrderItemDto item : orderItems) {
+            if (item.getProductId() == null || item.getProductId() == 0) {
+                throw new IllegalArgumentException("주문 상품의 productId가 없습니다.");
+            }
+            productService.decreaseSalesAndIncreaseStock(item.getProductId().intValue(), item.getQuantity());
+        }
 
         orderMapper.updateOrderStatusToCancel(orderId);
 

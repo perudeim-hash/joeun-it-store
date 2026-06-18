@@ -26,13 +26,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const quantityText = document.getElementById(`quantity-${cartItemId}`);
 
             const currentQuantity = Number(quantityText.textContent);
-            const stock = Number(quantityBox.dataset.stock);
-            const nextQuantity = currentQuantity + 1;
+            const remainingStock = Number(quantityBox.dataset.stock);
 
-            if (stock > 0 && nextQuantity > stock) {
-                alert("재고 수량을 초과할 수 없습니다.");
+            if (remainingStock <= 0) {
+                alert("남은 재고가 없습니다.");
                 return;
             }
+
+            const nextQuantity = currentQuantity + 1;
 
             updateQuantity(cartItemId, nextQuantity);
         });
@@ -41,7 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function updateQuantity(cartItemId, quantity) {
     const quantityBox = document.querySelector(`.quantity-box[data-cart-item-id="${cartItemId}"]`);
+    const quantityText = document.getElementById(`quantity-${cartItemId}`);
+
     const price = Number(quantityBox.dataset.price);
+    const oldQuantity = Number(quantityText.textContent);
+    const oldRemainingStock = Number(quantityBox.dataset.stock);
 
     fetch("/cart/update-ajax", {
         method: "POST",
@@ -62,18 +67,28 @@ function updateQuantity(cartItemId, quantity) {
         })
         .then((data) => {
             if (!data.success) {
-                alert("수량 변경에 실패했습니다.");
+                alert(data.message || "수량 변경에 실패했습니다.");
                 return;
             }
 
-            const quantityText = document.getElementById(`quantity-${cartItemId}`);
             const itemTotalElement = document.getElementById(`item-total-${cartItemId}`);
             const cartTotalElement = document.getElementById("cart-total-price");
             const cartFinalElement = document.getElementById("cart-final-price");
+            const stockText = document.getElementById(`stock-${cartItemId}`);
 
-            quantityText.textContent = data.quantity;
+            const newQuantity = Number(data.quantity);
+            const diffQuantity = newQuantity - oldQuantity;
 
-            const itemTotalPrice = price * Number(data.quantity);
+            const newRemainingStock = oldRemainingStock - diffQuantity;
+
+            quantityText.textContent = newQuantity;
+            quantityBox.dataset.stock = newRemainingStock;
+
+            if (stockText) {
+                stockText.textContent = newRemainingStock;
+            }
+
+            const itemTotalPrice = price * newQuantity;
 
             itemTotalElement.textContent = formatPrice(itemTotalPrice);
             cartTotalElement.textContent = formatPrice(data.cartTotalPrice);

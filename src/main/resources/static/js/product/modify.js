@@ -1,25 +1,33 @@
-function previewImage(input){
+document.addEventListener("DOMContentLoaded", () => {
 
-    const file = input.files[0];
+    const imageFile =
+        document.querySelector("#imageFile");
 
-    if(!file){
-        return;
-    }
+    const preview =
+        document.querySelector("#preview");
 
-    const reader = new FileReader();
+    console.log(imageFile);
+    console.log(preview);
 
-    reader.onload = function(e){
+    imageFile.addEventListener("change", (e) => {
 
-        const preview =
-            document.querySelector("#preview");
+        const file = e.target.files[0];
 
-        preview.src =
-            e.target.result;
+        if (!file) {
+            return;
+        }
 
-        preview.classList.remove("hidden");
+        const reader = new FileReader();
 
-    };
+        reader.onload = (event) => {
 
-    reader.readAsDataURL(file);
+            preview.src =
+                event.target.result;
 
-}
+        };
+
+        reader.readAsDataURL(file);
+
+    });
+
+});
