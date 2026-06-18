@@ -45,21 +45,14 @@ document.addEventListener("DOMContentLoaded", () => {
         specItems.forEach(item => {
 
             const inputs =
-                item.querySelectorAll("input, select");
+                item.querySelectorAll("input");
 
-            if(isEtc){
+            inputs.forEach(input => {
 
-                item.classList.add("hidden");
+                input.readOnly =
+                    isEtc;
 
-                inputs.forEach(input => {
-                    input.value = "";
-                });
-
-            } else {
-
-                item.classList.remove("hidden");
-
-            }
+            });
 
         });
 
@@ -72,4 +65,118 @@ document.addEventListener("DOMContentLoaded", () => {
         toggleSpec
     );
 
+
+
+    function setupCustomInput(
+        selectId,
+        inputId
+    ) {
+
+        const select =
+            document.querySelector(
+                "#" + selectId
+            );
+
+        const input =
+            document.querySelector(
+                "#" + inputId
+            );
+
+        if(!select || !input){
+            return;
+        }
+
+        const changeInput = () => {
+
+            if(
+                select.value ===
+                "직접입력"
+            ) {
+
+                input.classList.remove(
+                    "hidden"
+                );
+
+                input.value = "";
+
+            } else {
+
+                input.classList.add(
+                    "hidden"
+                );
+
+                input.value =
+                    select.value;
+
+            }
+
+        };
+
+        changeInput();
+
+        select.addEventListener(
+            "change",
+            changeInput
+        );
+
+    }
+
+
+
+    setupCustomInput(
+        "brandSelect",
+        "brandInput"
+    );
+
+    setupCustomInput(
+        "cpuSelect",
+        "cpu"
+    );
+
+    setupCustomInput(
+        "storageSelect",
+        "storageCapacity"
+    );
+
+    setupCustomInput(
+        "osSelect",
+        "os"
+    );
+
+    setupCustomInput(
+        "colorSelect",
+        "color"
+    );
+
+    setupCustomInput(
+        "ramSelect",
+        "ram"
+    );
+
+    setupCustomInput(
+        "screenSizeSelect",
+        "screenSize"
+    );
+    const writeForm =
+        document.querySelector("#writeForm");
+
+    writeForm.addEventListener(
+        "submit",
+        (e) => {
+
+            if(!imageFile.files.length){
+
+                alert(
+                    "상품 이미지를 선택하세요."
+                );
+
+                imageFile.focus();
+
+                e.preventDefault();
+
+                return;
+            }
+
+        }
+    );
 });

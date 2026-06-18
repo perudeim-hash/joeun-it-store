@@ -141,6 +141,13 @@ public class ProductController {
     public String writeProcess(
             ProductDto productDto) throws Exception {
 
+        System.out.println("========== 상품등록 ==========");
+        System.out.println("categoryId = " + productDto.getCategoryId());
+        System.out.println("productName = " + productDto.getProductName());
+        System.out.println("price = " + productDto.getPrice());
+        System.out.println("stock = " + productDto.getStock());
+        System.out.println("============================");
+
         // 가격 음수 방지
         if (productDto.getPrice() < 0) {
             productDto.setPrice(0);
@@ -176,6 +183,7 @@ public class ProductController {
             productDto.setImageName(savedFileName);
             productDto.setImagePath("/uploads/" + savedFileName);
         }
+
         if(productDto.getCategoryId() == 4){
 
             productDto.setCpu(null);
@@ -185,6 +193,7 @@ public class ProductController {
             productDto.setScreenSize(null);
 
         }
+
         productService.insert(productDto);
 
         return "redirect:/product/list";
