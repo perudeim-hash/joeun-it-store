@@ -68,7 +68,8 @@
 
     <div th:if="${faqList != null and !faqList.isEmpty()}" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-8">
         <div th:each="faq, stat : ${faqList}" class="collapse collapse-arrow border-b border-gray-100 rounded-none">
-            <input type="radio" name="faq-accordion" th:checked="${stat.index == 0 ? 'checked' : null}" />
+            <input type="checkbox" th:checked="${stat.index == 0 ? 'checked' : null}" />
+
             <div class="collapse-title text-base font-bold text-gray-800">
                 <span class="text-blue-600 mr-2">Q.</span> <span th:text="${faq.title}">질문 제목</span>
             </div>
