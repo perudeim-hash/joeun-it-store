@@ -10,84 +10,65 @@ body {
 .hero-section {
     position: relative;
     width: 100%;
-    height: 320px;
-    background: linear-gradient(
-            90deg,
-            #ffffff 0%,
-            #f8fbff 45%,
-            #ffffff 100%
-    );
-    border-bottom: 1px solid #eef0f3;
+    height: 380px;
     overflow: hidden;
+    border-bottom: 1px solid #eef0f3;
+    background: #ffffff;
 }
 
-.hero-section::before {
-    content: "";
+.hero-slide {
     position: absolute;
-
-    width: 500px;
-    height: 500px;
-
-    left: -150px;
-    top: -120px;
-
-    border-radius: 50%;
-
-    background: radial-gradient(
-            circle,
-            rgba(37, 99, 235, 0.18),
-            transparent 70%
-    );
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
 }
 
-.hero-section::after {
-    content: "";
-    position: absolute;
-
-    width: 450px;
-    height: 450px;
-
-    right: -100px;
-    bottom: -150px;
-
-    border-radius: 50%;
-
-    background: radial-gradient(
-            circle,
-            rgba(168, 85, 247, 0.18),
-            transparent 70%
-    );
+.hero-slide.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
 }
 
-.hero-content {
-    position: relative;
-    z-index: 2;
-
+.hero-inner {
     max-width: 1200px;
     height: 100%;
     margin: 0 auto;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+
+.theme-phone {
+    background: linear-gradient(135deg, #ffffff 0%, #edf6ff 45%, #dbeafe 100%);
+}
+
+.theme-laptop {
+    background: linear-gradient(135deg, #ffffff 0%, #f4edff 45%, #ddd6fe 100%);
+}
+
+.theme-gaming {
+    background: linear-gradient(135deg, #020617 0%, #111827 45%, #312e81 100%);
+}
+
 .hero-text {
-    width: 42%;
+    width: 45%;
     padding-left: 20px;
+    z-index: 3;
 }
 
 .hero-small {
-    margin: 0 0 8px;
-    font-size: 25px;
-    font-weight: 500;
+    margin: 0 0 12px;
+    font-size: 26px;
+    font-weight: 800;
     color: #111827;
 }
 
 .hero-text h1 {
     margin: 0;
-    font-size: 50px;
+    font-size: 54px;
     font-weight: 900;
-    letter-spacing: -2px;
+    letter-spacing: -3px;
     color: #111827;
 }
 
@@ -96,138 +77,253 @@ body {
 }
 
 .hero-desc {
-    margin: 12px 0 24px;
-    font-size: 18px;
+    margin: 16px 0 28px;
+    font-size: 19px;
     color: #4b5563;
+}
+
+.hero-text.dark .hero-small,
+.hero-text.dark h1,
+.hero-text.dark .hero-desc {
+    color: #ffffff;
+}
+
+.hero-text.dark h1 span {
+    color: #22d3ee;
 }
 
 .hero-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 42px;
-    padding: 0 28px;
+    height: 48px;
+    padding: 0 32px;
     border-radius: 999px;
-    background-color: #0066cc;
+    background: #0066cc;
     color: #ffffff;
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 800;
+    box-shadow: 0 10px 24px rgba(0, 102, 204, 0.25);
+    transition: 0.25s;
 }
 
 .hero-btn:hover {
-    background-color: #004fa3;
+    transform: translateY(-3px);
+    background: #004fa3;
 }
 
-/* 배너 오른쪽 가상 이미지 */
-.hero-visual {
+.hero-btn.purple {
+    background: #6d28d9;
+    box-shadow: 0 10px 24px rgba(109, 40, 217, 0.25);
+}
+
+.hero-btn.cyan {
+    background: #06b6d4;
+    box-shadow: 0 10px 24px rgba(6, 182, 212, 0.25);
+}
+
+.hero-art {
     position: relative;
-    width: 58%;
+    width: 55%;
     height: 100%;
 }
 
-.device {
+/* 1번 스마트폰 도형 */
+.art-tablet {
     position: absolute;
-    border-radius: 18px;
-    box-shadow: 0 16px 35px rgba(15, 23, 42, 0.16);
+    right: 40px;
+    top: 52px;
+    width: 330px;
+    height: 210px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #0f172a, #2563eb 60%, #93c5fd);
+    box-shadow: 0 30px 60px rgba(37, 99, 235, 0.25);
 }
 
-.laptop {
-    width: 310px;
-    height: 165px;
-    left: 70px;
-    top: 80px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #111827 0%, #0f4fb8 50%, #1e3a8a 100%);
-    transform: skew(-8deg);
-}
-
-.phone {
-    width: 90px;
-    height: 170px;
-    left: 350px;
+.art-phone {
+    position: absolute;
+    right: 330px;
     top: 72px;
-    background: linear-gradient(160deg, #111827, #2f3645);
-    border: 8px solid #222;
+    width: 120px;
+    height: 220px;
+    border-radius: 32px;
+    background: linear-gradient(160deg, #111827, #1d4ed8 70%, #60a5fa);
+    border: 8px solid #111827;
+    box-shadow: 0 25px 50px rgba(15, 23, 42, 0.25);
 }
 
-.tablet {
-    width: 175px;
-    height: 205px;
-    right: 120px;
-    top: 45px;
-    background: repeating-linear-gradient(
-            170deg,
-            #0f172a,
-            #0f172a 12px,
-            #4f00ff 16px,
-            #0f172a 28px
-    );
-    border: 9px solid #111827;
-}
-
-.earbuds {
-    width: 100px;
-    height: 70px;
-    right: 210px;
-    bottom: 45px;
+.art-earbuds {
+    position: absolute;
+    right: 240px;
+    bottom: 52px;
+    width: 130px;
+    height: 82px;
+    border-radius: 42px;
     background: #ffffff;
-    border-radius: 36px;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
 }
 
-.watch {
-    width: 70px;
-    height: 78px;
-    right: 45px;
-    bottom: 55px;
-    background: #111827;
-    border: 6px solid #222;
+/* 2번 노트북 도형 */
+.art-laptop-screen {
+    position: absolute;
+    right: 110px;
+    top: 58px;
+    width: 390px;
+    height: 220px;
     border-radius: 22px;
+    background:
+            linear-gradient(135deg, rgba(255,255,255,0.12), transparent),
+            linear-gradient(135deg, #111827, #1d4ed8 55%, #7c3aed);
+    box-shadow: 0 30px 60px rgba(124, 58, 237, 0.25);
 }
 
+.art-laptop-body {
+    position: absolute;
+    right: 80px;
+    top: 280px;
+    width: 450px;
+    height: 42px;
+    border-radius: 0 0 28px 28px;
+    background: linear-gradient(90deg, #cbd5e1, #64748b);
+}
+
+.art-mouse {
+    position: absolute;
+    right: 20px;
+    bottom: 62px;
+    width: 80px;
+    height: 100px;
+    border-radius: 46px;
+    background: linear-gradient(160deg, #f8fafc, #94a3b8);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+}
+
+/* 3번 게이밍 도형 */
+.art-keyboard {
+    position: absolute;
+    right: 190px;
+    top: 120px;
+    width: 390px;
+    height: 125px;
+    border-radius: 18px;
+    background:
+            repeating-linear-gradient(
+                    90deg,
+                    #111827,
+                    #111827 17px,
+                    #22d3ee 18px,
+                    #111827 24px
+            );
+    box-shadow: 0 28px 60px rgba(34, 211, 238, 0.22);
+}
+
+.art-gaming-mouse {
+    position: absolute;
+    right: 70px;
+    top: 120px;
+    width: 90px;
+    height: 125px;
+    border-radius: 48px;
+    background: linear-gradient(160deg, #020617, #7c3aed);
+    box-shadow: 0 24px 50px rgba(124, 58, 237, 0.3);
+}
+
+.art-headset {
+    position: absolute;
+    right: 420px;
+    top: 72px;
+    width: 150px;
+    height: 150px;
+    border: 15px solid #020617;
+    border-bottom: none;
+    border-radius: 90px 90px 20px 20px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.25);
+}
+
+/* 화살표 */
 .hero-arrow {
     position: absolute;
     top: 50%;
-    z-index: 5;
-    width: 42px;
-    height: 42px;
     transform: translateY(-50%);
+    z-index: 20;
+    width: 48px;
+    height: 48px;
     border: none;
     border-radius: 50%;
-    background-color: #ffffff;
+    background: #ffffff;
     color: #111827;
-    font-size: 34px;
+    font-size: 32px;
     line-height: 1;
-    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.12);
     cursor: pointer;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.16);
 }
 
 .hero-prev {
-    left: 28px;
+    left: 24px;
 }
 
 .hero-next {
-    right: 28px;
+    right: 24px;
 }
 
+/* 점 */
 .hero-dots {
     position: absolute;
-    bottom: 18px;
+    z-index: 20;
+    bottom: 20px;
     left: 50%;
-    display: flex;
-    gap: 8px;
     transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
 }
 
 .dot {
-    width: 11px;
-    height: 11px;
+    width: 12px;
+    height: 12px;
     border: none;
     border-radius: 50%;
-    background-color: #dbe2ea;
+    background: #dbe2ea;
+    cursor: pointer;
 }
 
 .dot.active {
-    background-color: #0066cc;
+    background: #0066cc;
+}
+
+/* 반응형 */
+@media (max-width: 1200px) {
+    .hero-inner {
+        width: calc(100% - 80px);
+    }
+
+    .hero-text h1 {
+        font-size: 44px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        height: 420px;
+    }
+
+    .hero-inner {
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .hero-text {
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .hero-art {
+        display: none;
+    }
+
+    .hero-arrow {
+        display: none;
+    }
 }
 
 /* 카테고리 */
