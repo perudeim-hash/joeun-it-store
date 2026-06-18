@@ -103,9 +103,6 @@ public class ProductController {
         boolean hasReviewed = false;
 
         if (loginMember != null) {
-            boolean isAdmin =
-                    "ADMIN".equals(loginMember.getRole());
-
             boolean hasPurchased =
                     productReviewService.hasPurchased(
                             loginMember.getMemberId(),
@@ -118,7 +115,7 @@ public class ProductController {
                             productId
                     );
 
-            canWriteReview = (isAdmin || hasPurchased) && !hasReviewed;
+            canWriteReview = hasPurchased && !hasReviewed;
         }
 
         model.addAttribute("canWriteReview", canWriteReview);
@@ -186,15 +183,8 @@ public class ProductController {
             productDto.setImageName(savedFileName);
             productDto.setImagePath("/uploads/" + savedFileName);
         }
-        if(productDto.getCategoryId() == 4){
 
-            productDto.setCpu(null);
-            productDto.setRam(null);
-            productDto.setStorageCapacity(null);
-            productDto.setOs(null);
-            productDto.setScreenSize(null);
-
-        if(productDto.getCategoryId() == 4){
+        if (productDto.getCategoryId() == 4) {
 
             productDto.setCpu(null);
             productDto.setRam(null);
@@ -299,20 +289,5 @@ public class ProductController {
         result.put("totalPage", totalPage);
 
         return result;
-    }
-    @GetMapping("/product/search")
-    public String search(@RequestParam String keyword,
-        Model model) {
-
-    List<ProductDto> productList =
-            productService.search(keyword);
-
-    model.addAttribute("productList",productList);
-    model.addAttribute("keyword",keyword);
-    model.addAttribute("currentPage",1);
-    model.addAttribute("totalPage",1);
-    model.addAttribute("categoryId",0);
-
-    return "product/list";
     }
 }
