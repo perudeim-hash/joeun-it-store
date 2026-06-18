@@ -9,9 +9,35 @@
     <select id="getList"
             resultType="org.store.joeunit.product.dto.ProductDto">
 
-        SELECT *
-        FROM PRODUCT
-        ORDER BY PRODUCT_ID DESC
+        SELECT
+        P.*,
+        NVL(ROUND(AVG(R.RATING), 1), 0) AS averageRating,
+        COUNT(R.REVIEW_ID) AS reviewCount
+        FROM PRODUCT P
+        LEFT JOIN PRODUCT_REVIEW R
+        ON P.PRODUCT_ID = R.PRODUCT_ID
+        GROUP BY
+        P.PRODUCT_ID,
+        P.CATEGORY_ID,
+        P.PRODUCT_NAME,
+        P.BRAND,
+        P.MODEL_NAME,
+        P.PRICE,
+        P.STOCK,
+        P.CPU,
+        P.RAM,
+        P.STORAGE_CAPACITY,
+        P.SCREEN_SIZE,
+        P.OS,
+        P.COLOR,
+        P.DESCRIPTION,
+        P.IMAGE_NAME,
+        P.IMAGE_PATH,
+        P.STATUS,
+        P.SALES_COUNT,
+        P.CREATED_AT,
+        P.UPDATED_AT
+        ORDER BY P.PRODUCT_ID DESC
 
     </select>
 
@@ -19,9 +45,35 @@
             parameterType="Integer"
             resultType="org.store.joeunit.product.dto.ProductDto">
 
-        SELECT *
-        FROM PRODUCT
-        WHERE PRODUCT_ID = #{productId}
+        SELECT
+        P.*,
+        NVL(ROUND(AVG(R.RATING), 1), 0) AS averageRating,
+        COUNT(R.REVIEW_ID) AS reviewCount
+        FROM PRODUCT P
+        LEFT JOIN PRODUCT_REVIEW R
+        ON P.PRODUCT_ID = R.PRODUCT_ID
+        WHERE P.PRODUCT_ID = #{productId}
+        GROUP BY
+        P.PRODUCT_ID,
+        P.CATEGORY_ID,
+        P.PRODUCT_NAME,
+        P.BRAND,
+        P.MODEL_NAME,
+        P.PRICE,
+        P.STOCK,
+        P.CPU,
+        P.RAM,
+        P.STORAGE_CAPACITY,
+        P.SCREEN_SIZE,
+        P.OS,
+        P.COLOR,
+        P.DESCRIPTION,
+        P.IMAGE_NAME,
+        P.IMAGE_PATH,
+        P.STATUS,
+        P.SALES_COUNT,
+        P.CREATED_AT,
+        P.UPDATED_AT
 
     </select>
 
@@ -106,10 +158,36 @@
             parameterType="String"
             resultType="org.store.joeunit.product.dto.ProductDto">
 
-        SELECT *
-        FROM PRODUCT
-        WHERE PRODUCT_NAME LIKE '%' || #{keyword} || '%'
-        ORDER BY PRODUCT_ID DESC
+        SELECT
+        P.*,
+        NVL(ROUND(AVG(R.RATING), 1), 0) AS averageRating,
+        COUNT(R.REVIEW_ID) AS reviewCount
+        FROM PRODUCT P
+        LEFT JOIN PRODUCT_REVIEW R
+        ON P.PRODUCT_ID = R.PRODUCT_ID
+        WHERE P.PRODUCT_NAME LIKE '%' || #{keyword} || '%'
+        GROUP BY
+        P.PRODUCT_ID,
+        P.CATEGORY_ID,
+        P.PRODUCT_NAME,
+        P.BRAND,
+        P.MODEL_NAME,
+        P.PRICE,
+        P.STOCK,
+        P.CPU,
+        P.RAM,
+        P.STORAGE_CAPACITY,
+        P.SCREEN_SIZE,
+        P.OS,
+        P.COLOR,
+        P.DESCRIPTION,
+        P.IMAGE_NAME,
+        P.IMAGE_PATH,
+        P.STATUS,
+        P.SALES_COUNT,
+        P.CREATED_AT,
+        P.UPDATED_AT
+        ORDER BY P.PRODUCT_ID DESC
 
     </select>
 
@@ -117,10 +195,36 @@
             parameterType="Integer"
             resultType="org.store.joeunit.product.dto.ProductDto">
 
-        SELECT *
-        FROM PRODUCT
-        WHERE CATEGORY_ID = #{categoryId}
-        ORDER BY PRODUCT_ID DESC
+        SELECT
+        P.*,
+        NVL(ROUND(AVG(R.RATING), 1), 0) AS averageRating,
+        COUNT(R.REVIEW_ID) AS reviewCount
+        FROM PRODUCT P
+        LEFT JOIN PRODUCT_REVIEW R
+        ON P.PRODUCT_ID = R.PRODUCT_ID
+        WHERE P.CATEGORY_ID = #{categoryId}
+        GROUP BY
+        P.PRODUCT_ID,
+        P.CATEGORY_ID,
+        P.PRODUCT_NAME,
+        P.BRAND,
+        P.MODEL_NAME,
+        P.PRICE,
+        P.STOCK,
+        P.CPU,
+        P.RAM,
+        P.STORAGE_CAPACITY,
+        P.SCREEN_SIZE,
+        P.OS,
+        P.COLOR,
+        P.DESCRIPTION,
+        P.IMAGE_NAME,
+        P.IMAGE_PATH,
+        P.STATUS,
+        P.SALES_COUNT,
+        P.CREATED_AT,
+        P.UPDATED_AT
+        ORDER BY P.PRODUCT_ID DESC
 
     </select>
 
@@ -130,9 +234,35 @@
 
         SELECT *
         FROM (
-        SELECT ROW_NUMBER() OVER(ORDER BY PRODUCT_ID DESC) RN,
-        P.*
+        SELECT
+        ROW_NUMBER() OVER(ORDER BY P.PRODUCT_ID DESC) RN,
+        P.*,
+        NVL(ROUND(AVG(R.RATING), 1), 0) AS averageRating,
+        COUNT(R.REVIEW_ID) AS reviewCount
         FROM PRODUCT P
+        LEFT JOIN PRODUCT_REVIEW R
+        ON P.PRODUCT_ID = R.PRODUCT_ID
+        GROUP BY
+        P.PRODUCT_ID,
+        P.CATEGORY_ID,
+        P.PRODUCT_NAME,
+        P.BRAND,
+        P.MODEL_NAME,
+        P.PRICE,
+        P.STOCK,
+        P.CPU,
+        P.RAM,
+        P.STORAGE_CAPACITY,
+        P.SCREEN_SIZE,
+        P.OS,
+        P.COLOR,
+        P.DESCRIPTION,
+        P.IMAGE_NAME,
+        P.IMAGE_PATH,
+        P.STATUS,
+        P.SALES_COUNT,
+        P.CREATED_AT,
+        P.UPDATED_AT
         )
         WHERE RN BETWEEN #{startRow}
         AND #{endRow}
@@ -145,10 +275,36 @@
 
         SELECT *
         FROM (
-        SELECT ROW_NUMBER() OVER(ORDER BY PRODUCT_ID DESC) RN,
-        P.*
+        SELECT
+        ROW_NUMBER() OVER(ORDER BY P.PRODUCT_ID DESC) RN,
+        P.*,
+        NVL(ROUND(AVG(R.RATING), 1), 0) AS averageRating,
+        COUNT(R.REVIEW_ID) AS reviewCount
         FROM PRODUCT P
-        WHERE CATEGORY_ID = #{categoryId}
+        LEFT JOIN PRODUCT_REVIEW R
+        ON P.PRODUCT_ID = R.PRODUCT_ID
+        WHERE P.CATEGORY_ID = #{categoryId}
+        GROUP BY
+        P.PRODUCT_ID,
+        P.CATEGORY_ID,
+        P.PRODUCT_NAME,
+        P.BRAND,
+        P.MODEL_NAME,
+        P.PRICE,
+        P.STOCK,
+        P.CPU,
+        P.RAM,
+        P.STORAGE_CAPACITY,
+        P.SCREEN_SIZE,
+        P.OS,
+        P.COLOR,
+        P.DESCRIPTION,
+        P.IMAGE_NAME,
+        P.IMAGE_PATH,
+        P.STATUS,
+        P.SALES_COUNT,
+        P.CREATED_AT,
+        P.UPDATED_AT
         )
         WHERE RN BETWEEN #{startRow}
         AND #{endRow}
@@ -172,15 +328,43 @@
         WHERE CATEGORY_ID = #{categoryId}
 
     </select>
+
     <select id="getBestProducts"
             resultType="org.store.joeunit.product.dto.ProductDto">
 
         SELECT *
         FROM (
-        SELECT *
-        FROM PRODUCT
-        ORDER BY SALES_COUNT DESC,
-        PRODUCT_ID DESC
+        SELECT
+        P.*,
+        NVL(ROUND(AVG(R.RATING), 1), 0) AS averageRating,
+        COUNT(R.REVIEW_ID) AS reviewCount
+        FROM PRODUCT P
+        LEFT JOIN PRODUCT_REVIEW R
+        ON P.PRODUCT_ID = R.PRODUCT_ID
+        WHERE P.STATUS = 'SALE'
+        GROUP BY
+        P.PRODUCT_ID,
+        P.CATEGORY_ID,
+        P.PRODUCT_NAME,
+        P.BRAND,
+        P.MODEL_NAME,
+        P.PRICE,
+        P.STOCK,
+        P.CPU,
+        P.RAM,
+        P.STORAGE_CAPACITY,
+        P.SCREEN_SIZE,
+        P.OS,
+        P.COLOR,
+        P.DESCRIPTION,
+        P.IMAGE_NAME,
+        P.IMAGE_PATH,
+        P.STATUS,
+        P.SALES_COUNT,
+        P.CREATED_AT,
+        P.UPDATED_AT
+        ORDER BY P.SALES_COUNT DESC,
+        P.PRODUCT_ID DESC
         )
         WHERE ROWNUM <![CDATA[ <= ]]> 6
 
@@ -191,42 +375,65 @@
 
         SELECT *
         FROM (
-        SELECT *
-        FROM PRODUCT
-        ORDER BY CREATED_AT DESC
+        SELECT
+        P.*,
+        NVL(ROUND(AVG(R.RATING), 1), 0) AS averageRating,
+        COUNT(R.REVIEW_ID) AS reviewCount
+        FROM PRODUCT P
+        LEFT JOIN PRODUCT_REVIEW R
+        ON P.PRODUCT_ID = R.PRODUCT_ID
+        GROUP BY
+        P.PRODUCT_ID,
+        P.CATEGORY_ID,
+        P.PRODUCT_NAME,
+        P.BRAND,
+        P.MODEL_NAME,
+        P.PRICE,
+        P.STOCK,
+        P.CPU,
+        P.RAM,
+        P.STORAGE_CAPACITY,
+        P.SCREEN_SIZE,
+        P.OS,
+        P.COLOR,
+        P.DESCRIPTION,
+        P.IMAGE_NAME,
+        P.IMAGE_PATH,
+        P.STATUS,
+        P.SALES_COUNT,
+        P.CREATED_AT,
+        P.UPDATED_AT
+        ORDER BY P.CREATED_AT DESC
         )
         WHERE ROWNUM <![CDATA[ <= ]]> 6
+
     </select>
 
     <update id="increaseSalesAndDecreaseStock">
-        UPDATE product
+        UPDATE PRODUCT
         SET
-        sales_count = NVL(sales_count, 0) + #{quantity},
-        stock = stock - #{quantity},
-        status = CASE
-        WHEN stock - #{quantity} &lt;= 0 THEN 'SOLD_OUT'
-        ELSE status
+        SALES_COUNT = NVL(SALES_COUNT, 0) + #{quantity},
+        STOCK = STOCK - #{quantity},
+        STATUS = CASE
+        WHEN STOCK - #{quantity} &lt;= 0 THEN 'SOLD_OUT'
+        ELSE STATUS
         END,
-        updated_at = SYSDATE
-        WHERE product_id = #{productId}
-        AND stock >= #{quantity}
+        UPDATED_AT = SYSDATE
+        WHERE PRODUCT_ID = #{productId}
+        AND STOCK >= #{quantity}
     </update>
 
     <update id="decreaseSalesAndIncreaseStock">
-        UPDATE product
+        UPDATE PRODUCT
         SET
-        sales_count = GREATEST(NVL(sales_count, 0) - #{quantity}, 0),
-        stock = stock + #{quantity},
-        status = CASE
-        WHEN stock + #{quantity} > 0 THEN 'SALE'
-        ELSE status
+        SALES_COUNT = GREATEST(NVL(SALES_COUNT, 0) - #{quantity}, 0),
+        STOCK = STOCK + #{quantity},
+        STATUS = CASE
+        WHEN STOCK + #{quantity} > 0 THEN 'SALE'
+        ELSE STATUS
         END,
-        updated_at = SYSDATE
-        WHERE product_id = #{productId}
+        UPDATED_AT = SYSDATE
+        WHERE PRODUCT_ID = #{productId}
     </update>
 
-
-
-        </mapper>
-
-
+</mapper>

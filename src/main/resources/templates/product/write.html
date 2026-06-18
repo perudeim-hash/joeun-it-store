@@ -40,7 +40,8 @@
                             <span class="label-text font-bold">카테고리</span>
                         </label>
 
-                        <select name="categoryId"
+                        <select id="categoryId"
+                                name="categoryId"
                                 class="select select-bordered w-full">
 
                             <option value="1">스마트폰</option>
@@ -51,7 +52,7 @@
                         </select>
                     </div>
 
-                    <div class="form-control">
+                    <div class="form-control spec-item">
                         <label class="label">
                             <span class="label-text font-bold">상품명</span>
                         </label>
@@ -64,14 +65,34 @@
                     </div>
 
                     <div class="form-control">
+
                         <label class="label">
                             <span class="label-text font-bold">브랜드</span>
                         </label>
 
+                        <select id="brandSelect"
+                                class="select select-bordered w-full">
+
+                            <option value="">선택</option>
+                            <option value="Samsung">Samsung</option>
+                            <option value="Apple">Apple</option>
+                            <option value="LG">LG</option>
+                            <option value="ASUS">ASUS</option>
+                            <option value="Lenovo">Lenovo</option>
+                            <option value="MSI">MSI</option>
+                            <option value="Logitech">Logitech</option>
+                            <option value="Anker">Anker</option>
+                            <option value="MOFT">MOFT</option>
+                            <option value="직접입력">직접입력</option>
+
+                        </select>
+
                         <input type="text"
+                               id="brandInput"
                                name="brand"
-                               class="input input-bordered w-full"
-                               placeholder="브랜드">
+                               class="input input-bordered w-full mt-2 hidden"
+                               placeholder="브랜드 입력">
+
                     </div>
 
                     <div class="form-control">
@@ -111,70 +132,178 @@
                                required>
                     </div>
 
-                    <div class="form-control">
+                    <div class="form-control spec-item">
+
                         <label class="label">
                             <span class="label-text font-bold">CPU</span>
                         </label>
 
+                        <select id="cpuSelect"
+                                class="select select-bordered w-full">
+
+                            <option value="">선택</option>
+                            <option value="Snapdragon 8 Elite">Snapdragon 8 Elite</option>
+                            <option value="Apple A18 Pro">Apple A18 Pro</option>
+                            <option value="Intel i3">Intel i3</option>
+                            <option value="Intel i5">Intel i5</option>
+                            <option value="Intel i7">Intel i7</option>
+                            <option value="Intel Ultra 7">Intel Ultra 7</option>
+                            <option value="AMD Ryzen 5">AMD Ryzen 5</option>
+                            <option value="AMD Ryzen 7">AMD Ryzen 7</option>
+                            <option value="직접입력">직접입력</option>
+
+                        </select>
+
                         <input type="text"
+                               id="cpu"
                                name="cpu"
-                               class="input input-bordered w-full"
-                               placeholder="CPU">
+                               class="input input-bordered w-full mt-2"
+                               placeholder="CPU 입력">
+
                     </div>
 
-                    <div class="form-control">
+                    <div class="form-control spec-item">
+
                         <label class="label">
                             <span class="label-text font-bold">RAM</span>
                         </label>
 
-                        <input type="text"
-                               name="ram"
-                               class="input input-bordered w-full"
-                               placeholder="RAM">
-                    </div>
+                        <select id="ramSelect"
+                                class="select select-bordered w-full">
 
-                    <div class="form-control">
+                            <option value="">선택</option>
+                            <option value="4GB">4GB</option>
+                            <option value="8GB">8GB</option>
+                            <option value="12GB">12GB</option>
+                            <option value="16GB">16GB</option>
+                            <option value="24GB">24GB</option>
+                            <option value="32GB">32GB</option>
+                            <option value="64GB">64GB</option>
+                            <option value="직접입력">직접입력</option>
+
+                        </select>
+
+                        <input type="text"
+                               id="ram"
+                               name="ram"
+                               class="input input-bordered w-full mt-2 hidden"
+                               placeholder="RAM 입력">
+
+                    </div>
+                    <div class="form-control spec-item">
+
                         <label class="label">
                             <span class="label-text font-bold">저장공간</span>
                         </label>
 
+                        <select id="storageSelect"
+                                class="select select-bordered w-full">
+
+                            <option value="">선택</option>
+                            <option value="64GB">64GB</option>
+                            <option value="128GB">128GB</option>
+                            <option value="256GB">256GB</option>
+                            <option value="512GB">512GB</option>
+                            <option value="1TB">1TB</option>
+                            <option value="2TB">2TB</option>
+                            <option value="직접입력">직접입력</option>
+
+                        </select>
+
                         <input type="text"
+                               id="storageCapacity"
                                name="storageCapacity"
-                               class="input input-bordered w-full"
-                               placeholder="저장공간">
+                               class="input input-bordered w-full mt-2"
+                               placeholder="저장공간 입력">
+
                     </div>
 
-                    <div class="form-control">
+                    <div class="form-control spec-item">
+
                         <label class="label">
                             <span class="label-text font-bold">화면크기</span>
                         </label>
 
+                        <select id="screenSizeSelect"
+                                class="select select-bordered w-full">
+
+                            <option value="">선택</option>
+                            <option value="6.1인치">6.1인치</option>
+                            <option value="6.7인치">6.7인치</option>
+                            <option value="10.9인치">10.9인치</option>
+                            <option value="11인치">11인치</option>
+                            <option value="12.9인치">12.9인치</option>
+                            <option value="13인치">13인치</option>
+                            <option value="14인치">14인치</option>
+                            <option value="15.6인치">15.6인치</option>
+                            <option value="16인치">16인치</option>
+                            <option value="직접입력">직접입력</option>
+
+                        </select>
+
                         <input type="text"
+                               id="screenSize"
                                name="screenSize"
-                               class="input input-bordered w-full"
-                               placeholder="화면크기">
+                               class="input input-bordered w-full mt-2 hidden"
+                               placeholder="화면크기 입력">
+
                     </div>
 
-                    <div class="form-control">
+                    <div class="form-control spec-item">
+
                         <label class="label">
                             <span class="label-text font-bold">운영체제</span>
                         </label>
 
-                        <input type="text"
-                               name="os"
-                               class="input input-bordered w-full"
-                               placeholder="운영체제">
-                    </div>
+                        <select id="osSelect"
+                                class="select select-bordered w-full">
 
+                            <option value="">선택</option>
+                            <option value="Android">Android</option>
+                            <option value="iOS">iOS</option>
+                            <option value="Windows 11">Windows 11</option>
+                            <option value="Windows 10">Windows 10</option>
+                            <option value="MacOS">MacOS</option>
+                            <option value="Linux">Linux</option>
+                            <option value="직접입력">직접입력</option>
+
+                        </select>
+
+                        <input type="text"
+                               id="os"
+                               name="os"
+                               class="input input-bordered w-full mt-2"
+                               placeholder="운영체제 입력">
+
+                    </div>
                     <div class="form-control">
+
                         <label class="label">
                             <span class="label-text font-bold">색상</span>
                         </label>
 
+                        <select id="colorSelect"
+                                class="select select-bordered w-full">
+
+                            <option value="">선택</option>
+                            <option value="블랙">블랙</option>
+                            <option value="화이트">화이트</option>
+                            <option value="실버">실버</option>
+                            <option value="골드">골드</option>
+                            <option value="블루">블루</option>
+                            <option value="그린">그린</option>
+                            <option value="퍼플">퍼플</option>
+                            <option value="핑크">핑크</option>
+                            <option value="직접입력">직접입력</option>
+
+                        </select>
+
                         <input type="text"
+                               id="color"
                                name="color"
-                               class="input input-bordered w-full"
-                               placeholder="색상">
+                               class="input input-bordered w-full mt-2"
+                               placeholder="색상 입력">
+
                     </div>
 
                 </div>
@@ -230,12 +359,23 @@
 
                 <div class="divider"></div>
 
-                <button type="submit"
-                        class="btn btn-primary btn-lg w-full">
+                <div class="flex gap-3">
 
-                    상품 등록
+                    <button type="submit"
+                            class="btn btn-primary btn-lg flex-1">
 
-                </button>
+                        상품 등록
+
+                    </button>
+
+                    <a href="/product/list"
+                       class="btn btn-neutral btn-lg">
+
+                        목록
+
+                    </a>
+
+                </div>
 
             </div>
 

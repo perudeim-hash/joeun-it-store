@@ -6,26 +6,177 @@ document.addEventListener("DOMContentLoaded", () => {
     const preview =
         document.querySelector("#preview");
 
-    imageFile.addEventListener("change", (e) => {
+    if(imageFile){
 
-        const file = e.target.files[0];
+        imageFile.addEventListener("change", (e) => {
 
-        if(!file){
+            const file = e.target.files[0];
+
+            if(!file){
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+
+                preview.src =
+                    event.target.result;
+
+                preview.classList.remove("hidden");
+            };
+
+            reader.readAsDataURL(file);
+
+        });
+    }
+
+    const category =
+        document.querySelector("#categoryId");
+
+    const specItems =
+        document.querySelectorAll(".spec-item");
+
+    function toggleSpec() {
+
+        const isEtc =
+            category.value === "4";
+
+        specItems.forEach(item => {
+
+            const inputs =
+                item.querySelectorAll("input");
+
+            inputs.forEach(input => {
+
+                input.readOnly =
+                    isEtc;
+
+            });
+
+        });
+
+    }
+
+    toggleSpec();
+
+    category.addEventListener(
+        "change",
+        toggleSpec
+    );
+
+
+
+    function setupCustomInput(
+        selectId,
+        inputId
+    ) {
+
+        const select =
+            document.querySelector(
+                "#" + selectId
+            );
+
+        const input =
+            document.querySelector(
+                "#" + inputId
+            );
+
+        if(!select || !input){
             return;
         }
 
-        const reader = new FileReader();
+        const changeInput = () => {
 
-        reader.onload = (event) => {
+            if(
+                select.value ===
+                "직접입력"
+            ) {
 
-            preview.src =
-                event.target.result;
+                input.classList.remove(
+                    "hidden"
+                );
 
-            preview.classList.remove("hidden");
+                input.value = "";
+
+            } else {
+
+                input.classList.add(
+                    "hidden"
+                );
+
+                input.value =
+                    select.value;
+
+            }
+
         };
 
-        reader.readAsDataURL(file);
+        changeInput();
 
-    });
+        select.addEventListener(
+            "change",
+            changeInput
+        );
 
+    }
+
+
+
+    setupCustomInput(
+        "brandSelect",
+        "brandInput"
+    );
+
+    setupCustomInput(
+        "cpuSelect",
+        "cpu"
+    );
+
+    setupCustomInput(
+        "storageSelect",
+        "storageCapacity"
+    );
+
+    setupCustomInput(
+        "osSelect",
+        "os"
+    );
+
+    setupCustomInput(
+        "colorSelect",
+        "color"
+    );
+
+    setupCustomInput(
+        "ramSelect",
+        "ram"
+    );
+
+    setupCustomInput(
+        "screenSizeSelect",
+        "screenSize"
+    );
+    const writeForm =
+        document.querySelector("#writeForm");
+
+    writeForm.addEventListener(
+        "submit",
+        (e) => {
+
+            if(!imageFile.files.length){
+
+                alert(
+                    "상품 이미지를 선택하세요."
+                );
+
+                imageFile.focus();
+
+                e.preventDefault();
+
+                return;
+            }
+
+        }
+    );
 });

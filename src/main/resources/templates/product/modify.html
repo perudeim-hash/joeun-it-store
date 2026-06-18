@@ -23,7 +23,6 @@
 
         <link rel="stylesheet" href="/css/common/head.css">
 
-
     </head>
 
     <body class="bg-base-200">
@@ -31,7 +30,7 @@
     <div th:replace="~{common/head :: head}"></div>
 
     <div class="container mx-auto p-10">
-
+        
         <h1 class="text-4xl font-bold mb-2">
             상품수정
         </h1>
@@ -115,10 +114,24 @@
                                         <span class="label-text">브랜드</span>
                                     </label>
 
+                                    <select id="brandSelect"
+                                            class="select select-bordered w-full">
+
+                                        <option value="Samsung">Samsung</option>
+                                        <option value="Apple">Apple</option>
+                                        <option value="LG">LG</option>
+                                        <option value="ASUS">ASUS</option>
+                                        <option value="Lenovo">Lenovo</option>
+                                        <option value="MSI">MSI</option>
+                                        <option value="직접입력">직접입력</option>
+
+                                    </select>
+
                                     <input type="text"
+                                           id="brandInput"
                                            name="brand"
                                            th:value="${product.brand}"
-                                           class="input input-bordered w-full">
+                                           class="input input-bordered w-full mt-2 hidden">
                                 </div>
 
                                 <div>
@@ -140,9 +153,6 @@
                                     <input type="number"
                                            name="price"
                                            th:value="${product.price}"
-                                           placeholder="가격"
-                                           min="0"
-                                           required
                                            class="input input-bordered w-full">
                                 </div>
 
@@ -154,10 +164,7 @@
                                     <input type="number"
                                            name="stock"
                                            th:value="${product.stock}"
-                                           placeholder="재고"
-                                           min="0"
-                                           required
-                                           class="input input-bordered w-full">
+                                           class="input input-bordered input-primary w-full">
                                 </div>
 
                                 <div>
@@ -165,10 +172,30 @@
                                         <span class="label-text">CPU</span>
                                     </label>
 
+                                    <select id="cpuSelect"
+                                            class="select select-bordered w-full">
+
+                                        <option value="">선택</option>
+                                        <option value="Intel i3">Intel i3</option>
+                                        <option value="Intel i5">Intel i5</option>
+                                        <option value="Intel i7">Intel i7</option>
+                                        <option value="Intel i9">Intel i9</option>
+                                        <option value="AMD Ryzen 5">AMD Ryzen 5</option>
+                                        <option value="AMD Ryzen 7">AMD Ryzen 7</option>
+                                        <option value="AMD Ryzen 9">AMD Ryzen 9</option>
+                                        <option value="Apple M1">Apple M1</option>
+                                        <option value="Apple M2">Apple M2</option>
+                                        <option value="Apple M3">Apple M3</option>
+                                        <option value="직접입력">직접입력</option>
+
+                                    </select>
+
                                     <input type="text"
+                                           id="cpu"
                                            name="cpu"
                                            th:value="${product.cpu}"
-                                           class="input input-bordered w-full">
+                                           class="input input-bordered w-full mt-2 hidden"
+                                           placeholder="CPU 입력">
                                 </div>
 
                                 <div>
@@ -176,10 +203,28 @@
                                         <span class="label-text">RAM</span>
                                     </label>
 
+                                    <select id="ramSelect"
+                                            class="select select-bordered w-full">
+
+                                        <option value="">선택</option>
+                                        <option value="4GB">4GB</option>
+                                        <option value="8GB">8GB</option>
+                                        <option value="12GB">12GB</option>
+                                        <option value="16GB">16GB</option>
+                                        <option value="24GB">24GB</option>
+                                        <option value="32GB">32GB</option>
+                                        <option value="64GB">64GB</option>
+                                        <option value="직접입력">직접입력</option>
+
+                                    </select>
+
                                     <input type="text"
+                                           id="ram"
                                            name="ram"
                                            th:value="${product.ram}"
-                                           class="input input-bordered w-full">
+                                           class="input input-bordered w-full mt-2 hidden"
+                                           placeholder="RAM 입력">
+
                                 </div>
 
                                 <div>
@@ -187,21 +232,59 @@
                                         <span class="label-text">저장공간</span>
                                     </label>
 
+                                    <select id="storageSelect"
+                                            class="select select-bordered w-full">
+
+                                        <option value="">선택</option>
+                                        <option value="128GB">128GB</option>
+                                        <option value="256GB">256GB</option>
+                                        <option value="512GB">512GB</option>
+                                        <option value="1TB">1TB</option>
+                                        <option value="2TB">2TB</option>
+                                        <option value="직접입력">직접입력</option>
+
+                                    </select>
+
                                     <input type="text"
+                                           id="storageCapacity"
                                            name="storageCapacity"
                                            th:value="${product.storageCapacity}"
-                                           class="input input-bordered w-full">
+                                           class="input input-bordered w-full mt-2 hidden"
+                                           placeholder="저장공간 입력">
+
                                 </div>
 
                                 <div>
-                                    <label class="label">
-                                        <span class="label-text">화면크기</span>
-                                    </label>
+                                    <div>
+                                        <label class="label">
+                                            <span class="label-text">화면크기</span>
+                                        </label>
 
-                                    <input type="text"
-                                           name="screenSize"
-                                           th:value="${product.screenSize}"
-                                           class="input input-bordered w-full">
+                                        <select id="screenSizeSelect"
+                                                class="select select-bordered w-full">
+
+                                            <option value="">선택</option>
+                                            <option value="6.1인치">6.1인치</option>
+                                            <option value="6.7인치">6.7인치</option>
+                                            <option value="10.9인치">10.9인치</option>
+                                            <option value="11인치">11인치</option>
+                                            <option value="12.9인치">12.9인치</option>
+                                            <option value="13인치">13인치</option>
+                                            <option value="14인치">14인치</option>
+                                            <option value="15.6인치">15.6인치</option>
+                                            <option value="16인치">16인치</option>
+                                            <option value="직접입력">직접입력</option>
+
+                                        </select>
+
+                                        <input type="text"
+                                               id="screenSize"
+                                               name="screenSize"
+                                               th:value="${product.screenSize}"
+                                               class="input input-bordered w-full mt-2 hidden"
+                                               placeholder="화면크기 입력">
+
+                                    </div>
                                 </div>
 
                                 <div>
@@ -209,10 +292,27 @@
                                         <span class="label-text">운영체제</span>
                                     </label>
 
+                                    <select id="osSelect"
+                                            class="select select-bordered w-full">
+
+                                        <option value="">선택</option>
+                                        <option value="Windows 11">Windows 11</option>
+                                        <option value="Windows 10">Windows 10</option>
+                                        <option value="MacOS">MacOS</option>
+                                        <option value="Android">Android</option>
+                                        <option value="iOS">iOS</option>
+                                        <option value="Linux">Linux</option>
+                                        <option value="직접입력">직접입력</option>
+
+                                    </select>
+
                                     <input type="text"
+                                           id="os"
                                            name="os"
                                            th:value="${product.os}"
-                                           class="input input-bordered w-full">
+                                           class="input input-bordered w-full mt-2 hidden"
+                                           placeholder="운영체제 입력">
+
                                 </div>
 
                                 <div>
@@ -220,10 +320,28 @@
                                         <span class="label-text">색상</span>
                                     </label>
 
+                                    <select id="colorSelect"
+                                            class="select select-bordered w-full">
+
+                                        <option value="">선택</option>
+                                        <option value="블랙">블랙</option>
+                                        <option value="화이트">화이트</option>
+                                        <option value="실버">실버</option>
+                                        <option value="골드">골드</option>
+                                        <option value="블루">블루</option>
+                                        <option value="핑크">핑크</option>
+                                        <option value="그린">그린</option>
+                                        <option value="직접입력">직접입력</option>
+
+                                    </select>
+
                                     <input type="text"
+                                           id="color"
                                            name="color"
                                            th:value="${product.color}"
-                                           class="input input-bordered w-full">
+                                           class="input input-bordered w-full mt-2 hidden"
+                                           placeholder="색상 입력">
+
                                 </div>
 
                             </div>
