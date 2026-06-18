@@ -33,6 +33,7 @@ public interface ProductMapper {
     List<ProductDto> getNewProducts();
 
 
+
     int getTotalCount();
 
     int getCategoryTotalCount(Integer categoryId);
@@ -43,6 +44,8 @@ public interface ProductMapper {
 
     int decreaseSalesAndIncreaseStock(@Param("productId") Integer productId,
                                       @Param("quantity") Integer quantity);
+
+
 
 
 }

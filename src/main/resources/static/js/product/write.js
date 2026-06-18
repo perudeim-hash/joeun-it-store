@@ -6,26 +6,70 @@ document.addEventListener("DOMContentLoaded", () => {
     const preview =
         document.querySelector("#preview");
 
-    imageFile.addEventListener("change", (e) => {
+    if(imageFile){
 
-        const file = e.target.files[0];
+        imageFile.addEventListener("change", (e) => {
 
-        if(!file){
-            return;
-        }
+            const file = e.target.files[0];
 
-        const reader = new FileReader();
+            if(!file){
+                return;
+            }
 
-        reader.onload = (event) => {
+            const reader = new FileReader();
 
-            preview.src =
-                event.target.result;
+            reader.onload = (event) => {
 
-            preview.classList.remove("hidden");
-        };
+                preview.src =
+                    event.target.result;
 
-        reader.readAsDataURL(file);
+                preview.classList.remove("hidden");
+            };
 
-    });
+            reader.readAsDataURL(file);
+
+        });
+    }
+
+    const category =
+        document.querySelector("#categoryId");
+
+    const specItems =
+        document.querySelectorAll(".spec-item");
+
+    function toggleSpec() {
+
+        const isEtc =
+            category.value === "4";
+
+        specItems.forEach(item => {
+
+            const inputs =
+                item.querySelectorAll("input, select");
+
+            if(isEtc){
+
+                item.classList.add("hidden");
+
+                inputs.forEach(input => {
+                    input.value = "";
+                });
+
+            } else {
+
+                item.classList.remove("hidden");
+
+            }
+
+        });
+
+    }
+
+    toggleSpec();
+
+    category.addEventListener(
+        "change",
+        toggleSpec
+    );
 
 });
