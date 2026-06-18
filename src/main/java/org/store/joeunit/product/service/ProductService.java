@@ -89,6 +89,9 @@ public class ProductService {
     public int decreaseSalesAndIncreaseStock(Integer productId, Integer quantity) {
         return productMapper.decreaseSalesAndIncreaseStock(productId, quantity);
     }
+    public  List<ProductDto> search(String keyword) {
+        return productMapper.search(keyword);
+    }
 
 
 }
