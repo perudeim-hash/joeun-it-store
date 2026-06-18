@@ -32,4 +32,7 @@ public interface BoardMapper {
 
     // ✨ 조회수 증가 ✨
     void updateHit(Long boardId);
+
+    // ✨ 고객센터 메인 화면에 띄울 FAQ 5개 가져오기 ✨
+    List<BoardDto> findTop5Faq();
 }

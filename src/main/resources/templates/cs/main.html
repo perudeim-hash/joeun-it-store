@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>고객센터</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" th:href="@{/css/common/head.css}">
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen pb-20">
+<div th:replace="~{common/head :: head}"></div>
+
+<div class="container mx-auto px-4 mt-12" style="max-width: 1000px;">
+
+    <div class="bg-blue-600 rounded-2xl p-10 text-center text-white shadow-md mb-10 relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-white opacity-10 rounded-full"></div>
+        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-white opacity-10 rounded-full"></div>
+
+        <h1 class="text-3xl font-extrabold mb-3 relative z-10">무엇을 도와드릴까요?</h1>
+        <p class="text-blue-100 mb-6 relative z-10">궁금한 점을 검색하시거나 아래 자주 묻는 질문을 확인해 주세요.</p>
+
+        <form action="/board/list" method="get" class="max-w-xl mx-auto relative z-10 flex w-full bg-white rounded-full p-1 shadow-lg items-center">
+            <input type="hidden" name="type" value="ALL">
+            <input type="hidden" name="searchType" value="titleContent">
+            <input type="text" name="keyword" placeholder="예) 배송조회, 환불, 비밀번호 찾기" class="flex-1 h-12 pl-6 pr-4 bg-transparent text-gray-800 outline-none w-full">
+            <button type="submit" class="bg-gray-900 hover:bg-black text-white px-8 rounded-full font-bold transition h-12 shrink-0">검색</button>
+        </form>
+    </div>
+
+    <h2 class="text-xl font-bold mb-4 text-gray-800">⚡ 자주 찾는 서비스</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        <a href="/order/list" class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-400 transition flex flex-col items-center justify-center gap-3 group">
+            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+            </div>
+            <span class="font-bold text-gray-700 group-hover:text-blue-600">주문/배송 조회</span>
+        </a>
+
+        <a href="/order/list" class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-400 transition flex flex-col items-center justify-center gap-3 group">
+            <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z" /></svg>
+            </div>
+            <span class="font-bold text-gray-700 group-hover:text-purple-600">취소/교환/반품</span>
+        </a>
+
+        <a href="/board/write?type=INQUIRY" class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-400 transition flex flex-col items-center justify-center gap-3 group">
+            <div class="w-14 h-14 bg-green-50 text-green-600 rounded-full flex items-center justify-center group-hover:bg-green-600 group-hover:text-white transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+            </div>
+            <span class="font-bold text-gray-700 group-hover:text-green-600">1:1 문의하기</span>
+        </a>
+
+        <a href="/board/list?type=NOTICE" class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-400 transition flex flex-col items-center justify-center gap-3 group">
+            <div class="w-14 h-14 bg-red-50 text-red-500 rounded-full flex items-center justify-center group-hover:bg-red-500 group-hover:text-white transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" /></svg>
+            </div>
+            <span class="font-bold text-gray-700 group-hover:text-red-500">공지사항</span>
+        </a>
+    </div>
+
+    <div class="flex justify-between items-end mb-4 border-b-2 border-gray-800 pb-2">
+        <div class="flex items-center gap-3">
+            <h2 class="text-xl font-bold text-gray-800">💡 자주 묻는 질문 (Top 5)</h2>
+            <a th:if="${session.loggedMember != null and session.loggedMember.role == 'ADMIN'}" href="/board/list?type=FAQ" class="btn btn-sm btn-error text-white font-bold">🛠️ FAQ 관리</a>
+        </div>
+        <a href="/board/list?type=FAQ" class="text-sm text-gray-500 hover:text-blue-600 font-bold">전체보기 &gt;</a>
+    </div>
+
+    <div th:if="${faqList != null and !faqList.isEmpty()}" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-8">
+        <div th:each="faq, stat : ${faqList}" class="collapse collapse-arrow border-b border-gray-100 rounded-none">
+            <input type="radio" name="faq-accordion" th:checked="${stat.index == 0 ? 'checked' : null}" />
+            <div class="collapse-title text-base font-bold text-gray-800">
+                <span class="text-blue-600 mr-2">Q.</span> <span th:text="${faq.title}">질문 제목</span>
+            </div>
+            <div class="collapse-content bg-gray-50 text-gray-600 pt-4">
+                <p th:text="${faq.content}" style="white-space: pre-wrap; word-break: break-all;">답변 내용</p>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${faqList == null or faqList.isEmpty()}" class="bg-white rounded-xl border border-gray-200 shadow-sm p-10 text-center text-gray-500 mb-8 font-bold">
+        등록된 자주 묻는 질문이 없습니다. (관리자가 게시판에서 FAQ를 작성하면 여기에 표시됩니다)
+    </div>
+
+    <div class="bg-gray-100 p-8 rounded-xl flex flex-col md:flex-row items-center justify-between gap-6 border border-gray-200">
+        <div>
+            <div class="flex items-center gap-3 mb-1">
+                <h3 class="text-2xl font-extrabold text-gray-900" th:text="'☎ ' + ${siteSettings != null ? siteSettings.csPhone : '1588-0000'}">☎ 1588-0000</h3>
+                <a th:if="${session.loggedMember != null and session.loggedMember.role == 'ADMIN'}" href="/admin/settings" class="btn btn-sm btn-error text-white font-bold">🛠️ 정보 수정</a>
+            </div>
+            <p class="text-sm font-bold text-gray-500" th:text="'운영시간 : ' + ${siteSettings != null ? siteSettings.csTime : '평일 09:00 ~ 18:00 (점심시간 12:00 ~ 13:00)'}">운영시간 : 평일 09:00 ~ 18:00</p>
+            <p class="text-sm font-bold text-gray-500" th:text="${siteSettings != null ? siteSettings.csHoliday : '주말 및 공휴일 휴무'}">주말 및 공휴일 휴무</p>
+        </div>
+        <div class="text-right mt-4 md:mt-0">
+            <p class="text-sm text-gray-600 mb-2">통화량이 많아 연결이 어려울 경우 1:1 문의를 이용해 주세요.</p>
+            <a href="/board/write?type=INQUIRY" class="btn btn-outline btn-sm font-bold text-gray-700">1:1 문의 쓰기</a>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

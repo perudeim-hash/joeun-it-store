@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>고객센터 설정 (관리자)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" th:href="@{/css/common/head.css}">
+</head>
+<body class="bg-gray-50 min-h-screen">
+<div th:replace="~{common/head :: head}"></div>
+
+<div class="container mx-auto px-4 mt-12 mb-20" style="max-width: 600px;">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-3">⚙️ 고객센터 정보 수정 (관리자 전용)</h2>
+
+    <form action="/admin/settings/update" method="post" class="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+        <div class="mb-5">
+            <label class="block text-gray-700 font-bold mb-2">고객센터 전화번호</label>
+            <input type="text" name="csPhone" th:value="${siteSettings != null ? siteSettings.csPhone : ''}" class="w-full border border-gray-300 rounded px-4 py-2 outline-none focus:border-blue-500" required>
+        </div>
+        <div class="mb-5">
+            <label class="block text-gray-700 font-bold mb-2">운영시간</label>
+            <input type="text" name="csTime" th:value="${siteSettings != null ? siteSettings.csTime : ''}" class="w-full border border-gray-300 rounded px-4 py-2 outline-none focus:border-blue-500" required>
+        </div>
+        <div class="mb-8">
+            <label class="block text-gray-700 font-bold mb-2">휴무일 안내</label>
+            <input type="text" name="csHoliday" th:value="${siteSettings != null ? siteSettings.csHoliday : ''}" class="w-full border border-gray-300 rounded px-4 py-2 outline-none focus:border-blue-500" required>
+        </div>
+        <div class="flex justify-end gap-3">
+            <a href="/cs/main" class="px-6 py-2 border border-gray-300 rounded text-gray-700 font-bold hover:bg-gray-50">취소</a>
+            <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-bold shadow">수정 저장</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

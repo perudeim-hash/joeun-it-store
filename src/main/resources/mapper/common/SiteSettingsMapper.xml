@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.store.joeunit.common.mapper.SiteSettingsMapper">
+
+    <select id="getSettings" resultType="org.store.joeunit.common.dto.SiteSettingsDto">
+        <![CDATA[
+        SELECT * FROM site_settings WHERE ROWNUM <= 1
+        ]]>
+    </select>
+
+    <update id="updateSettings" parameterType="org.store.joeunit.common.dto.SiteSettingsDto">
+        UPDATE site_settings
+        SET cs_phone = #{csPhone}, cs_time = #{csTime}, cs_holiday = #{csHoliday}
+        WHERE setting_id = 1
+    </update>
+
+</mapper>
