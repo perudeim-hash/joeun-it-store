@@ -53,6 +53,41 @@ document.addEventListener("DOMContentLoaded", () => {
         const isEtc =
             category.value === "4";
 
+        const cpuSelect =
+            document.querySelector("#cpuSelect");
+
+        const ramSelect =
+            document.querySelector("#ramSelect");
+
+        const storageSelect =
+            document.querySelector("#storageSelect");
+
+        const screenSizeSelect =
+            document.querySelector("#screenSizeSelect");
+
+        const osSelect =
+            document.querySelector("#osSelect");
+
+        if(cpuSelect){
+            cpuSelect.disabled = isEtc;
+        }
+
+        if(ramSelect){
+            ramSelect.disabled = isEtc;
+        }
+
+        if(storageSelect){
+            storageSelect.disabled = isEtc;
+        }
+
+        if(screenSizeSelect){
+            screenSizeSelect.disabled = isEtc;
+        }
+
+        if(osSelect){
+            osSelect.disabled = isEtc;
+        }
+
         cpu.readOnly = isEtc;
 
         ram.readOnly = isEtc;
@@ -62,9 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         screenSize.readOnly = isEtc;
 
         os.readOnly = isEtc;
-
     }
-
     toggleSpec();
 
     category.addEventListener(

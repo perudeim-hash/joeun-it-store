@@ -45,12 +45,23 @@ document.addEventListener("DOMContentLoaded", () => {
         specItems.forEach(item => {
 
             const inputs =
-                item.querySelectorAll("input");
+                item.querySelectorAll(
+                    "input, select"
+                );
 
             inputs.forEach(input => {
 
-                input.readOnly =
-                    isEtc;
+                if(input.tagName === "SELECT"){
+
+                    input.disabled =
+                        isEtc;
+
+                } else {
+
+                    input.readOnly =
+                        isEtc;
+
+                }
 
             });
 
