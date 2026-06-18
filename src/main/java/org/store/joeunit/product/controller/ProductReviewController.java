@@ -28,13 +28,16 @@ public class ProductReviewController {
             return "redirect:/member/login";
         }
 
+        boolean isAdmin =
+                "ADMIN".equals(loginMember.getRole());
+
         boolean purchased =
                 productReviewService.hasPurchased(
                         loginMember.getMemberId(),
                         productReviewDto.getProductId()
                 );
 
-        if (!purchased) {
+        if (!isAdmin && !purchased) {
             redirectAttributes.addFlashAttribute(
                     "reviewError",
                     "이 상품을 구매한 회원만 리뷰를 작성할 수 있습니다."

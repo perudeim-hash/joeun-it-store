@@ -49,31 +49,52 @@ a {
     color: #0066cc;
 }
 
+/* 검색창 */
 .search-box {
     display: flex;
+    align-items: stretch;
     width: 430px;
     height: 42px;
     margin-left: 80px;
     border: 2px solid #1f73d1;
     border-radius: 2px;
     overflow: hidden;
+    background-color: #fff;
 }
 
+/* 검색 input */
 .search-input {
     flex: 1;
+    height: 100%;
     border: none;
     padding: 0 14px;
     font-size: 14px;
     outline: none;
 }
 
+/* 검색 버튼 */
 .search-button {
     width: 52px;
+    height: 100%;
     border: none;
     background-color: #1f73d1;
     color: #fff;
-    font-size: 18px;
     cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+}
+
+/* 돋보기 아이콘 */
+.search-button svg {
+    display: block;
+    width: 21px;
+    height: 21px;
 }
 
 .search-button:hover {
@@ -193,8 +214,6 @@ a {
     line-height: 1;
     letter-spacing: 0.5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-
-    /* 텍스트 중앙 정렬 보정 */
     transform: translateY(2px);
 }
 

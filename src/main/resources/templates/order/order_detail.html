@@ -2,117 +2,139 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <title>주문 상세 내역</title>
+    <title>주문 상세</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" th:href="@{/css/common/head.css}">
     <link rel="stylesheet" th:href="@{/css/order/order_detail.css}">
     <script th:src="@{/js/order/order_list.js}" defer></script>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="bg-gray-50 text-gray-900 min-h-screen">
 <div th:replace="~{common/head :: head}"></div>
 
-<main class="detail-container">
+<main class="container mx-auto px-4 mt-12 mb-20" style="max-width: 900px;">
+
     <div class="flex justify-between items-end mb-6 border-b-2 border-gray-800 pb-4">
         <h2 class="text-3xl font-extrabold text-gray-900">📄 주문 상세 내역</h2>
         <span class="text-lg font-bold text-gray-500">주문번호 #[[${order.orderId}]]</span>
     </div>
 
-    <section class="mb-8 p-6 bg-white rounded-xl shadow-sm border border-gray-200">
-        <h3 class="section-title">주문 정보</h3>
-        <div class="info-grid">
-            <span class="info-label">주문 일자</span>
-            <span class="info-value" th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+    <!-- ✨ 추가된 진행 상태 표시 (Stepper) ✨ -->
+    <div class="mb-10 w-full">
+        <ul class="steps steps-vertical lg:steps-horizontal w-full font-bold text-sm text-gray-500">
+            <li class="step step-primary">주문 접수</li>
+            <li class="step" th:classappend="${order.orderStatus != 'ORDER_CANCEL'} ? 'step-primary' : ''">결제 완료</li>
+            <li class="step">상품 준비중</li>
+            <li class="step">배송 완료</li>
+        </ul>
+    </div>
 
-            <span class="info-label">주문 상태</span>
-            <span class="info-value font-bold text-blue-600" th:text="${order.orderStatus}"></span>
+    <!-- 취소 알림창 -->
+    <div th:if="${order.orderStatus == 'ORDER_CANCEL'}" class="alert alert-error text-white font-bold mb-8 shadow-sm rounded-xl">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>고객님의 요청으로 취소 처리된 주문입니다.</span>
+    </div>
 
-            <span class="info-label">회원 등급</span>
-            <span class="info-value text-lg font-black tracking-wide"
+    <section class="mb-8 p-8 bg-white rounded-xl shadow-sm border border-gray-200">
+        <h3 class="text-xl font-bold mb-6 text-gray-800 border-b pb-2">주문자 정보</h3>
+        <div class="grid grid-cols-[100px_1fr] gap-y-4 text-gray-700">
+            <span class="font-bold text-gray-500">주문일시</span>
+            <span class="font-medium" th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+
+            <span class="font-bold text-gray-500">현재상태</span>
+            <span class="font-extrabold" th:classappend="${order.orderStatus == 'ORDER_CANCEL'} ? 'text-red-500' : 'text-blue-600'" th:text="${order.orderStatus}"></span>
+
+            <span class="font-bold text-gray-500">회원등급</span>
+            <span class="font-extrabold text-lg uppercase tracking-wide"
                   th:classappend="${order.memberMembership != null ? 'text-grade-' + #strings.toLowerCase(order.memberMembership) : 'text-grade-bronze'}"
                   th:text="${order.memberMembership}">
             </span>
         </div>
     </section>
 
-    <section class="mb-8 p-6 bg-white rounded-xl shadow-sm border border-gray-200">
-        <h3 class="section-title">주문 상품</h3>
-        <div class="overflow-x-auto">
+    <section class="mb-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <h3 class="text-xl font-bold p-6 pb-2 text-gray-800">주문 상품</h3>
+        <div class="overflow-x-auto p-4">
             <table class="table w-full">
-                <thead class="bg-gray-50 text-gray-700 text-center text-sm border-b-2 border-gray-200">
+                <thead class="bg-gray-50 text-gray-600 text-center font-bold border-b-2 border-gray-200">
                 <tr>
-                    <th class="py-3">상품명</th>
-                    <th class="py-3">단가</th>
+                    <th class="py-3 text-left pl-6">상품명</th>
+                    <th class="py-3">판매가</th>
                     <th class="py-3">수량</th>
                     <th class="py-3">합계</th>
                 </tr>
                 </thead>
                 <tbody class="text-center">
-                <tr th:each="item : ${order.orderItems}" class="border-b border-gray-100 hover:bg-gray-50">
-                    <td class="font-bold text-gray-900 py-4 text-left pl-4" th:text="${item.productName}"></td>
-                    <td class="text-gray-600" th:text="${#numbers.formatInteger(item.orderPrice, 1, 'COMMA')} + '원'"></td>
-                    <td class="font-bold" th:text="${item.quantity} + '개'"></td>
-                    <td class="font-extrabold text-gray-900" th:text="${#numbers.formatInteger(item.itemTotalPrice, 1, 'COMMA')} + '원'"></td>
+                <tr th:each="item : ${order.orderItems}" class="border-b border-gray-100 hover:bg-gray-50 transition">
+                    <td class="font-bold text-gray-900 py-5 text-left pl-6" th:text="${item.productName}"></td>
+                    <td class="text-gray-600" th:text="${#numbers.formatInteger(item.orderPrice, 1, 'COMMA')} + ' 원'"></td>
+                    <td class="font-bold bg-gray-50 rounded-md" th:text="${item.quantity} + ' 개'"></td>
+                    <td class="font-extrabold text-gray-900 text-lg" th:text="${#numbers.formatInteger(item.itemTotalPrice, 1, 'COMMA')} + ' 원'"></td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </section>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <section class="p-6 bg-white rounded-xl shadow-sm border border-gray-200">
-            <h3 class="section-title">배송지 정보</h3>
-            <div class="info-grid mt-4">
-                <span class="info-label">수령인</span>
-                <span class="info-value" th:text="${order.receiverName}"></span>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- 배송 정보 -->
+        <section class="p-8 bg-white rounded-xl shadow-sm border border-gray-200">
+            <h3 class="text-xl font-bold mb-6 text-gray-800 border-b pb-2">배송지 정보</h3>
+            <div class="grid grid-cols-[80px_1fr] gap-y-4 text-gray-700">
+                <span class="font-bold text-gray-500">수령인</span>
+                <span class="font-medium" th:text="${order.receiverName}"></span>
 
-                <span class="info-label">연락처</span>
-                <span class="info-value" th:text="${order.receiverPhone}"></span>
+                <span class="font-bold text-gray-500">연락처</span>
+                <span class="font-medium" th:text="${order.receiverPhone}"></span>
 
-                <span class="info-label">배송 주소</span>
-                <span class="info-value break-words">
-                    <span class="text-sm text-gray-500 block mb-1" th:if="${order.zipcode != null and order.zipcode != 'null' and order.zipcode != ''}" th:text="'[' + ${order.zipcode} + ']'"></span>
+                <span class="font-bold text-gray-500">주소</span>
+                <span class="font-medium break-words leading-relaxed">
+                    <span class="inline-block bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs mb-1 font-bold" th:if="${order.zipcode != null and order.zipcode != 'null' and order.zipcode != ''}" th:text="${order.zipcode}"></span><br>
                     [[${order.address}]] [[${order.detailAddress}]]
                 </span>
             </div>
         </section>
 
-        <section class="p-6 bg-blue-50 rounded-xl shadow-sm border border-blue-100 flex flex-col justify-center">
-            <h3 class="section-title text-blue-900 border-b-2 border-blue-200">결제 요약</h3>
-            <div class="flex justify-between items-center mt-4 mb-2">
-                <span class="text-gray-600 font-bold">총 상품 금액</span>
-                <span class="text-lg font-bold" th:text="${#numbers.formatInteger(order.totalPrice, 1, 'COMMA')} + '원'"></span>
+        <!-- 결제 금액 정보 (영수증 스타일) -->
+        <section class="p-8 bg-slate-800 rounded-xl shadow-lg border border-slate-700 flex flex-col justify-center text-white relative overflow-hidden">
+            <!-- 영수증 장식용 패턴 -->
+            <div class="absolute top-0 left-0 w-full h-2 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCI+PHBhdGggZD0iTTAgMTBMNSAwTDEwIDEwWSIgZmlsbD0iI2Y4ZmFmYyIvPjwvc3ZnPg==')] rotate-180"></div>
+
+            <h3 class="text-xl font-bold text-blue-300 border-b border-slate-600 pb-3 mb-6">결제 상세</h3>
+
+            <div class="flex justify-between items-center mb-3">
+                <span class="text-gray-300 font-medium">총 상품 금액</span>
+                <span class="text-lg font-bold" th:text="${#numbers.formatInteger(order.totalPrice, 1, 'COMMA')} + ' 원'"></span>
             </div>
 
-            <div class="flex justify-between items-center mb-4 text-red-500">
-                <span class="font-bold">등급 할인 금액</span>
-
-                <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded text-xs font-bold bg-red-100 text-red-600"
+            <div class="flex justify-between items-center mb-5">
+                <span class="text-gray-300 font-medium">등급 할인
+                    <span class="ml-1 px-2 py-0.5 rounded text-xs font-bold bg-blue-500 text-white"
                           th:if="${order.totalPrice > order.finalPrice}"
                           th:text="${#strings.toUpperCase(order.memberMembership) == 'VIP' ? '10%' :
                                     #strings.toUpperCase(order.memberMembership) == 'GOLD' ? '5%' :
                                     #strings.toUpperCase(order.memberMembership) == 'SILVER' ? '3%' :
                                     #strings.toUpperCase(order.memberMembership) == 'BRONZE' ? '1%' : '0%'} + ' 할인'">
                     </span>
-                    <span class="font-bold" th:text="'-' + ${#numbers.formatInteger(order.totalPrice - order.finalPrice, 1, 'COMMA')} + '원'"></span>
-                </div>
+                </span>
+                <span class="font-bold text-red-400" th:text="'- ' + ${#numbers.formatInteger(order.totalPrice - order.finalPrice, 1, 'COMMA')} + ' 원'"></span>
             </div>
 
-            <div class="divider my-1 border-blue-200"></div>
-            <div class="flex justify-between items-center mt-2">
-                <span class="text-xl font-extrabold text-gray-900">최종 결제 금액</span>
-                <span class="text-3xl font-extrabold text-blue-700" th:text="${#numbers.formatInteger(order.finalPrice, 1, 'COMMA')} + '원'"></span>
+            <div class="border-t border-slate-600 border-dashed my-4"></div>
+
+            <div class="flex justify-between items-end mt-2">
+                <span class="text-lg font-medium text-gray-300">최종 결제 금액</span>
+                <span class="text-4xl font-extrabold text-yellow-400" th:text="${#numbers.formatInteger(order.finalPrice, 1, 'COMMA')} + ' 원'"></span>
             </div>
         </section>
     </div>
 
-    <div class="flex justify-center gap-3">
-        <a href="/order/list" class="btn btn-outline btn-wide text-lg h-12">주문 목록으로</a>
+    <div class="flex justify-center gap-4 mt-10">
+        <a href="/order/list" class="btn btn-outline btn-wide font-bold h-12">목록으로 돌아가기</a>
         <button type="button" th:if="${order.orderStatus != 'ORDER_CANCEL'}"
-                class="btn bg-red-500 hover:bg-red-600 text-white border-none btn-wide text-lg h-12"
+                class="btn bg-red-500 hover:bg-red-600 text-white border-none btn-wide font-bold h-12 shadow-md"
                 th:attr="onclick=|cancelOrder('${order.orderId}')|">
-            이 주문 취소하기
+            주문 취소하기
         </button>
     </div>
 </main>
