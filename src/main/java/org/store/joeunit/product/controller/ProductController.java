@@ -103,6 +103,9 @@ public class ProductController {
         boolean hasReviewed = false;
 
         if (loginMember != null) {
+            boolean isAdmin =
+                    "ADMIN".equals(loginMember.getRole());
+
             boolean hasPurchased =
                     productReviewService.hasPurchased(
                             loginMember.getMemberId(),
@@ -115,7 +118,7 @@ public class ProductController {
                             productId
                     );
 
-            canWriteReview = hasPurchased && !hasReviewed;
+            canWriteReview = (isAdmin || hasPurchased) && !hasReviewed;
         }
 
         model.addAttribute("canWriteReview", canWriteReview);

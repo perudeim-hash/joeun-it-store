@@ -7,24 +7,19 @@
     <meta charset="UTF-8">
     <title>상품목록</title>
 
-    <!-- DaisyUI -->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet"/>
 
-    <!-- 공통 헤더 -->
     <link rel="stylesheet" href="/css/common/head.css">
 
-    <!-- Tailwind -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
 <body class="bg-base-200">
 
-<!-- 공통 헤더 -->
 <div th:replace="~{common/head :: head}"></div>
 
 <div class="max-w-[1400px] mx-auto mt-10 flex gap-8">
 
-    <!-- 왼쪽 메뉴 -->
     <div class="w-64 shrink-0">
 
         <div class="card bg-base-100 shadow-xl">
@@ -42,7 +37,6 @@
                     상품목록
                 </a>
 
-                <!-- ADMIN 회원만 상품등록 버튼 표시 -->
                 <a href="/product/write"
                    class="btn btn-outline btn-success w-full"
                    th:if="${session.loggedMember != null and session.loggedMember.role == 'ADMIN'}">
@@ -55,7 +49,6 @@
 
     </div>
 
-    <!-- 오른쪽 영역 -->
     <div class="flex-1 min-w-0">
 
         <div class="mb-6">
@@ -66,7 +59,6 @@
 
         </div>
 
-        <!-- 카테고리 버튼 -->
         <div class="flex gap-2 mb-8">
 
             <a href="/product/list"
@@ -96,7 +88,6 @@
 
         </div>
 
-        <!-- 상품 목록 -->
         <div id="productList"
              class="grid grid-cols-4 gap-6">
 
@@ -123,34 +114,34 @@
                         <span th:text="${product.productName}">
                             상품명
                         </span>
-                        <div class="flex items-center gap-2 mt-2">
 
-                            <div class="text-yellow-400 text-sm">
+                    </a>
 
-        <span th:each="i : ${#numbers.sequence(1,5)}"
-              th:text="${i <= product.averageRating ? '★' : '☆'}">
-        </span>
+                    <div class="flex items-center gap-2 mt-1">
 
-                            </div>
+                        <div class="text-yellow-500 text-sm tracking-tight">
 
-                            <span class="text-xs text-gray-500">
-
-        <span th:text="${product.averageRating}">
-            0.0
-        </span>
-
-        /
-
-        리뷰
-        <span th:text="${product.reviewCount}">
-            0
-        </span>
-
-    </span>
+                            <span th:each="i : ${#numbers.sequence(1,5)}"
+                                  th:text="${i <= product.averageRating ? '★' : '☆'}">
+                            </span>
 
                         </div>
 
-                    </a>
+                        <span class="text-xs text-gray-500">
+
+                            <span th:text="${product.averageRating}">
+                                0.0
+                            </span>
+
+                            점 / 리뷰
+
+                            <span th:text="${product.reviewCount}">
+                                0
+                            </span>
+
+                        </span>
+
+                    </div>
 
                     <div class="text-sm text-gray-500">
 
@@ -195,7 +186,6 @@
 
         </div>
 
-        <!-- 상품이 없을 때 -->
         <div th:if="${productList == null or #lists.isEmpty(productList)}"
              class="card bg-base-100 shadow-md mt-8">
 
@@ -228,7 +218,8 @@
                 이전
             </a>
 
-            <th:block th:each="pageNum : ${#numbers.sequence(1, totalPage)}">
+            <th:block th:if="${totalPage > 0}"
+                      th:each="pageNum : ${#numbers.sequence(1, totalPage)}">
 
                 <a th:href="@{/product/list(page=${pageNum}, categoryId=${categoryId})}"
                    class="btn btn-sm"
