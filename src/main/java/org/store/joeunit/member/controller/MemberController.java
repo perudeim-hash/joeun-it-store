@@ -274,6 +274,15 @@ public class MemberController {
             return "redirect:/member/change-password";
         }
 
+        if (currentPassword.equals(newPassword)) {
+            redirectAttributes.addFlashAttribute(
+                    "message",
+                    "새 비밀번호는 현재 비밀번호와 다르게 입력해야 합니다."
+            );
+
+            return "redirect:/member/change-password";
+        }
+
         if (!newPassword.equals(newPasswordConfirm)) {
             redirectAttributes.addFlashAttribute(
                     "message",
