@@ -21,6 +21,39 @@ import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
+
+/**
+ * ProductController
+ *
+ * 상품 관련 요청(Request)을 처리하는 Controller
+ *
+ * 사용자가 상품목록, 상품상세, 상품등록,
+ * 상품수정, 상품삭제를 요청하면
+ * ProductService를 호출하여 처리한다.
+ *
+ * 주요 기능
+ * 1. 상품목록 조회
+ * 2. 카테고리별 상품조회
+ * 3. 상품상세 조회
+ * 4. 상품등록
+ * 5. 상품수정
+ * 6. 상품삭제
+ * 7. 이미지 업로드 처리
+ * 8. 페이징 처리
+ * 9. AJAX 카테고리 조회
+ *
+ * 동작 구조
+ *
+ * Browser
+ *      ↓
+ * ProductController
+ *      ↓
+ * ProductService
+ *      ↓
+ * ProductMapper
+ *      ↓
+ * Oracle Database
+ */
 public class ProductController {
 
     private final ProductService productService;
@@ -46,11 +79,25 @@ public class ProductController {
             totalCount = productService.getCategoryTotalCount(categoryId);
         }
 
-        int totalPage = (int) Math.ceil((double) totalCount / 8);
+        int totalPage =
+                (int)Math.ceil((double) totalCount / 8);
+
+        int pageBlock = 5;
+
+        int startPage =
+                ((page - 1) / pageBlock) * pageBlock + 1;
+
+        int endPage =
+                Math.min(
+                        startPage + pageBlock - 1,
+                        totalPage
+                );
 
         model.addAttribute("productList", productDtoList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPage", totalPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         model.addAttribute("categoryId", categoryId);
 
         return "product/list";
@@ -253,6 +300,8 @@ public class ProductController {
 
         return "redirect:/product/list";
     }
+
+
     @GetMapping("/product/category/{categoryId}")
     @ResponseBody
     public Map<String, Object> categoryId(@PathVariable Integer categoryId, @RequestParam(defaultValue = "1") int page) {
@@ -276,6 +325,20 @@ public class ProductController {
         result.put("productList", productList);
         result.put("currentPage", page);
         result.put("totalPage", totalPage);
+        int pageBlock = 5;
+
+        int startPage =
+                ((page - 1) / pageBlock) * pageBlock + 1;
+
+        int endPage =
+                Math.min(
+                        startPage + pageBlock - 1,
+                        totalPage
+                );
+
+        result.put("startPage", startPage);
+        result.put("endPage", endPage);
+
 
         return result;
     }

@@ -4,133 +4,95 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
-
-/*
- * 상품 DTO
- * PRODUCT 테이블 매핑
- */
-
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+
+/**
+ * ProductDto
+ *
+ * 상품 정보를 저장하는 DTO(Data Transfer Object)
+ *
+ * PRODUCT 테이블과 매핑된다.
+ *
+ * 주요 데이터
+ * - 상품번호(productId)
+ * - 카테고리(categoryId)
+ * - 상품명(productName)
+ * - 브랜드(brand)
+ * - 모델명(modelName)
+ * - 가격(price)
+ * - 재고(stock)
+ * - CPU(cpu)
+ * - RAM(ram)
+ * - 저장공간(storageCapacity)
+ * - 화면크기(screenSize)
+ * - 운영체제(os)
+ * - 색상(color)
+ * - 상품설명(description)
+ * - 이미지(imageName, imagePath)
+ * - 판매량(salesCount)
+ * - 평균평점(averageRating)
+ * - 리뷰개수(reviewCount)
+ *
+ * 계층 간 데이터 전달용 객체
+ *
+ * Controller
+ *      ↓
+ * Service
+ *      ↓
+ * Mapper
+ */
 public class ProductDto {
 
-    /*
-     * 상품번호
-     */
     private Integer productId;
 
-    /*
-     * 카테고리번호
-     */
     private Integer categoryId;
 
-    /*
-     * 카테고리명
-     */
     private String categoryName;
 
-    /*
-     * 상품명
-     */
     private String productName;
 
-    /*
-     * 제조사
-     */
     private String brand;
 
-    /*
-     * 모델명
-     */
     private String modelName;
 
-    /*
-     * 가격
-     */
     private Integer price;
 
-    /*
-     * 재고
-     */
     private Integer stock;
 
-    /*
-     * CPU
-     */
     private String cpu;
 
-    /*
-     * RAM
-     */
     private String ram;
 
-    /*
-     * 저장공간
-     */
     private String storageCapacity;
 
-    /*
-     * 화면크기
-     */
     private String screenSize;
 
-    /*
-     * 운영체제
-     */
     private String os;
 
-    /*
-     * 색상
-     */
     private String color;
 
-    /*
-     * 상품설명
-     */
     private String description;
 
-    /*
-     * 이미지 파일명
-     */
     private String imageName;
 
-    /*
-     * 이미지 경로
-     */
     private String imagePath;
 
-    /*
-     * 업로드 파일
-     */
     private MultipartFile upload;
 
-    /*
-     * 상품상태
-     * SALE
-     * SOLD_OUT
-     * STOP
-     */
     private String status;
 
-    /*
-     * 등록일
-     */
     private Date createdAt;
 
-    /*
-     * 수정일
-     */
     private Date updatedAt;
-
 
     private Integer salesCount;
 
     private Double averageRating;
+
     private Integer reviewCount;
 }
-
-

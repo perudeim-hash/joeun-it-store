@@ -12,7 +12,38 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-
+    /**
+     * ProductService
+     *
+     * 상품 관련 비즈니스 로직을 처리하는 Service 계층
+     *
+     * Controller는 요청을 받고
+     * Service는 실제 업무 로직을 처리한다.
+     *
+     * 주요 기능
+     * 1. 상품 목록 조회
+     * 2. 카테고리별 상품 조회
+     * 3. 상품 상세 조회
+     * 4. 상품 등록
+     * 5. 상품 수정
+     * 6. 상품 삭제
+     * 7. 상품 개수 조회
+     * 8. 페이징 처리
+     * 9. 베스트 상품 조회
+     * 10. 신규 상품 조회
+     * 11. 재고 증가/감소 처리
+     * 12. 판매량 증가/감소 처리
+     *
+     * 동작 구조
+     *
+     * ProductController
+     *        ↓
+     * ProductService
+     *        ↓
+     * ProductMapper
+     *        ↓
+     * Database
+     */
     private final ProductMapper productMapper;
 
     public List<ProductDto> getList() {

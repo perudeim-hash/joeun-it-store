@@ -219,33 +219,57 @@
             </div>
 
         </div>
-
         <div id="paging"
-             class="flex flex-wrap justify-center gap-2 mt-10">
+             class="w-full flex justify-center mt-16 mb-20">
 
-            <a th:if="${currentPage > 1}"
-               th:href="@{/product/list(page=${currentPage - 1}, categoryId=${categoryId})}"
-               class="btn btn-sm btn-outline">
-                이전
-            </a>
+            <div class="join
+                bg-base-100
+                rounded-2xl
+                shadow-2xl
+                border
+                border-base-300
+                p-2">
 
-            <th:block th:if="${totalPage > 0}"
-                      th:each="pageNum : ${#numbers.sequence(1, totalPage)}">
-
-                <a th:href="@{/product/list(page=${pageNum}, categoryId=${categoryId})}"
-                   class="btn btn-sm"
-                   th:classappend="${pageNum == currentPage} ? ' btn-primary' : ' btn-outline'"
-                   th:text="${pageNum}">
-                    1
+                <a th:if="${currentPage > 1}"
+                   th:href="@{/product/list(page=1,categoryId=${categoryId})}"
+                   class="join-item btn btn-outline">
+                    ⏮ 처음
                 </a>
 
-            </th:block>
+                <a th:if="${startPage > 1}"
+                   th:href="@{/product/list(page=${startPage-1},categoryId=${categoryId})}"
+                   class="join-item btn btn-outline">
+                    ◀ 이전
+                </a>
 
-            <a th:if="${currentPage < totalPage}"
-               th:href="@{/product/list(page=${currentPage + 1}, categoryId=${categoryId})}"
-               class="btn btn-sm btn-outline">
-                다음
-            </a>
+                <th:block th:each="pageNum : ${#numbers.sequence(startPage,endPage)}">
+
+                    <a th:href="@{/product/list(page=${pageNum},categoryId=${categoryId})}"
+                       class="join-item btn"
+                       th:classappend="${pageNum == currentPage}
+                    ? ' btn-primary text-white scale-110'
+                    : ' btn-ghost hover:btn-primary hover:text-white'"
+                       th:text="${pageNum}">
+                    </a>
+
+                </th:block>
+
+                <a th:if="${endPage < totalPage}"
+                   th:href="@{/product/list(page=${endPage+1},categoryId=${categoryId})}"
+                   class="join-item btn btn-outline">
+                    다음 ▶
+                </a>
+
+                <a th:if="${currentPage < totalPage}"
+                   th:href="@{/product/list(page=${totalPage},categoryId=${categoryId})}"
+                   class="join-item btn btn-outline">
+                    마지막 ⏭
+                </a>
+
+            </div>
+
+        </div>
+
 
         </div>
 
