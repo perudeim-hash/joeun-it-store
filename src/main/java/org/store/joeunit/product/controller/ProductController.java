@@ -33,15 +33,29 @@ public class ProductController {
     }
 
     @GetMapping("/product/list")
-    public String list(@RequestParam(defaultValue = "1") int page, @RequestParam(required = false) Integer categoryId, Model model) {
+    public String list(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(required = false) Integer categoryId,
+            @RequestParam(required = false) String keyword,
+            Model model) {
 
         List<ProductDto> productDtoList;
         int totalCount;
 
-        if (categoryId == null || categoryId == 0) {
+        if (keyword != null && !keyword.trim().isEmpty()) {
+
+            productDtoList = productService.search(keyword);
+            totalCount = productDtoList.size();
+
+            model.addAttribute("keyword", keyword);
+
+        } else if (categoryId == null || categoryId == 0) {
+
             productDtoList = productService.getPageList(page);
             totalCount = productService.getTotalCount();
+
         } else {
+
             productDtoList = productService.getCategoryPageList(categoryId, page);
             totalCount = productService.getCategoryTotalCount(categoryId);
         }
@@ -278,5 +292,25 @@ public class ProductController {
         result.put("totalPage", totalPage);
 
         return result;
+    }
+    @GetMapping("/product/search")
+    public String search(
+            @RequestParam(required = false) String keyword,
+            Model model) {
+
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return "redirect:/product/list";
+        }
+
+        List<ProductDto> productDtoList =
+                productService.search(keyword);
+
+        model.addAttribute("productList", productDtoList);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("currentPage", 1);
+        model.addAttribute("totalPage", 1);
+        model.addAttribute("categoryId", 0);
+
+        return "product/list";
     }
 }

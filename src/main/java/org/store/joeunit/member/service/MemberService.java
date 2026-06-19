@@ -48,8 +48,13 @@ public class MemberService {
         return memberDao.updateMember(memberDto);
     }
 
-    // 회원탈퇴
-
+    /**
+     *
+     * deleteMember -
+     *
+     *
+     *
+     */
     @Transactional
     public void deleteMember(Long memberId) {
 
